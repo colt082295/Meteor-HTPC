@@ -1,0 +1,40 @@
+<template name="viewSeasonPage">
+
+  {{> nav}}
+  
+<div class="wrapper">
+    
+    <div class="top-wrapper">
+        <div class="movie-info">
+            <button class="remove">Remove Show</button>
+            <div class="content" id="panel1">
+                <p class="movie-description">{{overview}}</p>
+                {{season_number}}
+                {{#each episodes}}
+
+                <a href="{{pathFor 'player'}}" class="episode_wrapper inline-block">
+                    <div class="carousel-item">
+                      <div class="carousel-img-wrapper">
+                        <div class="episode-img" style="background-image: url('{{this.banner}}')">
+                        </div>
+                      </div>
+                      <div class="episode_number">{{episode}}</div>
+                      <div class="carousel-title">{{name}}</div>
+                    </div>
+                  </a>
+                  
+                {{/each}}
+            
+        </div>
+    </div>
+
+</div>
+
+
+
+    
+</div>
+
+{{> footer}}
+                  
+</template>

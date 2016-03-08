@@ -1,0 +1,142 @@
+<template name="home">
+
+  {{> nav}}
+  
+  
+  <video id="video" class="video-js vjs-flat-skin" controls width="640" height="264">
+    <source src="http://167.114.103.80:{{port}}/" type='video/webm'>
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a web browser that
+      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
+  </video>
+  
+  
+  <script>
+    var player = videojs('video', { /* Options */ }, function() {
+  console.log('Good to go!');
+
+  this.play(); // if you don't trust autoplay for some reason
+
+  // How about an event listener?
+  this.on('ended', function() {
+    console.log('awww...over so soon?');
+  });
+});
+  </script>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="test">
+    <a href="about.html" class="button start">start</a>
+    <a href="about.html" class="button add-movie">add movie</a>
+    <a href="about.html" class="button remove-movies">remove movies</a>
+    <a href="about.html" class="button add-config">add config</a>
+    <a href="about.html" class="button remove-config">remove config</a>
+    
+    
+    <div class="suggestions section">
+      
+      <h4 class="section-title">Recently Added</h4>
+      <ul class="tabs">
+        <li class="tab col s3"><a class="active" href="#panel1">Blend</a></li>
+        <li class="tab col s3"><a href="#panel2">TV</a></li>
+        <li class="tab col s3"><a href="#panel3">Movies</a></li>
+      </ul>
+      
+      <div class="carousel">
+        
+          <div class="content" id="panel1">
+            <div class="owl-carousel">
+                {{#each movie}}
+                    <a href="{{pathFor 'viewMoviePage'}}" class="current_movie">
+                    <div class="carousel-item">
+                      <div class="carousel-img-wrapper">
+                        <div class="carousel-img" style="background-image: url('{{this.poster}}')">
+                        </div>
+                        <div class="carousel-description">{{this.name}}</div>
+                      </div>
+                      <div class="carousel-title">{{this.name}}</div>
+                    </div>
+                  </a>
+                {{/each}}
+                <!--
+              {{#each movie}}
+                  <a href="{{pathFor 'viewMoviePage'}}">
+                    <div class="carousel-item">
+                      <div class="carousel-img-wrapper">
+                        <div class="carousel-img" style="background-image: url('https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg')">
+                        </div>
+                        <div class="carousel-description">{{this.description}}</div>
+                      </div>
+                      <div class="carousel-title">{{this.title}}</div>
+                    </div>
+                  </a>
+              {{/each}}
+              -->
+            </div>
+          </div>
+          <div class="content owl-theme" id="panel2">
+            {{#each show}}
+            <div class="carousel-item">
+              <div class="carousel-img" style="background-image: url('http://thetvdb.com/banners/posters/73244-13.jpg')"></div>
+              <div class="carousel-title">The Office</div>
+            </div>
+            {{/each}}
+          </div>
+          <div class="content owl-theme" id="panel3">
+            
+            <div class="owl-carousel">
+              {{#each movie}}
+                <div class="carousel-item">
+                  <div class="carousel-img-wrapper">
+                    <div class="carousel-img" style="background-image: url('https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg')">
+                    </div>
+                    <div class="carousel-description">{{this.description}}</div>
+                  </div>
+                  <div class="carousel-title">{{this.title}}</div>
+                </div>
+              {{/each}}
+            </div>
+            
+          </div>
+        
+      </div>
+      
+    </div>
+
+    
+    
+    
+    
+    
+    <div class="wanted section">
+      
+      {{#each move}}
+      
+        <h4>test!!! </h4>
+      
+      {{/each}}
+      
+    </div>
+    
+    <div class="schedule section">
+      
+    </div>
+    
+    
+    
+    
+  </div>
+
+                  
+</template>

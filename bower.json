@@ -1,0 +1,18 @@
+{
+  "name": "meteor",
+  "dependencies": {
+    "jquery": "1.x",
+    "font-awesome": "~4.3.0",
+    "noty": "~2.3.5",
+    "Buttons": "~2.0.0",
+    "materialize": "~0.96.1",
+    "foundation": "~5.5.3",
+    "slick-carousel": "~1.5.8",
+    "owl.carousel": "~2.0.0-beta.3",
+    "Materialize": "materialize#~0.97.1"
+  },
+  "resolutions": {
+    "jquery": ">=2.1.1"
+  },
+  "private": true
+}

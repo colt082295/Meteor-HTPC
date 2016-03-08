@@ -1,0 +1,87 @@
+<template name="viewMoviePage">
+
+  {{> nav}}
+  
+<div class="wrapper">
+    <a href="" class="button search">Update Info</a>
+    <div class="top-wrapper">
+        <div class="image-wrapper">
+            <img src="{{poster}}"/>
+            {{#if greater_one location.length 1}}
+                {{#each location}}
+                    {{this}}
+                {{/each}}
+            {{/if}}
+        </div>
+        <div class="movie-info">
+            <button class="movie-info"></button>
+            <div class="top-container">
+                <h1 class="movie-title">{{name}}</h1>
+                <div class="tabs-container">
+                    <ul class="tabs">
+                    <li class="tab col s3"><a class="active" href="#panel1">Basic</a></li>
+                    <li class="tab col s3"><a href="#panel2">Cast</a></li>
+                    <li class="tab col s3"><a href="#panel3">More</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content" id="panel1">
+                <p class="movie-description">{{overview}}</p>
+            </div>
+            
+            <div class="content" id="panel2">
+                
+                <div class="cast-wrapper">
+                    <a href="#">
+                        <div class="cast">
+                            <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
+                            <p>Matt Damon</p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="cast">
+                            <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
+                            <p>Matt Damon</p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="cast">
+                            <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
+                            <p>Matt Damon</p>
+                        </div>
+                    </a>
+                </div>
+                
+            </div>
+            
+            
+            <div class="content" id="panel3">
+                
+                
+            </div>
+            
+        </div>
+    </div>
+    
+  <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+  poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
+    <source src="MY_VIDEO.mp4" type='video/mp4'>
+    <source src="MY_VIDEO.webm" type='video/webm'>
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a web browser that
+      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
+  </video>
+
+  <script src="http://vjs.zencdn.net/5.4.4/video.js"></script>
+
+
+
+
+
+    
+</div>
+
+{{> footer}}
+                  
+</template>

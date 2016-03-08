@@ -1,0 +1,78 @@
+<template name="viewActorPage">
+
+  {{> nav}}
+  
+<div class="wrapper">
+    
+    <div class="top-wrapper">
+        <div class="image-wrapper">
+            <img src="{{poster}}"/>
+        </div>
+        <div class="movie-info">
+            <button class="remove">Remove Show</button>
+            <div class="top-container">
+                <h1 class="movie-title">{{results.[0].name}}</h1>
+                <div class="tabs-container">
+                    <ul class="tabs">
+                    <li class="tab col s3"><a class="active" href="#panel1">Basic</a></li>
+                    <li class="tab col s3"><a href="#panel2">Cast</a></li>
+                    <li class="tab col s3"><a href="#panel3">More</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content" id="panel1">
+                <p class="movie-description">{{overview}}</p>
+                
+                    
+                {{#each results.[0].known_for}}
+
+                  <a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number}}" class="movies_wrapper inline-block">
+                    <div class="carousel-item">
+                      <div class="carousel-img-wrapper">
+                        <div class="carousel-img" style="background-image: url('{{this.poster}}')">
+                        </div>
+                      </div>
+                      <div class="carousel-title">{{title}}{{name}}</div>
+                    </div>
+                  </a>
+                
+                {{/each}}
+            </div>
+            
+            <div class="content" id="panel2">
+                
+                <div class="cast-wrapper">
+                    {{#each actors}}
+                    
+                        <a href="#">
+                            <div class="cast">
+                                <img src="{{this.picture}}"/>
+                                <p>{{this.name}}</p>
+                            </div>
+                        </a>
+                    
+                    {{/each}}
+                    
+                </div>
+                
+            </div>
+            
+            
+            <div class="content" id="panel3">
+                
+                
+            </div>
+            
+        </div>
+    </div>
+
+
+
+
+
+    
+</div>
+
+{{> footer}}
+                  
+</template>

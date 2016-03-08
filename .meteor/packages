@@ -1,0 +1,51 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+insecure
+fourseven:scss
+meteorhacks:npm
+iron:router
+accounts-password
+accounts-ui
+
+
+richsilv:owl-carousel
+sergeyt:typeahead
+cfs:standard-packages
+cfs:filesystem
+sujith3g:jstree
+reactive-var
+streams
+yuukan:streamy
+
+
+npm-container
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+ecmascript
+zurb:foundation-sites
+meteorhacks:aggregate
+meteorhacks:kadira
+meteorhacks:kadira-profiler
+meteorhacks:zones
+meteorhacks:unblock
+chrismbeckett:toastr
+cfs:gridfs
+cfs:ejson-file
+meteorhacks:async
+meteorhacks:fast-render

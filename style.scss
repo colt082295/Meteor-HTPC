@@ -1,0 +1,656 @@
+@import '{zurb:foundation-sites}/scss/foundation';
+@include foundation-everything;
+
+// @include foundation-grid;
+@include foundation-flex-grid;
+
+@-webkit-keyframes fade-in{
+from{
+    opacity:0;
+    top:-5px;
+}
+to{
+    opacity:1;
+    top:0px;
+}
+}
+//This sass(.scss) file gets compiled into the htpc_meteor.css file, which then gets compiled with all css.
+.navbar-items-container {
+  display: inline-block;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.section {
+    background-color: whitesmoke;
+    border-bottom: 1px solid silver;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+.tabs {
+    float: right;
+}
+.carousel {
+    overflow: hidden;
+    width: 100%;
+    text-align: center;                                                   
+}
+.carousel-item {
+  
+}
+.movies_wrapper .carousel-img-wrapper {
+    position: relative;
+    transition: all .5s ease-in-out;
+        width: 9%;
+    height: 0;
+    padding-bottom: 14%;
+    border-radius: 1%;
+    margin: auto;
+    box-shadow: 0px 0px 3px 0px silver;
+    min-width: inherit;
+    min-height: inherit;
+    & .carousel-img {
+          background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover!important;
+    height: 0;
+    margin: auto;
+    box-shadow: 0px 0px 3px 0px silver;
+    min-width: inherit;
+    min-height: inherit;
+    position: relative;
+    -ms-interpolation-mode: bicubic;
+    transition: all 0.5s ease-in-out;
+    }
+    & .carousel-description {
+      position:absolute;
+       top: 0;
+       left: 50%;
+    transform: translate(-50%);
+    margin-top: -5em;
+    opacity: 0;
+   color: white;
+   transition: all 0.5s ease-in-out;
+    }
+    &:hover {
+    cursor: pointer;
+    & .carousel-img {
+        filter: blur(1px) grayscale(75%);
+    -webkit-filter: blur(1px) grayscale(75%);
+        transition: all .5s ease-in-out;
+    }
+        & .carousel-description {
+            margin-top: 0em;
+            opacity: 1;
+            transition: all 0.5s ease-in-out;
+        }
+  }
+}
+
+
+.owl-item {
+    display: inline-block;
+}
+
+
+.tabs {
+  background-color: transparent!important;
+}
+
+.suggestions .tabs {
+      margin-bottom: 1em!important;
+}
+
+.section-title {
+    display: inline-block;
+    float: left;
+}
+
+.navbar-wrapper {
+  background-color: whitesmoke;
+}
+.top-bar {
+  background-color: whitesmoke;
+  & a {
+    background-color: transparent!important;
+  }
+  & li {
+    background-color: transparent!important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         .tt-menu {
+            transition: max-height 0.3s ease-in-out;
+            display: block!important;
+            max-height: 0;
+            width: 15vw;
+            height: auto;
+            overflow: hidden;
+            &.tt-open:not(.tt-empty) {
+                max-height: 9999px!important;
+                transition: max-height 2.5s ease-in-out;
+            }
+         }
+         .typeahead {
+            z-index: 101;
+            height: 43px!important;
+            width: 15vw!important;
+            margin: 0!important;
+        }
+        
+        
+        .top-bar input {
+            top: 0!important;
+        }
+
+
+
+
+
+
+//nav-bar
+
+.top-bar {
+    max-width: none!important;
+    box-shadow: none!important;
+    padding-left: 1em;
+    padding-right: 1em;
+    & a {
+        color: black!important;
+    }
+    & .dropdown {
+        background-color: #E8E8E8;
+        box-shadow: 1px 1px 1px silver;
+    }
+    & .search-content {
+        background-color: #E0E0E0;
+        height: 90px;
+        border-bottom: 1px solid black;
+        overflow: hidden;
+        transition: all .2s ease-in-out;
+        &:hover {
+            background-color: silver;
+        }
+        & a {
+            padding: .5em!important;
+            height: inherit;
+        }
+        & h1,h2,h3,h4,h5,h6 {
+            margin: 0;
+        }
+        & p {
+            margin: 0;
+        }
+        & .img-wrapper {
+            float: left;
+            width: 30%;
+            margin-right: .4em;
+            height: inherit;
+            max-height: 100%;    
+            & img {
+                height: 100%;
+            }
+        }
+        & .search-title {
+            line-height: normal;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #4C4C4C;
+        }
+        & .search-description {
+            
+        }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+.top-wrapper {
+    overflow: hidden;
+    padding: 1em;
+}   
+.image-wrapper {
+    width: 15%;
+    float: left;
+    display: inline-block;
+    & img {
+        border-radius: 2px;
+        box-shadow: 0px 0px 1px 1px silver;
+    }
+}
+.movie-info {
+    overflow: hidden;
+    padding: 1em;
+    & .top-container {
+        overflow: hidden;
+    }
+    & .movie-title {
+        display: inline-block;
+        float: left;
+        margin: 0;
+    }
+    & .tabs-container {
+        display: inline-block;
+        float: right;
+        width: 35%;
+    }
+    & .movie-description {
+        padding-left: 1em;
+        display: block;
+        width: 100%;
+    }
+    & .cast {
+        width: 7%;
+        text-align: center;
+        float: left;
+        margin-right: 3em;
+    }
+    .content {
+        overflow: hidden;
+        padding: 1em;
+    }
+}
+
+
+.current_movie {
+    display: block;
+    position: relative;
+    transition: all 0.5s ease-in-out;
+    width: 9%;
+    height: 0;
+    padding-bottom: 14%;
+    border-radius: 1%;
+    margin: auto;
+    box-shadow: 0px 0px 3px 0px silver;
+    min-width: 125px;
+    min-height: 185px;
+}
+.movies_top_wrapper {
+    overflow: hidden;
+    padding: 1em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 96%;
+}
+.row {
+    max-width: none!important;
+}
+.movies_wrapper {
+    transition: all 0.5s ease-in-out;
+    width: 9%;
+    border-radius: 1%;
+    margin-left: 0;
+    min-width: 125px;
+    min-height: 185px;
+    text-align: center;
+    padding-right: 1%;
+    padding-left: 1%;
+    & .carousel-item {
+        min-width: inherit;
+    min-height: inherit;
+    position: relative;
+    }
+}
+.sort_movies {
+    float: left;
+    display: inline-block;
+    width: 4%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.76);
+    position: fixed;
+    text-align: center;
+    top: 45px;
+    right: 0;
+    & .letter {
+        padding: 8.6%;
+        font-weight: 600;
+        font-size: .9rem;
+        display: block;
+        color: whitesmoke;
+        transition: all .2s ease-in-out;
+        &:hover {
+            transform: scale(2.2);
+            color: silver;
+        }
+    }
+}
+
+.top-bar .toggle-topbar.menu-icon {
+    margin-top: 0!important;
+}
+
+
+@media only screen and (max-width:760px) {
+    .sort_movies {
+        display: none;
+    }
+    .movies_top_wrapper { 
+     
+     width: 100%;   
+        
+    }
+    .movies_wrapper {
+    width: 33%;
+    min-width: 0;
+    }
+    .carousel-img-wrapper {
+       width: auto!important;
+    & .carousel-img {
+
+    }
+    }
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// Media query to show full menu
+/// @type String
+$topbar-breakpoint: medium !default;
+
+/// Height of topbar at $topbar-breakpoint and up.
+/// @type Number
+$topbar-height: 80px !default;
+
+/// Height of title bar below $topbar-breakpoint.
+/// @type Number
+$titlebar-height: $topbar-height;
+
+/// Adds styles for a top bar container.
+@include breakpoint($topbar-breakpoint) {
+  .top-bar {
+    .menu-items {
+      > li {
+        > a {
+          height: rem-calc($topbar-height);
+          line-height: rem-calc($topbar-height);
+          padding: 0 1rem;
+        }
+      }
+    }
+  }
+
+  .dropdown.menu > .is-dropdown-submenu-parent.has-submenu > a::after {
+    // Hides arrow on top-level menu items
+    display: none;
+  }
+}
+
+/// Removes float on 'medium' if $topbar-breakpoint equals large.
+@if $topbar-breakpoint == 'large' {
+  .top-bar-right {
+    float: none;
+
+    @include breakpoint($topbar-breakpoint) {
+      float: right;
+    }
+  }
+}
+
+/// Adds styles for a title bar container.
+.title-bar {
+  height: rem-calc($titlebar-height);
+
+  .title-bar-left {
+    a {
+      padding: 0 0 0 .5rem;
+    }
+
+    img {
+      height: rem-calc($titlebar-height) - 1rem;
+    }
+  }
+}
+.top-bar{ 
+    height: auto!important;
+    
+}
+
+
+.vjs-fullscreen-control {
+    top: -1.5em;
+}
+
+
+.badge.left {
+    left: 2%;
+    position: absolute;
+    top: 2%;
+}
+
+
+
+.inline-block {
+    display: inline-block!important;
+}
+
+
+
+
+
+.size {
+    flex: 0 1 auto;
+    padding-left: 2%;
+    padding-right: 2%;
+    height: inherit;
+}
+.more-flex {
+        -webkit-justify-content: space-around;
+    justify-content: space-around;
+    -webkit-align-content: space-around;
+    align-content: space-around;
+}
+@media screen and (min-width: 64em) {
+.large-1-5 {
+        flex: 0 0 12%;
+    max-width: 12%;
+}
+}
+
+
+
+.episode_number {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #5F99EA;
+    color: white;
+    font-weight: 600;
+    padding: 1em .5em 1em .5em;
+    line-height: 0;
+    font-size: .9rem;
+}
+
+.episode_wrapper {
+    transition: all 0.5s ease-in-out;
+    border-radius: 1%;
+    margin-left: 0;
+    min-width: 125px;
+    min-height: 185px;
+    text-align: center;
+    padding-right: 1%;
+    padding-left: 1%;
+    width: 19%;
+    & .carousel-img-wrapper {
+    position: relative;
+    transition: all .5s ease-in-out;
+    height: 0;
+    border-radius: 1%;
+    margin: auto;
+    box-shadow: 0px 0px 3px 0px silver;
+    min-width: inherit;
+    min-height: inherit;
+    }
+    & .carousel-item {
+        min-width: inherit;
+        min-height: inherit;
+        position: relative;
+    }
+    & .carousel-img {
+          background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover!important;
+    height: 0;
+    margin: auto;
+    box-shadow: 0px 0px 3px 0px silver;
+    min-width: inherit;
+    min-height: inherit;
+    position: relative;
+    -ms-interpolation-mode: bicubic;
+    transition: all 0.5s ease-in-out;
+    }
+    & .carousel-description {
+      position:absolute;
+       top: 0;
+       left: 50%;
+    transform: translate(-50%);
+    margin-top: -5em;
+    opacity: 0;
+   color: white;
+   transition: all 0.5s ease-in-out;
+    }
+    &:hover {
+    cursor: pointer;
+    & .carousel-img {
+        filter: blur(1px) grayscale(75%);
+    -webkit-filter: blur(1px) grayscale(75%);
+        transition: all .5s ease-in-out;
+    }
+        & .carousel-description {
+            margin-top: 0em;
+            opacity: 1;
+            transition: all 0.5s ease-in-out;
+        }
+  }
+}
+
+
+.flex-item {
+    
+    min-width: 180px;
+    text-align: center;
+    flex: 0 0 12%;
+    
+}
+.carousel-img {
+    
+    display: block;
+    width: 125px;
+    height: 180px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: auto;
+    
+}
+
+.row.flexbox {
+    justify-content: flex-start;
+    width: 100%;
+}
+
+
+@media screen and (max-width: 760px) {
+    
+    
+    .flex-item {
+    
+   
+    text-align: center;
+    flex: 0 0 33.3333333%;
+    
+}
+.carousel-img {
+    
+    display: block;
+    width: 145px;
+    height: 213px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: auto;
+    
+}
+
+.row.flexbox {
+    justify-content: space-around;
+}
+    
+    
+    
+}
+
+
+
+.episode-img {
+    
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: auto;
+    height: 100%;
+    
+}
+
+
+
+
+
+
+
+
+
+.video-js {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.vjs-big-play-button {
+   // display: none!important;
+}
