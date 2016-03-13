@@ -1,8 +1,15 @@
-<template name="shows">
+<template name="showsOld">
 
   {{> nav}}
   
-<div class="wrapper">
+  <div class="wrapper">
+  
+<div class="container full-height row">
+  
+  {{> sidebar}}
+  
+  
+  <div class="main columns">
     
     <div class="">
         <button class="scan">Scan Shows</button>
@@ -14,13 +21,14 @@
   
 
      <div class="row flexbox">   
-    {{#each show}}
+     {{_id}}
+    {{#each content}}
     
     
     
        <div class="flex-item-wrapper"> <div class="flex-item columns">
             
-            <a href="{{pathFor 'viewShowPage'}}" class="">
+            <a href="{{pathFor 'viewShowPage' section = ../_id}}" class="">
             <div class="">
               <div class="">
                 <div class="carousel-img" style="background-image: url('{{this.poster}}')">
@@ -96,7 +104,8 @@
 
 
 
-    
+    </div>
+    </div>
 </div>
 
 {{> footer}}

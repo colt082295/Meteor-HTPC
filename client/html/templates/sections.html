@@ -1,0 +1,37 @@
+<template name="section">
+
+  {{> nav}}
+  
+  <div class="wrapper">
+  
+<div class="container full-height row">
+  
+  {{> sidebar}}
+  
+  
+  
+  {{#if equals format "movies"}}
+    
+        {{> movies}}
+        
+    {{else}}
+    
+        {{#if equals format "shows"}}
+    
+            {{> shows}}
+        
+        {{else}}
+        
+            {{> shows}}
+    
+        {{/if}}
+        
+    {{/if}}
+  
+  
+    </div>
+</div>
+
+{{> footer}}
+                  
+</template>

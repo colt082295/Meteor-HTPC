@@ -1,6 +1,7 @@
 Movies = new Meteor.Collection('movies');
 Moviess = new Meteor.Collection('moviess');
 Tv = new Meteor.Collection('tv');
+Sections = new Meteor.Collection('sections');
 Tmdb = new Meteor.Collection('tmdb');
 
 
@@ -499,7 +500,7 @@ var time2 = 0;
                           
                           // {"type":"application/x-mpegURL", "src":"http://167.114.103.80:2347/stream/stream.m3u8"},
                           this.src({"type":"video/webm", "src":"http://167.114.103.80:"+result.port});
-                          this.duration(result.duration);
+                          //this.duration(result.duration);
                           this.load();
                           //this.play();
                           
@@ -509,10 +510,10 @@ var time2 = 0;
                           
                         
                           //this.play(); // if you don't trust autoplay for some reason
-                          this.duration(result.duration);
+                          //this.duration(result.duration);
                           
                           this.on("play", function(){
-        this.duration(result.duration);
+        //this.duration(result.duration);
         this.loadingSpinner.hide();
         //this.controlBar.show();
 
@@ -786,7 +787,7 @@ Template.viewSeasonPage.events({
     //Meteor.subscribe('tv');
 
     Template.viewSeasonPage.helpers({
-
+        
         episodes: function() {
 
             return this.episodes.sort(function(obj1, obj2) {
@@ -795,6 +796,161 @@ Template.viewSeasonPage.events({
             });
 
         }
+
+
+    });
+    
+    
+    Template.sidebar.helpers({
+
+        sections: function() {
+
+            return Sections.find({});
+
+        }
+
+
+    });
+    
+    
+    Template.sidebar.events({
+        
+    
+        'submit #adding-content': function(event, template) {
+            
+            event.preventDefault();
+            
+            console.log("started content add procedure");
+            
+            var name =  $('#new-content-name').val();
+            var location =  $('#new-content-location').val();
+            var format =  $( "#new-content-format" ).val();
+
+            Meteor.call('addSection', name, location, format, function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error adding the section. " + error);
+
+                }
+                else {
+
+                    console.log("Added new section.");
+                    $('#add-content').foundation('close');
+
+                }
+
+            });
+
+
+        },
+        
+        'submit #editing-content': function(event, template) {
+            
+            event.preventDefault();
+            
+            console.log("started content edit procedure");
+            
+            var name =  $('#edit-content-name').val();
+            var location =  $('#edit-content-location').val();
+            var format =  $( "#edit-content-format" ).val();
+            var id = Session.get("editSection");
+
+            Meteor.call('editSection', name, location, format, id, function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error editing the section. " + error);
+
+                }
+                else {
+
+                    console.log("Edited section.");
+                    $('#edit-content').foundation('close');
+
+                }
+
+            });
+
+
+        },
+        
+        'click .edit': function(event, template) {
+            
+            event.preventDefault();
+            
+            console.log("You clicked edit.");
+            
+            var name =  this.name;
+            var location =  this.location;
+            var format =  this.format;
+            var id = this._id;
+            
+            Session.set("editSection", id);
+            
+            console.log(name);
+            
+            $('#edit-content').foundation('open');
+            
+            $('#edit-content-name').val(name);
+            $('#edit-content-location').val(location);
+            //$("#edit-content-format select").val(format);
+            $( "#edit-content-format" ).val(format);
+
+
+        },
+        
+        'click #remove-sections': function(event, template) {
+            
+            event.preventDefault();
+            
+            Meteor.call('removeSections', function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error removing sections. " + error);
+
+                }
+                else {
+
+                    console.log("Removed all sections.");
+                    $('#edit-content').foundation('close');
+
+                }
+
+            })
+
+
+        },
+        
+        'click #remove-section': function(event, template) {
+            
+            event.preventDefault();
+            
+            var id = Session.get("editSection");
+            
+            console.log(id);
+            
+            Meteor.call('removeSection', id, function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error removing section. " + error);
+
+                }
+                else {
+
+                    console.log("Removed section.");
+                    $('#edit-content').foundation('close');
+
+                }
+
+            })
+
+
+        },
+        
+        
 
 
     });
@@ -846,6 +1002,10 @@ Template.viewSeasonPage.events({
     Template.registerHelper('greater_one', function(a, b) {
         return a > b;
     });
+    
+    Template.registerHelper('equals', function(a, b) {
+        return a === b;
+    });
 
     Template.registerHelper('parentData',
         function() {
@@ -854,6 +1014,13 @@ Template.viewSeasonPage.events({
     );
 
     Template.viewShowPage.helpers({
+        section: function() {
+            
+            var route = Router.current();
+        
+            return route.params._id;
+           
+        },
         season: function() {
 
             return this.seasons.sort(function(obj1, obj2) {
@@ -910,7 +1077,13 @@ Template.viewSeasonPage.events({
             event.preventDefault();
 
 
-            Meteor.call('guessShow3', function(error, result) { // Try to guess the title from the filename
+            var route = Router.current();
+            
+            var location = this.location;
+            
+            console.log(location);
+
+            Meteor.call('guessShow3', route.params._id, location, function(error, result) { // Try to guess the title from the filename
 
                 if (error) {
 
@@ -925,11 +1098,14 @@ Template.viewSeasonPage.events({
                 }
 
             });
+            
         },
 
         'click .remove': function(event, template) {
+            
+            var route = Router.current();
 
-            Meteor.call('removeShows', function(error, result) {
+            Meteor.call('removeShows', route.params._id, function(error, result) {
 
                 if (error) {
 
@@ -1107,6 +1283,7 @@ Template.viewSeasonPage.events({
         }
 
     });
+    
 
 
     Template.viewMoviePage.events({
@@ -1319,6 +1496,49 @@ Template.viewSeasonPage.events({
 
 
     });
+    
+    
+    Template.sidebar.onCreated(function() {
+        
+        Meteor.subscribe( 'sections', function(){
+          $( ".sidebar .spinner" ).remove();
+        });
+
+    });
+    
+    var subTv =  // Defining a variable for the subscription to TV. Then I can reference later to stop it.
+    
+    Template.shows.onDestroyed(function() {
+        
+        console.log("Section destroyed.");
+        subTv.stop();
+        
+        
+    })
+    
+    
+    Template.shows.onCreated(function() {
+        
+        var route = Router.current();
+        
+        console.log(route);
+        
+        subTv = Meteor.subscribe('tv', route.params._id);
+
+    });
+    
+    Template.shows.helpers({
+
+        content: function() {
+            return Tv.find().fetch();
+        },
+
+    });
+    
+    
+
+    
+    
 
     Template.home.onRendered(function() {
 
@@ -1371,13 +1591,14 @@ if (Meteor.isServer) {
 
 
 
-    Meteor.publish('tv', function() {
+    Meteor.publish('tv', function(section) {
         //this.unblock();
-        return Tv.find({}, {
+        return Tv.find({section: section}, {
             fields: {
                 name: 1,
                 _id: 1,
-                poster: 1
+                poster: 1,
+                section: 1,
             },
             sort: {
                 name: 1
@@ -1389,11 +1610,22 @@ if (Meteor.isServer) {
         //this.unblock();
         return Images.find({})
     });
+    
+    Meteor.publish('sections', function() {
+        //this.unblock();
+        return Sections.find({})
+    });
+    
+    Meteor.publish('section', function(id) {
+        //this.unblock();
+        return Sections.find({_id: id})
+    });
 
-    Meteor.publish('tv_info', function(id) {
+    Meteor.publish('tv_info', function(id, section) {
         //this.unblock();
         return Tv.find({
-            _id: id
+            _id: id,
+            section: section
         });
     });
 
@@ -1410,10 +1642,11 @@ if (Meteor.isServer) {
         });
     });
 
-    Meteor.publish('movie_info', function(id) {
+    Meteor.publish('movie_info', function(id, section) {
         //this.unblock();
         return Moviess.find({
-            _id: id
+            _id: id,
+            section: section,
         });
     });
 
@@ -1518,6 +1751,83 @@ if (Meteor.isServer) {
 
 
                 return fileDirVar;
+            },
+            
+            
+            addSection: function(name, location, format) {
+                
+                var insert = Sections.insert({
+                    name: name,
+                    location: location,
+                    format: format,
+                });
+                
+                if (format === "movies"){
+                    
+                    
+                    
+                } else if (format === "shows") {
+                    
+                    
+                    
+                } else {
+                    
+                    
+                    
+                }
+                
+                
+                
+            },
+            
+            editSection: function(name, location, format, id) {
+                
+                Sections.update({
+                    _id: id,
+                },
+                {
+                    name: name,
+                    location: location,
+                    format: format,
+                });
+                
+                
+                
+            },
+            
+            removeSections: function() {
+                
+                
+                Sections.remove({});
+                
+                
+                
+            },
+            
+            removeSection: function(id) {
+                
+                var section = Sections.findOne({_id: id});
+                
+                
+                
+                if (section.format === "movies") {
+                    
+                    Moviess.remove({section: id});
+                    
+                } else if (section.format === "shows") {
+                    
+                    Tv.remove({section: id});
+                    
+                } else {
+                    
+                }
+                
+                Sections.remove(section);
+                
+                
+                
+                
+                
             },
 
             rescanShows: function() {
@@ -4241,7 +4551,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
             */
 
 
-            guessShow3: function() {
+            guessShow3: function(sectionId, location) {
 
 
                 "use strict";
@@ -4269,7 +4579,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
 
-                var emitter = walk("/home/colt/Plex/tv_test", {
+                var emitter = walk(location, { // Make this an option, rather than hardcoded,
                     "no_recurse": true
                 });
                 
@@ -4279,7 +4589,6 @@ ffmpeg.ffprobe(path, function(err, metadata) {
     
                         var folder = file;
                         name = path.basename(file)
-                        //var directory = file;
                         var nameOg = name;
                         name = encodeURIComponent(name);
     
@@ -4337,16 +4646,13 @@ ffmpeg.ffprobe(path, function(err, metadata) {
     
                                     var country2 = countrynames.getCode(country)
     
-    
-    
-    
                                     name = name + " " + country2;
     
                                 }
                                 
                                 //
                                 
-                                // If it includes a year, like "The Flash", include the year in the search
+                                // If it includes a year, like "The Flash (2014)", include the year in the search
                                 
                                 if (showNameResponse.year) {
                                     name = name + " " + "(" + showNameResponse.year + ")";
@@ -4371,17 +4677,19 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                         
                                         //notifications.emit('message', result);
                                         var results = result;
-                                        var array = result[0];
+                                        var array = result[0]; // The first show found
                                         var series_name = array.SeriesName;
                                         var overview = array.Overview;
                                         var show_id = array.id;
                                         var banner = "http://thetvdb.com/banners/" + array.banner;
-                                        var show = Tv.findOne({
-                                            name: series_name
+                                        notifications.emit('message', "I found a show folder for " + series_name + ". Let's see if you already have it."); 
+                                        var show = Tv.findOne({ // Check if the show already exists in the database
+                                            name: series_name,
+                                            section: sectionId
                                         });
-                                        if (!show) { // Check if the show is already in the DB
+                                        if (!show) { // If the show doesn't exist in the database
     
-                                            Meteor.call('searchShow5', show_id, Meteor.bindEnvironment(function(error, result) {
+                                            Meteor.call('searchShow5', show_id, Meteor.bindEnvironment(function(error, result) { // Pull some more data from the show
     
                                                 //notifications.emit('message', result);
     
@@ -4391,11 +4699,11 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                                 var language = result.language;
                                                 var poster = "http://thetvdb.com/banners/" + result.poster;
                                                 //series = it.SeriesName;
-                                                //notifications.emit('message', "Current Name " + name);
+                                                notifications.emit('message', "Looks like you don't already have " + series_name + ". I'm going to add it.");
                                                 
                                                 // I want to pull air times from something else in the longrun.
-                                                var air_day = result.Airs_DayOfWeek;
-                                                var air_time = result.AirTime;
+                                                //var air_day = result.Airs_DayOfWeek;
+                                                //var air_time = result.AirTime;
     
                                                 //notifications.emit('message', "Nothing found in the DB for " + series_name + ". Let's add it then."); 
     
@@ -4409,7 +4717,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                                     poster: poster,
                                                     results: results,
                                                     episode_info: result.Episodes,
-                                                    seasons: []
+                                                    seasons: [],
+                                                    section: sectionId,
                                                 });
     
                                                 //notifications.emit('message', result);
@@ -4428,7 +4737,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                             callback(null, {
                                                 series: series_name,
                                                 seasons: show.seasons,
-                                                notification: series_name + " 1 is already in the DB."
+                                                notification: "It looks like " + series_name + " is already in the DB."
                                             });
                                             
                                         }
@@ -4442,23 +4751,28 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                             }
                             else { // If the extracted data does include a season number. Look more at this later, because this may be the fix to having shows with numbers being figured out correctly.
     
-    
+                                
+                                // If it includes a country, make sure to include it in the search
+                                
                                 if (showNameResponse.country) {
     
                                     var country = showNameResponse.country;
     
-                                    var country2 = countrynames.getCode(country)
-    
-    
-    
-    
+                                    var country2 = countrynames.getCode(country);
+                                    
                                     name = name + " " + country2;
     
                                 }
                                 
+                                //
+                                
+                                // If it includes a year, like "The Flash (2014)", include the year in the search
+                                
                                 if (showNameResponse.year) {
                                     name = name + " " + "(" + showNameResponse.year + ")";
                                 }
+                                
+                                //
     
                                 Meteor.call('searchShow4', name, Meteor.bindEnvironment(function(error, result) {
     
@@ -4476,54 +4790,16 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                         var show_id = array.id;
                                         var banner = "http://thetvdb.com/banners/" + array.banner;
                                         var show = Tv.findOne({
-                                            name: series_name
+                                            name: series_name,
+                                            section: sectionId
                                         });
+                                        
+                                        // I need to figure out a way to double check to make sure the folder is a season folder, and not just a show with numbers.
+                                        
+                                        
                                         if (!show) {
     
-                                            Meteor.call('searchShow5', show_id, Meteor.bindEnvironment(function(error, result) {
-                                                //notifications.emit('message', result);
-    
-    
-                                                //var series_id = it.seriesid;
-                                                //var series_name = it.SeriesName;
-                                                var language = result.language;
-                                                var poster = "http://thetvdb.com/banners/" + result.poster;
-                                                //series = it.SeriesName;
-                                                //notifications.emit('message', "Current Name " + name);
-                                                
-                                                // I want to pull air times from something else in the longrun.
-                                                var air_day = result.Airs_DayOfWeek;
-                                                var air_time = result.AirTime;
-    
-    
-    
-    
-    
-    
-    
-    
-                                                //notifications.emit('message', "Nothing found in the DB for " + series_name + ". Let's add it then."); 
-    
-                                                Tv.insert({
-                                                    name: series_name,
-                                                    overview: overview,
-                                                    banner: banner,
-                                                    language: language,
-                                                    show_id: show_id,
-                                                    series_id: show_id,
-                                                    poster: poster,
-                                                    results: results,
-                                                    episode_info: result.Episodes,
-                                                    seasons: []
-                                                });
-    
-                                                //notifications.emit('message', result);
-                                                callback(null, {
-                                                    series: series_name,
-                                                    notification: "Just added " + series_name
-                                                });
-    
-                                            }))
+                                            notifications.emit('message', "There isn't a show named " + series_name + " in the database.");
     
                                         }
                                         else {
@@ -4576,35 +4852,23 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 var seasonEps = "";
 
 
-                function episodes(file, name, seasons, callback) { // This function seems to be the one causing the most performance problems. But I'm also getting multiple resolved futures on the file function earlier.
+                function episodes(file, name, season, seasonGuess, callback) { // This function seems to be the one causing the most performance problems. But I'm also getting multiple resolved futures on the file function earlier.
 
                      
-                    notifications.emit('message', "2 - Current seasons for " + name);
+                    notifications.emit('message', "Current season for " + name);
                     var seasons1 = []; 
-                    notifications.emit('message', seasons);
+                    notifications.emit('message', season);
 
 
                     var folder = path.basename(file);
 
                     folder = encodeURIComponent(folder);
-
-                    Meteor.call('showName2', folder, Meteor.bindEnvironment(function(error, result) {
-
-                        if (error) {
-
-                            notifications.emit('message', error);
-                            callback(null, error);
-
-                        }
-                        else {
-                            
                             
 
-                            if (result.season && !result.episode) {
-
-                                var episodes = [];
+                                
                                 var episode_numbers = [];
-                                var season = result.season;
+                                var seasonNumber = seasonGuess;
+                                var episodes = [];
                                 var seasonIndex = season - 1;
                                 var seasonBool = false;
 
@@ -4614,27 +4878,9 @@ var seasonEps = "";
                                     walker;
 
                                 walker = walk.walk(file, options);
-                                
-                                /*
-                                seasons = seasons.filter(function(season) {
-                                    return season.season_number === season; // if truthy then keep item
-                                })
-                                
-                                
-                                
-                                
-                                seasons = seasons[seasonIndex].map(function ( obj ) {
-                                    return obj.episode === result.episode;
-                                })[0]
-                                
-                                */
-     
 
 
-                                //var emitter3 = walk(file); 
-
-
-                                walker.on("file", Meteor.bindEnvironment(function(root, fileStats, next) {
+                                walker.on("file", Meteor.bindEnvironment(function(root, fileStats, next) { // When it finds a file in the folder
                                     //notifications.emit('message', root);
                                     //notifications.emit('message', fileStats);
                                     var episodeName = fileStats.name;
@@ -4653,7 +4899,7 @@ var seasonEps = "";
 
                                             notifications.emit('message', result);
 
-                                            var check = episode_numbers.indexOf(result.episode);
+                                            //var check = episode_numbers.indexOf(result.episode);
                                             
                                             
                                             
@@ -4663,7 +4909,7 @@ var seasonEps = "";
                                            
                                             
                                             
-
+                                            /*
                                             if (check > 0) {
 
                                                 notifications.emit('message', "Already an episode with the number " + result.episode);
@@ -4672,9 +4918,9 @@ var seasonEps = "";
                                                 update.location.push(root + "/" + episodeName);
 
                                             }
-                                            
-                                            else if (seasons) {
+                                            */
                                                 
+                                                /*
                                                 if (!seasonEps) {
                                                     // If this variable is null, do a map/filter function to return the season object for
                                                     // this specific season. If the variable isn't null then just use it. When all episodes
@@ -4694,23 +4940,74 @@ var seasonEps = "";
                                                     
                                                     
                                                 }
+                                                */
                                                 
-                                                seasonBool = true;
-                                                var episodeIndex = result.episode - 1;
-                                                
-                                                
-                                                notifications.emit('message', "Test seasons");
-                                                notifications.emit('message', seasons);
+                                            
                                                 
                                                 // I'll have to get the current season episodes, make a check for the episode. If it exists push to
                                                 // location array inside it. Then continue on for all episodes in the season. When done, update
                                                 // doc with the current season episodes.
                                                 
+                                                if (season) {
+                                                    
+                                                    episodes = season.episodes;
+                                                    var episodeNumber = result.episode;
+                                                    //seasonNumber = season.season_number;
+                                                    var location = root + "/" + episodeName;
                                                 
-                                                for (var i=0; i<seasons.length; i++) {
-                                                  if (seasons[seasonIndex].episodes[episodeIndex].episode === result.episode) {
+                                                
+                                                var episodeExist = episodes.filter(function( obj ) { // See if the episode already exists
+                                                    if (obj.episode === episodeNumber) {
+                                                        var sameLocation = obj.location.indexOf(location);
+                                                        notifications.emit('message', "sameLocation");
+                                                        notifications.emit('message', sameLocation);
+                                                        if (sameLocation >= 0) { // Make sure not to add the same exact episode file.
+                                                            notifications.emit('message', "This episode in this location is already in the database.");
+                                                        } else {
+                                                        obj.location.push(root + "/" + episodeName);
+                                                        notifications.emit('message', "tester");
+                                                        notifications.emit('message', obj);
+                                                        }
+                                                        return obj;
+                                                        
+                                                    }
+                                                })[ 0 ];
+                                                notifications.emit('message', "episodeExist");
+                                                notifications.emit('message', episodeExist);
+                                                
+                                                if (episodeExist) {
+                                                    
+                                                    
+                                                    
+                                                } else {
+                                                    
+                                                    var episode = {
+                                                        location: [root + "/" + episodeName],
+                                                        episode: result.episode
+                                                    }
+                                                    
+                                                    episodes.push(episode);
+                                                    
+                                                }
+                                                
+                                        } else {
+                                            
+                                            //seasonNumber = season.season_number;
+                                            
+                                            var episode = {
+                                                        location: [root + "/" + episodeName],
+                                                        episode: result.episode
+                                                    }
+                                                    
+                                                    episodes.push(episode);
+                                            
+                                        }
+                                                
+                                                /*
+                                                for (var i=0; i<season.episodes.length; i++) {
+                                                  if (season.episodes[episodeIndex].episode === result.episode) {
                                                       notifications.emit('message', "Found a dup episode");
-                                                      seasons[seasonIndex].episodes[episodeIndex].episode = "TEST";
+                                                      season.episodes[episodeIndex].episode = "TEST";
                                                     //jsonObj[i].Username = "Thomas";
                                                     break;
                                                   } else {
@@ -4720,7 +5017,7 @@ var seasonEps = "";
                                                         episode: result.episode
                                                     }
                                                     
-                                                    seasons[seasonIndex].episodes.push(episode);
+                                                    season.episodes.push(episode);
                                                       
                                                       
                                                   }
@@ -4730,27 +5027,12 @@ var seasonEps = "";
                                                   
                                                   
                                                 }
-                                                seasons1 = seasons;
-                                                notifications.emit('message', "rhtrht");
-                                                notifications.emit('message', seasons1);
+                                                
+                                                */
                                                 
                                                 
                                                 
-                                                
-                                                
-                                            }
                                             
-                                            else {
-                                                episode_numbers.push(result.episode);
-
-                                                var episode = {
-                                                    location: [root + "/" + episodeName],
-                                                    episode: result.episode
-                                                }
-                                                episodes.push(episode);
-                                                notifications.emit('message', "Just added " + result.episode);
-                                                //notifications.emit('message', episodes);
-                                            }
 
                                         }
 
@@ -4765,7 +5047,7 @@ var seasonEps = "";
                                 walker.on("end", Meteor.bindEnvironment(function() {
 
 
-                                    notifications.emit('message', "Emiiter3 ended for " + result.season);
+                                    notifications.emit('message', "Finished season " + seasonNumber + " of " +  name + " Here's all of the episodes for the season:");
                                     notifications.emit('message', episodes);
 
 
@@ -4892,8 +5174,12 @@ var seasonEps = "";
 
 
 
-
-
+                                    if (season) {
+                                        
+                                        season.episodes = episodes;
+                                        
+                                    }
+                                    
 
                                     
 
@@ -4901,8 +5187,10 @@ var seasonEps = "";
 
                                     
                                     var find_show = Tv.findOne({
-                                        name: name
+                                        name: name,
+                                        section: sectionId
                                     });
+                                    /*
                                     
                                     if (seasonBool == false) {
                                         
@@ -4918,14 +5206,14 @@ var seasonEps = "";
                                         
                                     }
 
-
-                                    
-
-                                    notifications.emit('message', seasons);
+                                    */
 
                                     if (find_show) {
 
                                         current_seasons = [];
+                                        notifications.emit('message', "Test Show");
+                                        notifications.emit('message', find_show);
+                                        if (find_show.seasons.length > 0)  {
 
                                         find_show.seasons.forEach(function(file, index, array) {
 
@@ -4934,34 +5222,33 @@ var seasonEps = "";
                                             var response2 = pushSeasonNumberWrap(file.season_number);
 
                                         });
+                                        }
                                         // The current seasons area seems to be slightly wrong. It works, but seems to not show the correct number of seasons sometimes.
                                         notifications.emit('message', "Current seasons for " + name);
                                         notifications.emit('message', current_seasons);
-                                        notifications.emit('message', "result for season " + result.season);
 
 
 
 
-                                        if (current_seasons.indexOf(result.season) >= 0) {
+                                        if (seasonNumber && current_seasons.indexOf(seasonNumber) >= 0) {
 
                                             //notifications.emit('message', "Looks like season " + result.season + " of " + name + " already exists.");
 
 
                                             var tv_update3 = Tv.update({
                                                     _id: find_show._id,
-                                                    'seasons.season_number': result.season
+                                                    'seasons.season_number': seasonNumber,
+                                                    section: sectionId,
                                                 }, {
-                                                    $push: {
-                                                        "seasons.$.episodes": {
-                                                            $each: episodes
-                                                        }
+                                                    $set: {
+                                                        "seasons.$.episodes": episodes
                                                     }
                                                 }, {
                                                     multi: true
                                                 }
 
                                             );
-                                            callback(null, "Looks like season " + result.season + " of " + name + " already exists.");
+                                            callback(null, "Looks like season " + seasonNumber + " of " + name + " already exists.");
                                             
 
 
@@ -4969,21 +5256,33 @@ var seasonEps = "";
 
 
                                         }
-                                        else {
+                                        else if (!season) {
 
                                             notifications.emit('message', "Found " + name + " in DB, adding the episodes to it!");
+                                            notifications.emit('message', season);
 
 
                                             Tv.update({
-                                                _id: find_show._id
+                                                _id: find_show._id,
+                                                section: sectionId,
                                             }, {
                                                 $push: {
-                                                    'seasons': seasons
+                                                    'seasons': {
+                                                     
+                                                        episodes: episodes,
+                                                        poster: "",
+                                                        posters: [],
+                                                        season_number: seasonNumber,   
+                                                        
+                                                    }
                                                 }
                                             });
 
-                                            callback(null, "Added episodes to " + name + " season " + result.season);
+                                            callback(null, "Added episodes to " + name + " season " + seasonNumber);
 
+                                        }
+                                        else {
+                                            
                                         }
 
                                     }
@@ -5006,14 +5305,7 @@ var seasonEps = "";
 
 
 
-                            }
-                            else {
-                                callback(null, "This is an episode not a season " + result.title);
-                            }
-
-                        }
-
-                    }));
+                         
 
 
 
@@ -5024,6 +5316,9 @@ var seasonEps = "";
                 function directoryRecur(directory, name, seasons, callback) {
 
                     var emitter2 = walk(directory);
+                    
+                    notifications.emit('message', "seasons test");
+                    notifications.emit('message', seasons);
 
                     //var seasons = [];
 
@@ -5048,15 +5343,87 @@ var seasonEps = "";
 
                         directories.forEach(function(file, index, array) {
 
-                            notifications.emit('message', "TESTTTT");
-                            notifications.emit('message', seasons);
+                            notifications.emit('message', "Checking the folder " + file);
+                            
+                            var folder = path.basename(file);
+                            
+                            
+                            Meteor.call('showName2', folder, Meteor.bindEnvironment(function(error, result) { // Check the folder name to make sure it's a season.
+
+                                if (error) {
+        
+                                    notifications.emit('message', error);
+                                    callback(null, error);
+        
+                                }
+                                else {
+                                    
+                                    
+                                    if (result.season && !result.episode) { // If there's a season, but no episode
+
+                                
+                                var season = result.season;
+                                
+                                if(season && seasons) { // I need to get the correct logic here to only run when there are seasons. No point trying to filter through nothing, and spitting out undefined errors.
+                                    
+                                    notifications.emit('message', "seasons test");
+                                notifications.emit('message', seasons);
+                                
+                                var seasonExist = seasons.filter(function( obj ) { // Look for a season with the current season number.
+                                    return +obj.season_number === +season;
+                                })[ 0 ];
+                                
+                                }
+                                
+                                
+                                /*
+                                var check = seasons[seasonIndex].map(function ( obj ) {
+                                    return obj.episode === result.episode;
+                                })[0]
+                                */
+                                notifications.emit('message', "check test");
+                                notifications.emit('message', season);
+                                notifications.emit('message', seasonExist);
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    var episodesWrap = Async.wrap(episodes);
+
+                                    var response = episodesWrap(file, name, seasonExist, season);
+        
+                                    notifications.emit('message', response);
+                                    
+                                    
+                                    
+                                    
+                                    }
+                                    
+                                    
+                                    
+                                    
+                                    
+                                }
+                                
+                                
+                            }))
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             
 
-                            var episodesWrap = Async.wrap(episodes);
-
-                            var response = episodesWrap(file, name, seasons);
-
-                            notifications.emit('message', response);
+                            
 
 
 
@@ -5117,14 +5484,10 @@ var seasonEps = "";
                         notifications.emit('message', response);
 
                         if (response.series) {
-
-                            notifications.emit('message', "The series is " + response.series);
                             
                             // Need to include a check for duplicate episodes
                             
                             var seasons = response.seasons;
-                            notifications.emit('message', "Testing all the seasons...");
-                            notifications.emit('message', seasons);
                             
 
                             var directoryWrap = Async.wrap(directoryRecur);
@@ -5217,9 +5580,9 @@ var seasonEps = "";
                     
 
 
-                    var allShows = Tv.find().fetch();
+                    var allShows = Tv.find({section: sectionId}).fetch();
 
-                    notifications.emit('message', "All Shows:");
+                    notifications.emit('message', "I finished adding all your shows. I'm now going to pickup some extra metadata in the background for episodes, etc. Here's all the shows you have in your database:");
                     notifications.emit('message', allShows);
 
 
@@ -5229,6 +5592,9 @@ var seasonEps = "";
                         var id = file.show_id;
                         name = file.name;
                         var episode_info = file.episode_info;
+                        notifications.emit('message', "All show info for " + name + " :");
+                        notifications.emit('message', file);
+                        
 
                         file.seasons.forEach(function(file, index, array) {
 
@@ -5238,15 +5604,18 @@ var seasonEps = "";
                             var episodes = file.episodes;
                             var episodeInfo = [];
 
-                            notifications.emit('message', "Episode Info for " + name);
+                            notifications.emit('message', "Getting season data for " + name + " season " + season);
                             notifications.emit('message', episode_info);
-
+                            
+                            
+                            // Get the season object
                             // Likely a better way to do this. Maybe pull all objects with a season number matching the current season in the function above. Then search thtat array for episodes.
                             episodeInfo = episode_info.filter(function(obj) {
                                 return obj.SeasonNumber == season;
                             });
+                            
 
-                            notifications.emit('message', "After Episode Info for " + name);
+                            notifications.emit('message', "All season info for " + name + " season " + season);
                             notifications.emit('message', episodeInfo);
 
 
@@ -5288,6 +5657,7 @@ var seasonEps = "";
 
 
                                         var episodeArray = [];
+                                        
 
 
                                         episodes.forEach(function(file, index, array) {
@@ -5327,6 +5697,7 @@ var seasonEps = "";
                                         }
 
                                         });
+                                        
 
 
 
@@ -5348,7 +5719,8 @@ var seasonEps = "";
 
                                         var tv_update3 = Tv.update({
                                                 _id: _id,
-                                                'seasons.season_number': season
+                                                'seasons.season_number': season,
+                                                section: sectionId,
                                             }, {
                                                 $set: {
                                                     "seasons.$.poster": season_posters[0],
@@ -5399,6 +5771,7 @@ var seasonEps = "";
 
 
                         });
+                        
 
                     })
                     
@@ -6457,11 +6830,11 @@ var seasonEps = "";
 
             },
 
-            removeShows: function() {
+            removeShows: function(section) {
 
 
 
-                return Tv.remove({});
+                return Tv.remove({section: section});
 
             },
 

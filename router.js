@@ -3,6 +3,20 @@ Router.map(function(){
     this.route('home', {path: '/'} );
 });
 
+/*
+Router.route('/section/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+  name: 'content', // This links to the template
+  waitOn: function() {
+        return Meteor.subscribe('sections');
+      },
+      data: function() {
+        return Sections.findOne(this.params._id);
+      },
+      fastRender: true,
+      cache: 5, //cache 5 blog posts
+    expire: 3 //expire them if inactive for 3 minutes
+});
+*/
 
 Router.route('/movies', { // Route to template to the specified link, and pull the id from the Mongodb collection.
   name: 'movies', // This links to the template
@@ -18,54 +32,66 @@ Router.route('/movies', { // Route to template to the specified link, and pull t
     expire: 3 //expire them if inactive for 3 minutes
 });
 
-
-Router.route('/shows', { // Route to template to the specified link, and pull the id from the Mongodb collection.
-  name: 'shows', // This links to the template
+Router.route('/section/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+  name: 'section', // This links to the template
   waitOn: function() {
-        return Meteor.subscribe('tv');
+        return Meteor.subscribe('section', this.params._id);
       },
       data: function() {
-        return {
-        show : Tv.find({})}
+        return Sections.findOne(this.params._id)
       },
       fastRender: true,
       cache: 5, //cache 5 blog posts
     expire: 3 //expire them if inactive for 3 minutes
 });
+/*
 
+Router.route('/shows/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+  name: 'shows', // This links to the template
+  waitOn: function() {
+        return Meteor.subscribe('tv', this.params._id);
+      },
+      data: function() {
+        return Tv.findOne(this.params._id)
+      },
+      fastRender: true,
+      cache: 5, //cache 5 blog posts
+    expire: 3 //expire them if inactive for 3 minutes
+});
+*/
 
 // Route to specific page to edit the client
-Router.route('/movie/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+Router.route('/section/:section/movie/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
   name: 'viewMoviePage', // This links to the template
   waitOn: function() {
-      return Meteor.subscribe('movie_info', this.params._id);
+      return Meteor.subscribe('movie_info', this.params._id, this.params.section);
   },
-  data: function() { return Moviess.findOne(this.params._id); }, // This returns the id for the specified item
+  data: function() { return Moviess.findOne({_id:this.params._id, section: this.params.section}); }, // This returns the id for the specified item
   fastRender: true,
   cache: 5, //cache 5 blog posts
     expire: 3 //expire them if inactive for 3 minutes
 });
 
-Router.route('/show/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+Router.route('/section/:section/show/:_id', { // Route to template to the specified link, and pull the id from the Mongodb collection.
   name: 'viewShowPage', // This links to the template
   waitOn: function() {
-      return Meteor.subscribe('tv_info', this.params._id);
+      return Meteor.subscribe('tv_info', this.params._id, this.params.section);
   },
-  data: function() { return Tv.findOne(this.params._id); }, // This returns the id for the specified item
+  data: function() { return Tv.findOne({_id:this.params._id, section: this.params.section}); }, // This returns the id for the specified item
   fastRender: true,
   cache: 5, //cache 5 blog posts
     expire: 3 //expire them if inactive for 3 minutes
 });
 
-Router.route('/show/:_id/season/:season_number', {
+Router.route('/section/:section/show/:_id/season/:season_number', {
       name: 'viewSeasonPage', // This links to the template
       waitOn: function() {
-      return Meteor.subscribe('tv_info', this.params._id);
+      return Meteor.subscribe('tv_info', this.params._id, this.params.section);
   },
       data: function() { 
         var season_number = this.params.season_number;
         
-               var tv = Tv.findOne(this.params._id);
+               var tv = Tv.findOne({_id:this.params._id, section:this.params.section});
                if (tv && tv.seasons) { 
                    
                  return tv.seasons.find(function(season) {

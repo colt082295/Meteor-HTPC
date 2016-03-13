@@ -1,0 +1,24 @@
+<template name="content">
+    
+    {{#if equals format "movies"}}
+    
+        {{> movies}}
+        
+    {{else}}
+    
+        {{#if equals format "shows"}}
+    
+            {{> shows}}
+        
+        {{else}}
+        
+            {{> shows}}
+    
+        {{/if}}
+        
+    {{/if}}
+    
+    
+    
+    
+</template>

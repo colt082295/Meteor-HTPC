@@ -1,96 +1,62 @@
 <template name="nav">
-<nav class="title-bar" data-responsive-toggle="top-bar-menu" data-hide-for="medium">
-  <div class="title-bar-left">
-    <a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="Logo"></a>
-  </div>
-
-  <div class="title-bar-right">
-    <button class="menu-icon" type="button" data-toggle></button>
-  </div>
-</nav>
-
-<nav class="top-bar" id="top-bar-menu">
-  <div class="row">
-    <div class="top-bar-left show-for-medium">
-      <ul class="menu menu-items">
-        <li><a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="logo"></a></li>
-      </ul>
+  <nav class="title-bar" data-responsive-toggle="top-bar-menu" data-hide-for="medium">
+    <div class="title-bar-left">
+      <a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="Logo"></a>
     </div>
-    <div class="top-bar-right">
-      <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
-        <li>
-          <a href="{{pathFor 'movies'}}">Movies</a>
-          <ul class="menu vertical ">
-            <li>
-              <a href="#">Item 1A</a>
-              <ul class="menu vertical ">
-                <li><a href="#">Item 1Ai</a></li>
-                <li><a href="#">Item 1Aii</a></li>
-                <li><a href="#">Item 1Aiii</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Item 1B</a></li>
-            <li><a href="#">Item 1C</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="{{pathFor 'shows'}}">Shows</a>
-          <ul class="menu vertical ">
-            <li><a href="#">Item 2A</a></li>
-            <li><a href="#">Item 2B</a></li>
-          </ul>
-        </li>
-        <li id="downloads-tab" class=""><a href="#">Downloads</a></li>
-        <li id="history-tab" class=""><a href="#">History</a></li>
-        <li class="hide-for-small-only">
-          <input class="form-control typeahead" name="team" type="text"
-           placeholder=""
-           autocomplete="off" spellcheck="off"
-           data-sets="search"/>
-       </li>
-      </ul>
+  
+    <div class="title-bar-right">
+      <button class="menu-icon" type="button" data-toggle></button>
     </div>
-  </div>
-</nav>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="modal1" class="modal">
-    <div class="modal-content">
-      <div class="dir">
-                {{#each currentDir}}
-                    <p><a class="folder" href="#">{{this}}</a></p>
-                {{/each}}
+  </nav>
+  
+  <nav class="top-bar" id="top-bar-menu">
+    <div class="row">
+      <div class="top-bar-left show-for-medium">
+        <ul class="menu menu-items">
+          <li><a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="logo"></a></li>
+        </ul>
+      </div>
+      <div class="top-bar-right">
+        <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
+          <li>
+            <a href="{{pathFor 'movies'}}">Movies</a>
+            <ul class="menu vertical ">
+              <li>
+                <a href="#">Item 1A</a>
+                <ul class="menu vertical ">
+                  <li><a href="#">Item 1Ai</a></li>
+                  <li><a href="#">Item 1Aii</a></li>
+                  <li><a href="#">Item 1Aiii</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Item 1B</a></li>
+              <li><a href="#">Item 1C</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="{{pathFor 'shows'}}">Shows</a>
+            <ul class="menu vertical ">
+              <li><a href="#">Item 2A</a></li>
+              <li><a href="#">Item 2B</a></li>
+            </ul>
+          </li>
+          <li id="downloads-tab" class=""><a href="#">Downloads</a></li>
+          <li id="history-tab" class=""><a href="#">History</a></li>
+          <li class="hide-for-small-only">
+            <input class="form-control typeahead" name="team" type="text"
+             placeholder=""
+             autocomplete="off" spellcheck="off"
+             data-sets="search"/>
+         </li>
+        </ul>
       </div>
     </div>
-    <div class="modal-footer">
-      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
+  </nav>
 
 </template>
 
 <template name="team">
+  
   <div class="search-content">
     <a href="#">
       <div class="img-wrapper">
@@ -102,4 +68,5 @@
       </div>
     </a>
   </div>
+  
 </template>

@@ -26,7 +26,7 @@
                     
                 {{#each season}}
 
-                  <a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number}}" class="movies_wrapper inline-block">
+                  <a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number section = ../section}}" class="movies_wrapper inline-block">
                     <div class="carousel-item">
                       <div class="carousel-img-wrapper">
                         <div class="carousel-img" style="background-image: url('{{this.poster}}')">

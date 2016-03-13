@@ -2,33 +2,7 @@
 
   {{> nav}}
   
-  
-  <video id="video" class="video-js vjs-flat-skin" controls width="640" height="264">
-    <source src="http://167.114.103.80:{{port}}/" type='video/webm'>
-    <p class="vjs-no-js">
-      To view this video please enable JavaScript, and consider upgrading to a web browser that
-      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
-  </video>
-  
-  
-  <script>
-    var player = videojs('video', { /* Options */ }, function() {
-  console.log('Good to go!');
-
-  this.play(); // if you don't trust autoplay for some reason
-
-  // How about an event listener?
-  this.on('ended', function() {
-    console.log('awww...over so soon?');
-  });
-});
-  </script>
-
-  
-  
-  
-  
+  {{> sidebar}}
   
   
   

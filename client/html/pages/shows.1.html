@@ -1,10 +1,10 @@
-<template name="movies">
+<template name="shows">
 
 <div class="main columns">
     
     <div class="">
-        <button class="scan">Scan Movies</button>
-        <button class="remove">Remove Movies</button>
+        <button class="scan">Scan Shows</button>
+        <button class="remove">Remove Shows</button>
         <a href="" class="button info">Re-Scan Info</a>
         
         
@@ -23,9 +23,6 @@
             <div class="">
               <div class="">
                 <div class="carousel-img" style="background-image: url('{{this.poster}}')">
-                    {{#if greater_one this.location.length 1}}
-                        <span class="info badge left">{{this.location.length}}</span>
-                    {{/if}}
                 </div>
               </div>
               <div class="carousel-title">{{this.name}}</div>
