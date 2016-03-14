@@ -1,4 +1,5 @@
 <template name="nav">
+  <div class="nav-wrapper">
   <nav class="title-bar" data-responsive-toggle="top-bar-menu" data-hide-for="medium">
     <div class="title-bar-left">
       <a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="Logo"></a>
@@ -17,6 +18,7 @@
         </ul>
       </div>
       <div class="top-bar-right">
+        <!--
         <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
           <li>
             <a href="{{pathFor 'movies'}}">Movies</a>
@@ -25,8 +27,6 @@
                 <a href="#">Item 1A</a>
                 <ul class="menu vertical ">
                   <li><a href="#">Item 1Ai</a></li>
-                  <li><a href="#">Item 1Aii</a></li>
-                  <li><a href="#">Item 1Aiii</a></li>
                 </ul>
               </li>
               <li><a href="#">Item 1B</a></li>
@@ -40,21 +40,24 @@
               <li><a href="#">Item 2B</a></li>
             </ul>
           </li>
-          <li id="downloads-tab" class=""><a href="#">Downloads</a></li>
-          <li id="history-tab" class=""><a href="#">History</a></li>
+          
           <li class="hide-for-small-only">
             <input class="form-control typeahead" name="team" type="text"
              placeholder=""
              autocomplete="off" spellcheck="off"
              data-sets="search"/>
-         </li>
+         </li> 
         </ul>
+        -->
       </div>
     </div>
   </nav>
+  
+  </div>
 
 </template>
 
+<!--
 <template name="team">
   
   <div class="search-content">
@@ -70,3 +73,4 @@
   </div>
   
 </template>
+-->

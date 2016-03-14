@@ -450,7 +450,7 @@ $titlebar-height: $topbar-height;
   }
 }
 .top-bar{ 
-    height: auto!important;
+    //height: auto!important;
     
 }
 
@@ -744,4 +744,28 @@ $titlebar-height: $topbar-height;
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
+}
+
+.nav-wrapper {
+    box-shadow: 0px 1px 7px rgba(192, 192, 192, 0.79);
+    z-index: 1;
+}
+
+
+
+.flex-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    
+    >div {
+        width: 100%;
+    }
+    .fill-vert {
+        flex: 1;
+    }
+}
+
+.main {
+    padding: 1em;
 }

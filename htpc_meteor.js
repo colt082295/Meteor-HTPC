@@ -451,8 +451,9 @@ var time2 = 0;
     
     Template.player.onDestroyed(function() {
         
-        
-        videojs("video").dispose();
+        var oldPlayer = document.getElementById('video');
+        videojs(oldPlayer).dispose();
+        //videojs("video").dispose();
         console.log("Destroyed");
         
         
@@ -469,162 +470,7 @@ var time2 = 0;
             // Add a check to see if it supports HLS and also DASH. I also want to try to force fullscreen landscape on mobile.
             
             var myVideo = document.createElement('video');
-            if (myVideo.canPlayType('video/webm')) {
-                console.log("You can play webm")
-                Meteor.call('streamWebm', location, function(error, result) {
-                  if (error) {
-                      
-                      console.log(error);
-                      
-                  } else {
-                      
-                      console.log(result);
-                      //videojs("video").ready(function(){
-                      var player = videojs("video").ready(function(){
-                          //var player = videojs('video', {  }, function() {
-                          console.log('Good to go!');
-                          
-                          /*
-                          
-                          I have to figure out a way to pass the correct port for the video to the video player on the page.
-                          
-                          */
-                          this.bigPlayButton.hide();
-                          this.loadingSpinner.show();
-                          
-                          
-                          // find out way to get loading spinner to show up so user knows something is happening.
-                          
-                          
-                          //this.duration(result.duration);
-                          
-                          // {"type":"application/x-mpegURL", "src":"http://167.114.103.80:2347/stream/stream.m3u8"},
-                          this.src({"type":"video/webm", "src":"http://167.114.103.80:"+result.port});
-                          //this.duration(result.duration);
-                          this.load();
-                          //this.play();
-                          
-                          // The duration gets screwed up for some reason, but if i pause the video once the page loads, the duration is right. Why?
-                          
-                          
-                          
-                        
-                          //this.play(); // if you don't trust autoplay for some reason
-                          //this.duration(result.duration);
-                          
-                          this.on("play", function(){
-        //this.duration(result.duration);
-        this.loadingSpinner.hide();
-        //this.controlBar.show();
-
-      });
-      
-      /*
-                     this.on("loadeddata", function(){ // is this an actual event?
-        this.duration(result.duration);
-        this.play();
-        this.loadingSpinner.hide();
-        //this.controlBar.show();
-
-      });
-      */
-      
-                     this.on("loadedmetadata", function(){ // is this an actual event?
-                     
-        this.duration(result.duration);
-        this.play();
-        this.loadingSpinner.hide();
-        //this.controlBar.show();
-                     
-
-      });
-      
-/*
-this.on("timeupdate", function(){
-    
-    console.log('Event callback: ' + this.currentTime); 
-    
-})
-*/
-
-
-
-this.on('timeupdate', function() {
-    time = this.currentTime();
-});
-/*
-
-this.on('progress', function() {
-    if (time === time2) {
-        console.log("They equal");
-        this.currentTime(time);
-    }
-});
-    */  
-                    this.on("seeking", function(){ // is this an actual event?
-       
-        time2 = this.currentTime();
-        Session.set("time", time);
-        console.log('want to seek to ' + time );
-        
-        //if (time !== time2) {
-        
-        
-        Meteor.call('streamSeek', location, time2, function(error, result) {
-                  if (error) {
-                      
-                      console.log(error);
-                      
-                  } else {
-                      
-                      
-                      setTimeout(function() {  
-                            player.pause();
-                        
-                        player.loadingSpinner.show();
-                           player.src({"type":"video/webm", "src":"http://167.114.103.80:"+result.port});
-                        player.currentTime(time2);
-                            player.load();
-                            //player.currentTime(time2);
-                            player.play();
-                        }, 3000);
-                      
-                      
-                      
-                  }
-                  
-                  
-                  
-        })
-        
-       /* } else {
-            console.log('Time is equal' );
-            //player.currentTime(time2);
-            //player.play();
-        }
-        
-        */
-        
-        
-        
-        
-
-      });
-                          
-                        
-                          // How about an event listener?
-                          this.on('ended', function() {
-                            console.log('awww...over so soon?');
-                          });
-                        });
-                      
-                      
-                  }
-            
-            
-            });
-            }
-            else if (myVideo.canPlayType('video/mp4')) {
+            if (myVideo.canPlayType('video/mp4')) {
                 console.log("You can play mp4")
                 Meteor.call('streamMp4', location, function(error, result) {
                   if (error) {
@@ -673,17 +519,8 @@ this.on('progress', function() {
 
       });
       
-      
-                     this.on("loadeddata", function(){ // is this an actual event?
-        //this.duration(result.duration);
-        this.play();
-        this.loadingSpinner.hide();
-        //this.controlBar.show();
-
-      });
-      
                      this.on("loadedmetadata", function(){ // is this an actual event?
-        //this.duration(result.duration);
+        this.duration(result.duration);
         this.play();
         this.loadingSpinner.hide();
         //this.controlBar.show();
@@ -992,7 +829,31 @@ Template.viewSeasonPage.events({
 
     Template.movies.helpers({
 
+        content: function() {
+            return Moviess.find().fetch();
+        },
+
     });
+    
+    var subMovie;
+    
+    Template.movies.onCreated(function() {
+        
+        var route = Router.current();
+        
+        console.log(route);
+        
+        subMovie = Meteor.subscribe('movies', route.params._id);
+
+    });
+    
+    Template.shows.onDestroyed(function() {
+        
+        console.log("Section destroyed.");
+        subMovie.stop();
+        
+        
+    })
 
     Template.registerHelper('encodeName', function() {
         this.name = encodeURIComponent(this.name);
@@ -1359,8 +1220,88 @@ Template.viewSeasonPage.events({
     Template.registerHelper("equals", function(a, b) {
         return (a === b);
     });
+    
+    Template.movies.events({
+
+        'click .info': function(event, template) {
+
+            notifications.on('message', function(message) {
+                console.log(message);
+            });
+
+            Meteor.call('rescanShows', function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error with the Re-scan " + error);
+
+                }
+                else {
+
+                    console.log("Finished Re-scan");
+
+                }
+
+            })
 
 
+        },
+
+        'click .scan': function(event, template) {
+            event.preventDefault();
+
+
+            var route = Router.current();
+            
+            var location = this.location;
+            
+            console.log(location);
+
+            Meteor.call('guessIt2', route.params._id, location, function(error, result) { // Try to guess the title from the filename
+
+                if (error) {
+
+                    console.log("Guess Error!");
+
+                }
+                else {
+
+                    console.log(result);
+
+
+                }
+
+            });
+            
+        },
+
+        'click .remove': function(event, template) {
+            
+            var route = Router.current();
+
+            Meteor.call('removeShows', route.params._id, function(error, result) {
+
+                if (error) {
+
+                    console.log("Remove Error!");
+
+                }
+                else {
+
+                    toastr.success("Remove: ", "Removed the shows.");
+
+                    console.log("All shows removed.");
+
+
+                }
+
+            });
+
+        },
+
+    });
+
+/*
     Template.movies.events({
 
         'click .start': function(event, template) {
@@ -1390,7 +1331,7 @@ Template.viewSeasonPage.events({
 
 
     });
-
+*/
 
 
 
@@ -1629,9 +1570,9 @@ if (Meteor.isServer) {
         });
     });
 
-    Meteor.publish('movies', function() {
+    Meteor.publish('movies', function(section) {
         //this.unblock();
-        return Moviess.find({}, {
+        return Moviess.find({section: section}, {
             fields: {
                 name: 1,
                 _id: 1,
@@ -2639,6 +2580,27 @@ ffmpeg.ffprobe(path, function(err, metadata) {
     });
     
     */
+    
+    /*
+    var range = req.headers.range
+    , parts = range.replace(/bytes=/, "").split("-")
+    , partialstart = parts[0]
+    , partialend = parts[1]
+    , start = parseInt(partialstart, 10)
+    , end = partialend ? parseInt(partialend, 10) : metadata.format.size-1
+    , chunksize = (end-start)+1
+    
+    res.writeHead(206
+    , { 'Content-Range': 'bytes ' + start + '-' + end + '/' + metadata.format.size
+    , 'Accept-Ranges': 'bytes', 'Content-Length': chunksize
+    , 'Transfer-Encoding': 'chunked'
+    , 'Content-Type': 'video/mp4'
+    })
+    
+    console.log(end);
+    console.log("PLAYING MP4");
+    */
+    
 
 var stream  = fs.createWriteStream('/var/home/colt/plesk_hosted/htpc_meteor/public/stream/out.mp4');
                         ffmpeg(path)
@@ -2692,7 +2654,7 @@ var stream  = fs.createWriteStream('/var/home/colt/plesk_hosted/htpc_meteor/publ
                            
     //.pipe(res, { end: true })
     .withVideoCodec('libx264')
-                            .addOptions(['-crf 24', '-movflags frag_keyframe', '-preset ultrafast']) // -movflags frag_keyframe+empty_moov   -movflags +faststart    Might use a different flag to move the metadata to the front.
+                            .addOptions(['-crf 24', '-movflags frag_keyframe+empty_moov', '-preset ultrafast']) // -movflags frag_keyframe+empty_moov   -movflags +faststart    Might use a different flag to move the metadata to the front.
                             .withVideoBitrate(2200)
                             .withAudioCodec('libfdk_aac')
                             .audioBitrate('128k')
@@ -2936,6 +2898,34 @@ ffmpeg.ffprobe(path, function(err, metadata) {
     });
     
     */
+    /*
+    var range = req.headers.range
+    , parts = range.replace(/bytes=/, "").split("-")
+    , partialstart = parts[0]
+    , partialend = parts[1]
+    , start = parseInt(partialstart, 10)
+    , end = partialend ? parseInt(partialend, 10) : metadata.format.size-1
+    , chunksize = (end-start)+1
+    
+    res.writeHead(206
+    , { 'Content-Range': 'bytes ' + start + '-' + end + '/' + metadata.format.size
+    , 'Accept-Ranges': 'bytes', 'Content-Length': chunksize
+    , 'Transfer-Encoding': 'chunked'
+    , 'Content-Type': 'video/webm'
+    })
+    
+    console.log(end);
+    
+    */
+    
+    /*
+     res.writeHead(206, { 
+    'Content-Type': 'video/webm',
+    'Content-Length': metadata.format.size,
+    "Content-Range": "bytes 0-"+end+"/"+metadata.format.size,
+    "Accept-Ranges": "0-"+metadata.format.size,
+     });
+     */
 
 var stream  = fs.createWriteStream('/var/home/colt/plesk_hosted/htpc_meteor/public/stream/out.mp4');
                         ffmpeg(path)
@@ -3495,7 +3485,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
 
-            guessIt2: function() {
+            guessIt2: function(id, folder) {
 
                 this.unblock();
 
@@ -3508,7 +3498,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                 var future = new Future();
 
 
-                var dir = "/home/colt/Plex/movies";
+                //var dir = "/home/colt/Plex/movies";
                 var walk = Meteor.npmRequire('walk'),
                     fs = Meteor.npmRequire('fs'),
                     walker;
@@ -3516,7 +3506,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
 
-                walker = walk.walk(dir, options);
+                walker = walk.walk(folder, options);
 
 
 
@@ -3566,7 +3556,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                     else {
                                         Moviess.insert({
                                             name: result,
-                                            location: [location]
+                                            location: [location],
+                                            section: id,
                                         });
 
                                         console.log(result);
@@ -3611,7 +3602,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
                 walker.on("end", function() {
 
-                    var fetch = Moviess.find().fetch();
+                    var fetch = Moviess.find({section: id}).fetch();
 
 
                     fetch.forEach(function(file, index, array) { // This runs a foreach to go through every movie in the movie collection.
@@ -3674,7 +3665,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                         var title = it.original_title;
 
                                         Moviess.update({
-                                            _id: file._id
+                                            _id: file._id,
+                                            section: id,
                                         }, {
                                             name: title,
                                             overview: overview,
@@ -3683,7 +3675,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                             old_name: old_name,
                                             poster: poster_base + poster,
                                             movie_id: movie_id,
-                                            location: [location]
+                                            location: [location],
+                                            section: id,
                                         }, function(err, res) {
                                             if (err) {
                                                 console.log("single - ERROR UPDATING: " + title);
@@ -3701,7 +3694,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
                                         Moviess.update({
-                                            _id: file._id
+                                            _id: file._id,
+                                            section: id,
                                         }, {
                                             $set: {
                                                 hide: 'yes'
@@ -3783,7 +3777,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                         var title = it.original_title;
 
                                         Moviess.update({
-                                            _id: file._id
+                                            _id: file._id,
+                                            section: id,
                                         }, {
                                             name: title,
                                             overview: overview,
@@ -3792,7 +3787,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                             old_name: old_name,
                                             poster: poster_base + poster,
                                             movie_id: movie_id,
-                                            location: [location]
+                                            location: [location],
+                                            section: id,
                                         }, function(err, res) {
                                             if (err) {
                                                 console.log("single - ERROR UPDATING: " + title);
@@ -3810,7 +3806,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
                                         Moviess.update({
-                                            _id: file._id
+                                            _id: file._id,
+                                            section: id,
                                         }, {
                                             $set: {
                                                 hide: 'yes'
@@ -3877,7 +3874,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
                         notifications.emit('message', file.name);
                         var fetch = Moviess.find({
-                            name: file.name
+                            name: file.name,
+                            section: id,
                         }).fetch();
 
                         fetch.forEach(function(file, index, array) {
@@ -3889,10 +3887,11 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
                         });
 
-                        var id = id_array.shift();
+                        var id1 = id_array.shift();
 
                         Moviess.update({
-                            _id: id
+                            _id: id1,
+                            section: id,
                         }, {
                             $set: {
                                 location: location_array
@@ -3912,7 +3911,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                         id_array.forEach(function(file, index, array) {
 
                             Moviess.remove({
-                                _id: file
+                                _id: file,
+                                section: id,
                             }, function(err, res) {
                                 if (err) {
                                     console.log("ERROR REMOVING: " + file);

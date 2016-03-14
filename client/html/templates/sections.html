@@ -1,11 +1,12 @@
 <template name="section">
 
-  {{> nav}}
-  
   <div class="wrapper">
   
-<div class="container full-height row">
+<div class="flex-wrap">
+
+  {{> nav}}
   
+  <div class="row fill-vert">
   {{> sidebar}}
   
   
@@ -27,7 +28,7 @@
         {{/if}}
         
     {{/if}}
-  
+  </div>
   
     </div>
 </div>

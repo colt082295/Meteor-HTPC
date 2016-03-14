@@ -2,14 +2,20 @@
 
   {{> nav}}
   
-<div class="wrapper">
+    <div class="wrapper">
+  
+<div class="container full-height row">
+  
+  {{> sidebar}}
+  
+  
+<div class="main columns">
     
     <div class="top-wrapper">
         <div class="movie-info">
             <button class="remove">Remove Show</button>
             <div class="content" id="panel1">
                 <p class="movie-description">{{overview}}</p>
-                {{season_number}}
                 {{#each episodes}}
 
                 <a href="{{pathFor 'player'}}" class="episode_wrapper inline-block">
@@ -36,5 +42,8 @@
 </div>
 
 {{> footer}}
+</div>
+</div>
+
                   
 </template>
