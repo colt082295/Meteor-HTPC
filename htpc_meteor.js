@@ -531,7 +531,6 @@ var time2 = 0;
         console.log('seeking 1' + this.currentTime() );
         var time = this.currentTime();
         
-        
         Meteor.call('streamSeek', location, time, function(error, result) {
                   if (error) {
                       
@@ -644,14 +643,221 @@ Template.viewSeasonPage.events({
 
             return Sections.find({});
 
-        }
+        },
+        
+        directories: function() {
+
+            return Session.get("directories");
+
+        },
 
 
     });
     
+    Template.sidebar.onRendered(function(event,template) {
+        
+        
+    })
+    
+    var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
+var timeoutId = 0;
     
     Template.sidebar.events({
         
+        
+        'keyup #edit-content-location': function(event, template){
+            
+            clearTimeout(timeoutId); // doesn't matter if it's 0
+            timeoutId = setTimeout(function(){
+        
+              console.log( "Handler for .keypress() called." );
+              
+              var folder = $('#edit-content-location').val();
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+            
+            
+            
+            }, 500);
+            
+            
+            
+            
+        },
+        
+        'click #editing-content .directory': function(event, template) {
+            
+            var target = event.target.text;
+            var folder = $('#edit-content-location').val();
+            console.log(target);
+            
+            folder = folder.replace(/\/?$/, '/'); // If no trailing slash, add it
+            folder = folder + target;
+            $('#edit-content-location').val(folder);
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+            
+            
+        },
+        
+        'click #adding-content .directory': function(event, template) {
+            
+            var target = event.target.text;
+            var folder = $('#new-content-location').val();
+            console.log(target);
+            
+            folder = folder.replace(/\/?$/, '/'); // If no trailing slash, add it
+            folder = folder + target;
+            $('#new-content-location').val(folder);
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+            
+            
+        },
+        
+        'click #editing-content #up-directory': function(event, template) {
+            
+            var folder = $('#edit-content-location').val();
+            
+            folder = folder.substr(0, folder.lastIndexOf("/"));
+            $('#edit-content-location').val(folder);
+            console.log(folder);
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+            
+            
+        },
+        
+        'click #adding-content #up-directory': function(event, template) {
+            
+            var folder = $('#new-content-location').val();
+            
+            folder = folder.substr(0, folder.lastIndexOf("/"));
+            $('#new-content-location').val(folder);
+            console.log(folder);
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+            
+            
+        },
+        
+        'keyup #add-content-location': function(event, template){
+            
+            clearTimeout(timeoutId); // doesn't matter if it's 0
+            timeoutId = setTimeout(function(){
+        
+              console.log( "Handler for .keypress() called." );
+              
+              var folder = $('#add-content-location').val();
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+            
+            
+            
+            }, 500);
+            
+            
+            
+            
+        },
+    
     
         'submit #adding-content': function(event, template) {
             
@@ -674,6 +880,11 @@ Template.viewSeasonPage.events({
 
                     console.log("Added new section.");
                     $('#add-content').foundation('close');
+                    
+                    
+                    
+                    
+                    
 
                 }
 
@@ -733,9 +944,59 @@ Template.viewSeasonPage.events({
             $('#edit-content-location').val(location);
             //$("#edit-content-format select").val(format);
             $( "#edit-content-format" ).val(format);
+            
+            var folder = location;
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
 
 
         },
+        
+        'click .add': function(event, template) {
+            
+            event.preventDefault();
+            
+            console.log("You clicked add.");
+            
+            $('#add-content').foundation('open');
+            
+            var folder = $( "#new-content-location" ).val();
+                
+                Meteor.call('folderTree', folder, function(error, result) {
+    
+                    if (error) {
+    
+                        console.log("There was an error checking the directory. " + error);
+    
+                    }
+                    else {
+    
+                        console.log("Looked in the directory." + folder);
+                        Session.set("directories", result);
+                        console.log(result);
+    
+                    }
+    
+                });
+
+
+        },
+        
         
         'click #remove-sections': function(event, template) {
             
@@ -989,38 +1250,6 @@ Template.viewSeasonPage.events({
     });
 
     Template.home.events({
-
-        'click .start': function(event, template) {
-            event.preventDefault();
-            notifications.on('message', function(message) {
-                console.log(message);
-            });
-            if (search_running === "") {
-
-                Meteor.call('guessIt2', function(error, result) { // Try to guess the title from the filename
-
-                    if (error) {
-
-                        console.log("Guess Error!");
-
-                    }
-                    else {
-
-                        console.log(result);
-
-
-                    }
-
-                });
-
-            }
-            else {
-                console.log("There's already a search running. Please wait until it finishes.");
-            }
-
-
-
-        },
 
         'click .add-movie': function(event, template) {
             event.preventDefault();
@@ -1279,7 +1508,7 @@ Template.viewSeasonPage.events({
             
             var route = Router.current();
 
-            Meteor.call('removeShows', route.params._id, function(error, result) {
+            Meteor.call('removeMovies', route.params._id, function(error, result) {
 
                 if (error) {
 
@@ -1288,9 +1517,9 @@ Template.viewSeasonPage.events({
                 }
                 else {
 
-                    toastr.success("Remove: ", "Removed the shows.");
+                    toastr.success("Removed the Movies.");
 
-                    console.log("All shows removed.");
+                    console.log("All movies removed.");
 
 
                 }
@@ -1577,9 +1806,10 @@ if (Meteor.isServer) {
                 name: 1,
                 _id: 1,
                 poster: 1,
-                location: 1
+                location: 1,
+                section: 1,
             },
-            limit: 20
+            //limit: 20
         });
     });
 
@@ -1659,17 +1889,6 @@ if (Meteor.isServer) {
 
 
 
-        var NZBGet = Meteor.npmRequire('nzbget-api');
-
-        var options = {
-            host: '127.0.0.1',
-            port: 6789,
-            login: 'colt',
-            hash: 'Myfuturecareer1'
-        }
-
-        var nzbGet = new NZBGet(options);
-
 
 
         Meteor.methods({
@@ -1703,19 +1922,7 @@ if (Meteor.isServer) {
                     format: format,
                 });
                 
-                if (format === "movies"){
-                    
-                    
-                    
-                } else if (format === "shows") {
-                    
-                    
-                    
-                } else {
-                    
-                    
-                    
-                }
+                return insert;
                 
                 
                 
@@ -3479,6 +3686,72 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
                 return future.wait();
             },
+            
+            
+            
+            folderTree: function(folder) {
+                
+                this.unblock();
+                
+                notifications.permissions.read(function(userId, eventName) {
+                    return true;
+                });
+                
+                
+                var future = new Future();
+                var walk = Meteor.npmRequire('walk'),
+                    fs = Meteor.npmRequire('fs'),
+                    mime = Meteor.npmRequire('mime'),
+                    walker,
+                    path = Meteor.npmRequire('path'),
+                    directories = [];
+                    
+                    var options = {
+                        
+                        followLinks: true
+                        // directories with these keys will be skipped 
+                        , filters: ["Temp", "_Temp"]
+                
+                    };
+                 
+                    walker = walk.walk(folder, options);
+                
+                walker.on('directories', Meteor.bindEnvironment(function (root, dirStatsArray, next) {
+                    
+                    
+                    directories = dirStatsArray;
+                    notifications.emit('message', root);
+                    notifications.emit('message', dirStatsArray);
+                    //next();
+                    notifications.emit('message', "All Folders");
+                    notifications.emit('message', directories);
+                    future.return(directories);
+                    
+                }));
+                
+                walker.on("errors", function(root, nodeStatsArray, next) {
+                    
+                    notifications.emit('message', "ERROR");
+                    notifications.emit('message', nodeStatsArray);
+                    notifications.emit('message', root);
+                    next();
+
+                });
+                
+                walker.on("end", Meteor.bindEnvironment(function() {
+                    
+                    notifications.emit('message', "All Folders");
+                    notifications.emit('message', directories);
+                    
+                    future.return(directories);
+                    
+                }));
+                
+                
+                return future.wait();
+                
+                
+            },
 
 
 
@@ -3494,26 +3767,95 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                 notifications.permissions.read(function(userId, eventName) {
                     return true;
                 });
-
+                
+                var allVideos = [];
                 var future = new Future();
-
-
-                //var dir = "/home/colt/Plex/movies";
                 var walk = Meteor.npmRequire('walk'),
                     fs = Meteor.npmRequire('fs'),
-                    walker;
-                var path = Meteor.npmRequire('path')
+                    mime = Meteor.npmRequire('mime'),
+                    walker,
+                    path = Meteor.npmRequire('path');
+                
+                walker = walk.walk(folder);
+                
+                
+                /*
+                walker.on('directory', Meteor.bindEnvironment(function (path1, dir, next) { // On a subdirectory
+                    
+                    
+                	notifications.emit('message', "Checking subdirectory: " +path1+"/"+dir.name);
+                	var walk1 = Meteor.npmRequire('walk');
+                    var walkDir = walk1.walk(path1+"/"+dir.name);
+                    
+                    
+                    walkDir.on("file", Meteor.bindEnvironment(function(root, fileStats, next) {
+                        
+                        
+                        notifications.emit('message', fileStats);
+                        var ext = path.extname(fileStats.name);
+                        var name1 = fileStats.name;
+                        var root2 = root.substr(0, root.length - 1);
+                        //var location = root2 + name;
+                        var name2 = encodeURIComponent(name1);
+                        var location = root + '/' + name1;
+
+                        if (ext === ".avi" || ext === ".mkv" || ext === ".mp4" || ext === ".vob") { // Check if the file is a video. Switch this to an array of extensions at some point.
+                            
+                            allVideos.push(location);
+                            Meteor.call('movieName', name2, location, function(error, result) {
+
+                                if (error) {
+                                    console.log(error);
+                                    notifications.emit('message', error);
+                                }
+                                else {
+
+                                    Moviess.insert({
+                                        name: result,
+                                        location: [location],
+                                        section: id,
+                                    });
+
+                                    //console.log(result);
+                                    notifications.emit('message', result);
+
+                                }
 
 
+                            });
+                            
+                        } else {
+                            notifications.emit('message', "It looks like " + name1 + " isn't a supported video file.");
+                        }
+                        
+                        next();
+                        
+                    }));
+                    
+                    walkDir.on("errors", function(root, nodeStatsArray, next) {
+                        
+                        notifications.emit('message', "Error in folder " + root);
+                        notifications.emit('message', nodeStatsArray);
+                        notifications.emit('message', next);
+                        //future.return("Error in folder " + path + " " + next);
+                        next();
 
-                walker = walk.walk(folder, options);
+                    });
+                    
+                    walkDir.on("end", Meteor.bindEnvironment(function() {
 
+                    
+                    }));
+                    
+                    
+                   next(); 
+                }));
+*/
 
 
                 walker.on("file", Meteor.bindEnvironment(function(root, fileStats, next) {
-
-                    notifications.emit('message', root);
-
+                    
+                    notifications.emit('message', "TEST");
 
                     /*
              
@@ -3523,105 +3865,120 @@ ffmpeg.ffprobe(path, function(err, metadata) {
              
                     */
 
+                    // Right now I have a problem where it's not waiting for all this to finish.
 
                     fs.readFile(fileStats.name, Meteor.bindEnvironment(function() {
-                        // doStuff 
+                        
+                        notifications.emit('message', "READING");
+                        
                         var ext = path.extname(fileStats.name);
-                        var name = fileStats.name;
-                        var root2 = root.substr(0, root.length - 1);
-                        var location = root2 + name;
+                        var name1 = fileStats.name;
+                        var location = root + '/' + name1;
+                        var nameEncoded = encodeURIComponent(name1);
+                        
+                        var videoFormats = [".avi",".mkv",".mp4",".vob",".ts",".m2ts",".mpg",".wmv"];
+                        notifications.emit('message', "READING2");
+                        
+                        if ( videoFormats.indexOf( ext ) > -1 ) {
+                            
+                            notifications.emit('message', "Found a video. " + name1);
+                            notifications.emit('message', root);
+                            notifications.emit('message', name1);
+                            notifications.emit('message', location);
+                            
+                            
+                            var n = root.lastIndexOf('/');
+                        var result1 = root.substring(n + 1);
+                        root = result1;
+                        notifications.emit('message', "root test");
+                        notifications.emit('message', root);
+                            //var type = mime.lookup(name1);
+                            //var type1 = type.substring(0,type.indexOf("/"))
+                            //notifications.emit('message', "mime");
+                            //notifications.emit('message', type);
+                            //notifications.emit('message', type1);
+                            
+                            allVideos.push(location);
+                            //if (type1 === "video") {
+                            //if ( videoFormats.indexOf( ext ) > -1 ) {
 
-                        name = encodeURIComponent(name);
-
-                        if (ext === ".avi" ||
-                            ext === ".mkv" ||
-                            ext === ".mp4" ||
-                            ext === ".vob") {
-                            notifications.emit('message', "Found a video. " + name);
-
-                            Meteor.call('movieName', name, root, function(error, result) {
+                            Meteor.call('movieName', nameEncoded, root, function(error, result) {
 
                                 if (error) {
                                     console.log(error);
                                     notifications.emit('message', error);
+                                    next();
                                 }
                                 else {
+                                    
+                                    
+                                    
+                                    
+                                    
+                                        
+                                    Moviess.insert({
+                                        name: result,
+                                        location: [location],
+                                        section: id,
+                                    });
 
-                                    if (name.includes("sample")) {
-                                        notifications.emit('message', "Found a sample file: " + name);
-                                    }
-                                    else if (name.includes("Sample")) {
-                                        notifications.emit('message', "Found a sample file: " + name);
-                                    }
-                                    else {
-                                        Moviess.insert({
-                                            name: result,
-                                            location: [location],
-                                            section: id,
-                                        });
-
-                                        console.log(result);
-                                        notifications.emit('message', result);
-                                    }
-
-
-
+                                    //console.log(result);
+                                    notifications.emit('message', result);
+                                    notifications.emit('message', "Just finished guessing and adding: " + name1);
+                                    next();
 
                                 }
 
 
                             });
-                            notifications.emit('message', "Just finished the guess.");
+                            
+                            
+                            } else {
+                                next();
+                            }
+                            
+                            //next();
 
 
-                        }
-                        next();
+                        
+                        
                     }));
-
-
-
-
-
-
-
-
-
-
-
-
+                
                 }));
 
 
 
                 walker.on("errors", function(root, nodeStatsArray, next) {
-
+                    
+                    notifications.emit('message', "ERROR");
+                    notifications.emit('message', root);
                     future.return("Error! " + next);
 
                 });
 
 
-                walker.on("end", function() {
+                walker.on("end", Meteor.bindEnvironment(function() {
 
+                    
+                    
                     var fetch = Moviess.find({section: id}).fetch();
-
+                    
+                    notifications.emit('message', "allVideos");
+                    notifications.emit('message', fetch);
 
                     fetch.forEach(function(file, index, array) { // This runs a foreach to go through every movie in the movie collection.
 
                         run = run + 1; // This adds one to the current run count
 
                         if (run >= 20) { // When the run count hits 20 or more
+                        
                             run = 0;
                             notifications.emit('message', 'YOU HIT THE LIMIT FOR TMDB');
                             Meteor._sleepForMs(30000); // Find the currect time to put it to sleep for
                             notifications.emit('message', 'THE LIMIT IS UP');
-
                             finished = finished + 1;
 
                             name = file.name; // Getting the name of the movie
-
-                            var location = file.location; // Getting the location of the movie
-
-                            //console.log(name);
 
                             Meteor.call('searchMovie', name, function(error, movie) { // Do a search on TMDB for movies matching the name
 
@@ -3668,15 +4025,17 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                             _id: file._id,
                                             section: id,
                                         }, {
-                                            name: title,
-                                            overview: overview,
-                                            release: release,
-                                            runtime: runtime,
-                                            old_name: old_name,
-                                            poster: poster_base + poster,
-                                            movie_id: movie_id,
-                                            location: [location],
-                                            section: id,
+                                            
+                                            $set: {
+                                                name: title,
+                                                overview: overview,
+                                                release: release,
+                                                runtime: runtime,
+                                                old_name: old_name,
+                                                poster: poster_base + poster,
+                                                movie_id: movie_id,
+                                            }
+                                            
                                         }, function(err, res) {
                                             if (err) {
                                                 console.log("single - ERROR UPDATING: " + title);
@@ -3731,10 +4090,6 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
                             name = file.name; // Getting the name of the movie
 
-                            var location = file.location; // Getting the location of the movie
-
-                            //console.log(name);
-
                             Meteor.call('searchMovie', name, function(error, movie) { // Do a search on TMDB for movies matching the name
 
                                 if (error) {
@@ -3780,15 +4135,16 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                             _id: file._id,
                                             section: id,
                                         }, {
-                                            name: title,
-                                            overview: overview,
-                                            release: release,
-                                            runtime: runtime,
-                                            old_name: old_name,
-                                            poster: poster_base + poster,
-                                            movie_id: movie_id,
-                                            location: [location],
-                                            section: id,
+                                            
+                                            $set: {
+                                                name: title,
+                                                overview: overview,
+                                                release: release,
+                                                runtime: runtime,
+                                                old_name: old_name,
+                                                poster: poster_base + poster,
+                                                movie_id: movie_id,
+                                            }
                                         }, function(err, res) {
                                             if (err) {
                                                 console.log("single - ERROR UPDATING: " + title);
@@ -3839,6 +4195,50 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                         }
 
                     });
+                    
+                    //var result2 = Moviess.find().fetch();
+                    
+                    /*
+                    var pipeline = [
+                      {$group: {_id: null, resTime: {$sum: "$resTime"}}}
+                    ];
+                    */
+                    
+                    var pipeline = [
+                        { $group: { 
+                            // Group by fields to match on (a,b)
+                            _id: "$name",
+                    
+                            // Count number of matching docs for the group
+                            count: { $sum:  1 },
+                    
+                            // Save the _id for matching docs
+                            docs: {
+                            
+                            $push: {
+                                _id: "$_id",
+                                location: "$location"
+                            }
+                                                
+                            }
+                        }},
+                    
+                        // Limit results to duplicates (more than 1 match) 
+                        { $match: {
+                            count: { $gt : 1 }
+                        }}
+                    ]
+                    /*
+                    
+                    var pipeline = [
+                        {"$group" : { "_id": "$name", "count": { "$sum": 1 } } },
+                        {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }, 
+                        {"$project": {"name" : "$_id", "_id" : 0} }
+                    ];
+                    */
+                    
+                    
+                    /*
 
                     var pipeline = [{
                         "$group": {
@@ -3862,13 +4262,101 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                             "_id": 0
                         }
                     }];
+                    */
                     var result2 = Moviess.aggregate(pipeline);
-
+                    
+                    notifications.emit('message', "pipeline");
                     notifications.emit('message', result2);
+                    
+                    
 
 
                     result2.forEach(function(file, index, array) {
+                        
+                        notifications.emit('message', "All ones");
+                        notifications.emit('message', file);
+                        
+                        var location_array = [];
+                        var updateId = file.docs[0]._id;
+                        var idArray = [];
+                        file.docs.shift(); 
+                        
+                        
+                        file.docs.forEach(function(file, index, array) {
+                            
+                            
+                            
+                            location_array.push(file.location[0]);
+                            idArray.push(file._id);
+                            /*
+                            
+                            Moviess.remove({
+                                _id: file._id,
+                                section: id,
+                            },
+                            function(err, res) {
+                                if (err) {
+                                    console.log("ERROR REMOVING: " + file.name);
+                                }
+                                else {
+    
+                                    console.log("SUCCESSFULLY REMOVED: " + file.name);
+                                }
+                            });
+                            */
+                            
+                            
+                        });
+                        
+                        notifications.emit('message', "All ids");
+                        notifications.emit('message', idArray);
+                        
+                        /*
+                        Moviess.remove({'_id':{'$in':idArray}},
+                            function(err, res) {
+                                if (err) {
+                                    console.log("ERROR REMOVING docs ");
+                                }
+                                else {
+    
+                                    console.log("SUCCESSFULLY REMOVED docs ");
+                                }
+                            });
+                         
+                        */
+                        
+                        
+                        /*
+                        Moviess.update({
+                            _id: updateId,
+                            section: id,
+                        },
+                        {
+                            $push: {
+                                location: {
+                                    $each: location_array
+                                }
+                            }
 
+                        }, function(err, res) {
+                            if (err) {
+                                console.log("ERROR UPDATING: " + file.name);
+                            }
+                            else {
+
+                                console.log("SUCCESSFULLY UPDATED: " + file.name);
+                            }
+                        });
+                        
+                        */
+                        
+                        notifications.emit('message', "All locations");
+                        notifications.emit('message', location_array);
+                        notifications.emit('message', updateId);
+                        
+                        
+                        
+                        /*
                         var id_array = [];
                         var location_array = [];
 
@@ -3877,6 +4365,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                             name: file.name,
                             section: id,
                         }).fetch();
+                        
+                        
 
                         fetch.forEach(function(file, index, array) {
 
@@ -3923,6 +4413,8 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                                 }
                             });
                         });
+                        
+                        */
 
 
                     });
@@ -3932,8 +4424,10 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
                     future.return("Finished!");
+                    
+                    
 
-                });
+                }));
 
 
                 return future.wait();
@@ -3942,29 +4436,31 @@ ffmpeg.ffprobe(path, function(err, metadata) {
 
 
             movieName: function(name, root) {
+                
+                notifications.permissions.read(function(userId, eventName) {
+                    return true;
+                });
+                
                 var future = new Future();
                 var call = Meteor.http.call('GET', "http://localhost:5000/?filename=" + name + "&options=--type%3Dmovie%20", {});
+                notifications.emit('message', "RUNNING " + name);
 
-                if (!call.data.year) {
-                    console.log("No data for the year. Checking the screen size.");
+                    //console.log("No data for the year. Checking the screen size.");
                     if (!call.data.screen_size) {
-                        console.log("No data for the screen size. Going to run search for folder name instead.")
+                        notifications.emit('message', "NO SIZE " + name);
+                        notifications.emit('message', "TRYING " + root + " INSTEAD OF " + name);
+                        notifications.emit('message', call);
+                        root = encodeURIComponent(root);
+                        //console.log("No data for the screen size. Going to run search for folder name instead.")
                         var call2 = Meteor.http.call('GET', "http://localhost:5000/?filename=" + root + "&options=--type%3Dmovie%20", {});
 
-                        if (!call2.data.year) {
-                            console.log("No data for year found from folder.")
-
-                            if (!call2.data.screen_size) {
-                                console.log("No data for year found from screen size. Going to assume neither included in folder or filename, and going with original guess.");
-                                future.return(call.data.title);
-
-                            }
-                            else {
-                                future.return(call.data.title);
-                            }
-
+                        if (!call2.data.screen_size) {
+                            
+                            future.return(call.data.title);
+                            
                         }
                         else {
+                            
                             future.return(call2.data.title);
                         }
 
@@ -3973,10 +4469,7 @@ ffmpeg.ffprobe(path, function(err, metadata) {
                     else {
                         future.return(call.data.title);
                     }
-                }
-                else {
-                    future.return(call.data.title);
-                }
+                
 
                 /*
     
@@ -4877,17 +5370,13 @@ var seasonEps = "";
                                     fs = Meteor.npmRequire('fs'),
                                     walker;
 
-                                walker = walk.walk(file, options);
+                                walker = walk.walk(file);
 
 
                                 walker.on("file", Meteor.bindEnvironment(function(root, fileStats, next) { // When it finds a file in the folder
                                     //notifications.emit('message', root);
                                     //notifications.emit('message', fileStats);
                                     var episodeName = fileStats.name;
-
-                                    //notifications.emit('message', episodeName);
-                                    //notifications.emit('message', "sssss");
-                                    //Meteor._sleepForMs(10000);
 
                                     Meteor.call('episodeName', episodeName, Meteor.bindEnvironment(function(error, result) {
 
@@ -4898,56 +5387,7 @@ var seasonEps = "";
                                         else {
 
                                             notifications.emit('message', result);
-
-                                            //var check = episode_numbers.indexOf(result.episode);
                                             
-                                            
-                                            
-                                            // I need to figure out a way to filter through the episodes for the season, and see if a current episode
-                                            // with that number already exists. If it does, just push the location of the new file to it. Then when
-                                            // this function's done iterating through the season it can update the Mongo doc.
-                                           
-                                            
-                                            
-                                            /*
-                                            if (check > 0) {
-
-                                                notifications.emit('message', "Already an episode with the number " + result.episode);
-                                                var update = episodes[check];
-                                                //notifications.emit('message', check);
-                                                update.location.push(root + "/" + episodeName);
-
-                                            }
-                                            */
-                                                
-                                                /*
-                                                if (!seasonEps) {
-                                                    // If this variable is null, do a map/filter function to return the season object for
-                                                    // this specific season. If the variable isn't null then just use it. When all episodes
-                                                    // are checked in this directory, reset the variable to null. There's probably a much
-                                                    // better way to do all of this. I need to spend a day cleaning all my code so I can
-                                                    // se what's going on better.
-                                                    
-                                                    
-                                                    var seasonEps = seasons.filter(function(obj) {
-                                                    return obj.season_number == season;
-                                                    }).map(function(obj) {
-                                                        return obj.episodes
-                                                    });
-                                                    
-                                                    notifications.emit('message', "rhtrhrthreh");
-                                                    notifications.emit('message', seasonEps);
-                                                    
-                                                    
-                                                }
-                                                */
-                                                
-                                            
-                                                
-                                                // I'll have to get the current season episodes, make a check for the episode. If it exists push to
-                                                // location array inside it. Then continue on for all episodes in the season. When done, update
-                                                // doc with the current season episodes.
-                                                
                                                 if (season) {
                                                     
                                                     episodes = season.episodes;
@@ -5002,38 +5442,7 @@ var seasonEps = "";
                                                     episodes.push(episode);
                                             
                                         }
-                                                
-                                                /*
-                                                for (var i=0; i<season.episodes.length; i++) {
-                                                  if (season.episodes[episodeIndex].episode === result.episode) {
-                                                      notifications.emit('message', "Found a dup episode");
-                                                      season.episodes[episodeIndex].episode = "TEST";
-                                                    //jsonObj[i].Username = "Thomas";
-                                                    break;
-                                                  } else {
-                                                      
-                                                      var episode = {
-                                                        location: [root + "/" + episodeName],
-                                                        episode: result.episode
-                                                    }
-                                                    
-                                                    season.episodes.push(episode);
-                                                      
-                                                      
-                                                  }
-                                                  
-                                                  
-                                                  
-                                                  
-                                                  
-                                                }
-                                                
-                                                */
-                                                
-                                                
-                                                
-                                            
-
+                                               
                                         }
 
 
@@ -5050,137 +5459,11 @@ var seasonEps = "";
                                     notifications.emit('message', "Finished season " + seasonNumber + " of " +  name + " Here's all of the episodes for the season:");
                                     notifications.emit('message', episodes);
 
-
-                                    /*
-                
-                                    var i;
-                
-                
-                                    for (i = episodes.length - 1; i >= 0; i -= 1) {
-                                        
-                                        notifications.emit('message', episodes[i]);
-                                        var episodeName = path.basename(episodes[i].location[0]);
-                                        notifications.emit('message', episodeName);
-                                        
-                                        Meteor.call('episodeName', episodeName, Meteor.bindEnvironment(function(error, result) { // Have to wait for meteor call to finish
-                                                    
-                                                          if (error) {
-                                                              notifications.emit('message', error);
-                                                          } else {
-                                                              
-                                                              
-                                                              var obj = episodes.filter(function ( obj ) {
-                                                                    return obj.episode === result.episode;
-                                                                })[0];
-                                                              
-                                                              
-                                                              if (obj) {
-                                                                  
-                                                                  
-                                                                  notifications.emit('message', "Already an episode with the number " + result.episode);
-                                                                  //this.episode = result.episode;
-                                                                  obj.location.push(episodes[i].location[0]);
-                                                                  episodes.splice(i, 1);
-                                                                
-                                                               } else {
-                                                                    episodes[i].episode = result.episode;
-                                                               }
-                                       
-                                                               
-                                                              
-                                                              
-                                                              
-                                                          }
-                                                          
-                                                          
-                                        }))
-                                      
-                                        
-                                    }
-                
-                
-                                    */
-
-
-
-                                    /*
-                
-                
-                
-                                        episodes.slice().reverse().forEach( function(file, index, array){ // Using slice and revere, etc because of having to remove items in the ForEach if there are duplicate episodes. There's probably a better way.
-                                        
-                                        var episodeName = path.basename(file.location[0]);
-                                        
-                                        Meteor.call('episodeName', episodeName, Meteor.bindEnvironment(function(error, result) { // Have to wait for meteor call to finish
-                                                    
-                                                          if (error) {
-                                                              notifications.emit('message', error);
-                                                          } else {
-                                                              
-                                                              
-                                                              var obj = episodes.filter(function ( obj ) {
-                                                                    return obj.episode === result.episode;
-                                                                })[0];
-
-                                                              
-                                                              if (obj) {
-                                                                  notifications.emit('message', "Already an episode with the number " + result.episode);
-                                                                  notifications.emit('message', obj);
-                                                                  //this.episode = result.episode;
-                                                                  obj.location.push(file.location[0]);
-                                                                  episodes.splice(array.length - 1 - index, 1);
-                                                                  //index = index - 1;
-                                                                  
-                                                              } else {
-                                                                  
-                                                                  file.episode = result.episode;
-                                                              }
-                                                               
-                                                              
-                                                              
-                                                              
-                                                          }
-                                                          
-                                                          
-                                      }))
-                                        
-                                        
-                                        
-                                        
-                                        
-                                    })
-                
-                
-                
-                
-                
-                
-                
-                
-                                    */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                     if (season) {
                                         
                                         season.episodes = episodes;
                                         
                                     }
-                                    
-
                                     
 
                                     //notifications.emit('message', find_show);
@@ -5387,11 +5670,20 @@ var seasonEps = "";
                                     
                                     
                                     
+                                 /*   
+                                    if (!seasonExist) {
+                                    seasonExist = 0;
+                                }
+                                */
                                     
                                     
-                                    
-                                    
-                                    
+                                    notifications.emit('message', "check all");
+                                notifications.emit('message', file);
+                                notifications.emit('message', name);
+                                notifications.emit('message', seasonExist);
+                                notifications.emit('message', season);
+                                
+                                
                                     
                                     
                                     var episodesWrap = Async.wrap(episodes);
@@ -6824,9 +7116,9 @@ var seasonEps = "";
 
 
 
-            removeMovies: function() {
+            removeMovies: function(section) {
 
-                return Moviess.remove({});
+                return Moviess.remove({section: section});
 
             },
 

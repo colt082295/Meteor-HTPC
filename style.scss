@@ -769,3 +769,23 @@ $titlebar-height: $topbar-height;
 .main {
     padding: 1em;
 }
+
+.directory_wrapper {
+    height: 25vh;
+    padding: 1em 0 1em 0;
+    overflow-y: auto;
+    margin-bottom: 2em;
+    
+    a {
+    display: block;
+    padding: 1em;
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    transition: all .3s ease-in-out;
+    
+    &:hover {
+        background-color: whitesmoke;
+    }
+}
+}
+

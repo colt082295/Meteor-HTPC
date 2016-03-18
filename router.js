@@ -28,7 +28,7 @@ Router.route('/movies', { // Route to template to the specified link, and pull t
         movie : Moviess.find({}, {sort: {name: 1}})}
       },
       fastRender: true,
-      cache: 5, //cache 5 blog posts
+      cache: 5, //cache 5
     expire: 3 //expire them if inactive for 3 minutes
 });
 
@@ -38,10 +38,10 @@ Router.route('/section/:_id', { // Route to template to the specified link, and 
         return Meteor.subscribe('section', this.params._id);
       },
       data: function() {
-        return Sections.findOne(this.params._id)
+        return Sections.findOne(this.params._id);
       },
       fastRender: true,
-      cache: 5, //cache 5 blog posts
+      cache: 5, //cache 5
     expire: 3 //expire them if inactive for 3 minutes
 });
 /*
@@ -68,7 +68,7 @@ Router.route('/section/:section/movie/:_id', { // Route to template to the speci
   },
   data: function() { return Moviess.findOne({_id:this.params._id, section: this.params.section}); }, // This returns the id for the specified item
   fastRender: true,
-  cache: 5, //cache 5 blog posts
+  cache: 5, //cache 5
     expire: 3 //expire them if inactive for 3 minutes
 });
 
@@ -79,7 +79,7 @@ Router.route('/section/:section/show/:_id', { // Route to template to the specif
   },
   data: function() { return Tv.findOne({_id:this.params._id, section: this.params.section}); }, // This returns the id for the specified item
   fastRender: true,
-  cache: 5, //cache 5 blog posts
+  cache: 5, //cache 5
     expire: 3 //expire them if inactive for 3 minutes
 });
 

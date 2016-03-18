@@ -6,7 +6,7 @@
         
         <div class="top">
             
-            <a class="add" data-open="add-content"><i class="fa fa-plus"></i></a>
+            <a class="add"><i class="fa fa-plus"></i></a>
             
         </div>
         
@@ -25,6 +25,7 @@
             
             {{/each}}
             
+            
         </div>
         
         
@@ -39,7 +40,22 @@
           <form id="adding-content">
               
                <input type="text" id="new-content-name" placeholder="Name of section">
-               <input type="text" id="new-content-location" placeholder="Enter the directory">
+               
+               <input type="text" id="new-content-location" name="new_content_location" placeholder="Enter the directory" value="/">
+               
+               <div class="directory_wrapper">
+                   
+                   <a id="up-directory" class="">Up one directory</a>
+                   
+                   {{#each directories}}
+                   
+                       <a class="directory">{{name}}</a>
+                       
+                   {{/each}}
+               
+               </div>
+               
+               
                
                <label>Choose a format
                   <select id="new-content-format">
@@ -71,6 +87,17 @@
               
                <input type="text" id="edit-content-name" placeholder="Name of section">
                <input type="text" id="edit-content-location" placeholder="Enter the directory">
+               <div class="directory_wrapper">
+                   
+                   <a id="up-directory" class="">Up one directory</a>
+                   
+                   {{#each directories}}
+                   
+                       <a class="directory">{{name}}</a>
+                       
+                   {{/each}}
+               
+               </div>
                
                <label>Choose a format
                   <select id="edit-content-format">
