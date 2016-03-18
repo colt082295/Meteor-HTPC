@@ -1,6 +1,8 @@
-.*
-public/bower_components
-public/stream
+.bower-cache/
+.bower-registry/
+.bower-tmp/
+public/bower_components/
+public/stream/
 public/guessit-rest.log
 public/manifest.json
 server/kadira.js
