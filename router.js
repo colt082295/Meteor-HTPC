@@ -18,6 +18,41 @@ Router.route('/section/:_id', { // Route to template to the specified link, and 
 });
 */
 
+Router.route('/gig', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+  name: 'viewGig', // This links to the template
+      fastRender: true,
+      cache: 5, //cache 5
+    expire: 3 //expire them if inactive for 3 minutes
+});
+
+Router.route('/login', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+  name: 'login', // This links to the template
+  waitOn: function() {
+        return Meteor.subscribe('users');
+      },
+      data: function() {
+        return {
+        users : Meteor.users.find().fetch()};
+      },
+      fastRender: true,
+      cache: 5, //cache 5
+    expire: 3 //expire them if inactive for 3 minutes
+});
+
+Router.route('/register', { // Route to template to the specified link, and pull the id from the Mongodb collection.
+  name: 'register', // This links to the template
+  waitOn: function() {
+        return Meteor.subscribe('users');
+      },
+      data: function() {
+        return {
+        users : Meteor.users.find().fetch()};
+      },
+      fastRender: true,
+      cache: 5, //cache 5
+    expire: 3 //expire them if inactive for 3 minutes
+});
+
 Router.route('/movies', { // Route to template to the specified link, and pull the id from the Mongodb collection.
   name: 'movies', // This links to the template
   waitOn: function() {

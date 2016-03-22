@@ -11,13 +11,24 @@
   </nav>
   
   <nav class="top-bar" id="top-bar-menu">
-    <div class="row">
       <div class="top-bar-left show-for-medium">
         <ul class="menu menu-items">
           <li><a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="logo"></a></li>
         </ul>
       </div>
       <div class="top-bar-right">
+        <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
+          <li>
+            {{#if currentUser}}
+            <a class="user" href="">{{currentUser.username}}</a>
+            <ul class="menu vertical ">
+              <li><a id="logout" href="#">Logout</a></li>
+            </ul>
+            {{else}}
+            <a class="" href="{{pathFor 'login'}}">Login</a>
+            {{/if}}
+          </li>
+        </ul>
         <!--
         <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
           <li>
@@ -50,7 +61,6 @@
         </ul>
         -->
       </div>
-    </div>
   </nav>
   
   </div>

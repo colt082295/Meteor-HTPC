@@ -1,3 +1,4 @@
+@import 'settings';
 @import '{zurb:foundation-sites}/scss/foundation';
 @include foundation-everything;
 
@@ -117,6 +118,15 @@ to{
   }
   & li {
     background-color: transparent!important;
+  }
+  & ul {
+      background-color: transparent!important;
+  }
+  .dropdown {
+      box-shadow: none!important;
+  }
+  .submenu {
+      background-color: whitesmoke!important;
   }
 }
 
@@ -789,3 +799,26 @@ $titlebar-height: $topbar-height;
 }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.user {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: table-cell!important;
+    background-color: silver!important;
+    border: 1px solid grey;
+    color: white!important;
+    font-weight: 800;
+    vertical-align: middle;
+    text-align: center;
+}

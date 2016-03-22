@@ -31,54 +31,30 @@
         
         
     </div>
-    
-    
+
     <div class="reveal" id="add-content" data-reveal>
         
-      <div class="content">
-          
-          <form id="adding-content">
-              
-               <input type="text" id="new-content-name" placeholder="Name of section">
-               
-               <input type="text" id="new-content-location" name="new_content_location" placeholder="Enter the directory" value="/">
-               
-               <div class="directory_wrapper">
-                   
-                   <a id="up-directory" class="">Up one directory</a>
-                   
-                   {{#each directories}}
-                   
-                       <a class="directory">{{name}}</a>
-                       
-                   {{/each}}
-               
-               </div>
-               
-               
-               
-               <label>Choose a format
-                  <select id="new-content-format">
-                    <option value="movies">Movies</option>
-                    <option value="shows">TV Shows</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
-                
-                <input type="submit" class="button" value="Add Section">
-              
-          </form>
-          
-      </div>
-      
-      
-      <button class="close-button" data-close aria-label="Close modal" type="button">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      
+        {{> addContentSidebar}}    
+        
     </div>
     
+
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+
+    
+    <!--
         <div class="reveal" id="edit-content" data-reveal>
         
       <div class="content">
@@ -124,4 +100,58 @@
     </div>
     
     
-</template>
+
+-->
+    </template>
+    
+    
+    
+    <template name="addContentSidebar">
+        
+        
+              <div class="content">
+          
+          <form id="adding-content">
+              
+               <input type="text" id="new-content-name" placeholder="Name of section">
+               
+               <input type="text" id="new-content-location" name="new_content_location" placeholder="Enter the directory" value="/">
+               
+               <div class="directory_wrapper">
+                   
+                   <a id="up-directory" class="">Up one directory</a>
+                   
+                   {{#each directories}}
+                   
+                       <a class="directory">{{name}}</a>
+                       
+                   {{/each}}
+               
+               </div>
+               
+               
+               
+               <label>Choose a format
+                  <select id="new-content-format">
+                    <option value="movies">Movies</option>
+                    <option value="shows">TV Shows</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                
+                <a id="submit" class="button">Add Section</a>
+              
+          </form>
+          
+          
+          
+      </div>
+      
+      
+      <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        
+        
+        
+    </template>
