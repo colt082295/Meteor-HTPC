@@ -39,69 +39,12 @@
     </div>
     
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <div class="reveal" id="edit-content" data-reveal>
         
+        {{> editContentSidebar}}     
 
-    
-    <!--
-        <div class="reveal" id="edit-content" data-reveal>
-        
-      <div class="content">
-          
-          <form id="editing-content">
-              
-               <input type="text" id="edit-content-name" placeholder="Name of section">
-               <input type="text" id="edit-content-location" placeholder="Enter the directory">
-               <div class="directory_wrapper">
-                   
-                   <a id="up-directory" class="">Up one directory</a>
-                   
-                   {{#each directories}}
-                   
-                       <a class="directory">{{name}}</a>
-                       
-                   {{/each}}
-               
-               </div>
-               
-               <label>Choose a format
-                  <select id="edit-content-format">
-                    <option value="movies">Movies</option>
-                    <option value="shows">TV Shows</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
-                
-                <input type="submit" class="button" value="Save Section">
-                
-                <a class="button" id="remove-sections">Remove all sections</a>
-                <a class="button" id="remove-section">Remove section</a>
-              
-          </form>
-          
-      </div>
-      
-      
-      <button class="close-button" data-close aria-label="Close modal" type="button">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      
     </div>
-    
-    
 
--->
     </template>
     
     
@@ -153,5 +96,52 @@
       </button>
         
         
+        
+    </template>
+    
+    
+    
+    
+    <template name="editContentSidebar">
+        
+       <div class="content">
+          
+          <form id="editing-content">
+              
+               <input type="text" id="edit-content-name" placeholder="Name of section">
+               <input type="text" id="edit-content-location" placeholder="Enter the directory">
+               <div class="directory_wrapper">
+                   
+                   <a id="up-directory" class="">Up one directory</a>
+                   
+                   {{#each directories}}
+                   
+                       <a class="directory">{{name}}</a>
+                       
+                   {{/each}}
+               
+               </div>
+               
+               <label>Choose a format
+                  <select id="edit-content-format">
+                    <option value="movies">Movies</option>
+                    <option value="shows">TV Shows</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                
+                <input type="submit" class="button" value="Save Section">
+                
+                <a class="button" id="remove-sections">Remove all sections</a>
+                <a class="button" id="remove-section">Remove section</a>
+              
+          </form>
+          
+      </div>
+      
+      
+      <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+      </button> 
         
     </template>

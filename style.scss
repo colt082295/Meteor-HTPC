@@ -785,6 +785,7 @@ $titlebar-height: $topbar-height;
     padding: 1em 0 1em 0;
     overflow-y: auto;
     margin-bottom: 2em;
+    overflow-x: hidden;
     
     a {
     display: block;

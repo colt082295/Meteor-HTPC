@@ -589,10 +589,24 @@ Template.videoVersionModal.helpers({
         
     });
     
-
-
     
-    Template.sidebar.events({
+    
+        Template.editContentSidebar.helpers({
+        
+        directories: function() {
+
+            return Session.get("directories");
+
+        },
+        
+        
+    });
+    
+    
+    
+    Template.editContentSidebar.events({
+        
+        
         
         'keyup #edit-content-location': function(event, template){
             
@@ -662,8 +676,6 @@ Template.videoVersionModal.helpers({
         },
         
         
-        
-        
         'click #editing-content #up-directory': function(event, template) {
             
             var folder = $('#edit-content-location').val();
@@ -691,14 +703,6 @@ Template.videoVersionModal.helpers({
             
             
         },
-        
-        
-        
-        
-        
-    
-    
-       
         
         'submit #editing-content': function(event, template) {
             
@@ -729,6 +733,67 @@ Template.videoVersionModal.helpers({
 
 
         },
+        
+        'click #remove-sections': function(event, template) {
+            
+            event.preventDefault();
+            
+            Meteor.call('removeSections', function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error removing sections. " + error);
+
+                }
+                else {
+
+                    console.log("Removed all sections.");
+                    $('#edit-content').foundation('close');
+
+                }
+
+            })
+
+
+        },
+        
+        'click #remove-section': function(event, template) {
+            
+            event.preventDefault();
+            
+            var id = Session.get("editSection");
+            
+            console.log(id);
+            
+            Meteor.call('removeSection', id, function(error, result) {
+
+                if (error) {
+
+                    console.log("There was an error removing section. " + error);
+
+                }
+                else {
+
+                    console.log("Removed section.");
+                    $('#edit-content').foundation('close');
+
+                }
+
+            })
+
+
+        },
+        
+        
+        
+    });
+    
+
+
+    
+    Template.sidebar.events({
+        
+        
         
         'click .edit': function(event, template) {
             
@@ -805,60 +870,6 @@ Template.videoVersionModal.helpers({
 
 
         },
-        
-        
-        'click #remove-sections': function(event, template) {
-            
-            event.preventDefault();
-            
-            Meteor.call('removeSections', function(error, result) {
-
-                if (error) {
-
-                    console.log("There was an error removing sections. " + error);
-
-                }
-                else {
-
-                    console.log("Removed all sections.");
-                    $('#edit-content').foundation('close');
-
-                }
-
-            })
-
-
-        },
-        
-        'click #remove-section': function(event, template) {
-            
-            event.preventDefault();
-            
-            var id = Session.get("editSection");
-            
-            console.log(id);
-            
-            Meteor.call('removeSection', id, function(error, result) {
-
-                if (error) {
-
-                    console.log("There was an error removing section. " + error);
-
-                }
-                else {
-
-                    console.log("Removed section.");
-                    $('#edit-content').foundation('close');
-
-                }
-
-            })
-
-
-        },
-        
-        
-
 
     });
 
