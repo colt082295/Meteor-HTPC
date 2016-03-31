@@ -34,7 +34,10 @@ Meteor.methods({
 
                         console.log("encoding movie", path);
                         notifications.emit('message', metadata);
-                        ffmpeg(path)
+                        ffmpeg({
+                          source: path,
+                          timeout: 0
+                        })
 
 
 
@@ -120,9 +123,10 @@ Meteor.methods({
 
                         console.log("encoding movie", path);
                         notifications.emit('message', metadata);
-
-                        var stream = fs.createWriteStream('/var/home/colt/plesk_hosted/htpc_meteor/public/stream/out.mp4');
-                        ffmpeg(path)
+                        ffmpeg({
+                          source: path,
+                          timeout: 0
+                        })
 
 
 
@@ -211,7 +215,10 @@ Meteor.methods({
 
 
 
-                        ffmpeg(path)
+                        ffmpeg({
+                          source: path,
+                          timeout: 0
+                        })
 
 
                         .withVideoCodec('libvpx')
@@ -294,7 +301,10 @@ Meteor.methods({
 
 
 
-                        ffmpeg(path)
+                        ffmpeg({
+                          source: path,
+                          timeout: 0
+                        })
 
 
                         .withVideoCodec('libx264')
