@@ -13,11 +13,10 @@
     <a href="" id="remove" class="button">Remove</a>
     <div class="top-wrapper">
         <div class="image-wrapper">
-            <img src="{{poster}}"/>
-            {{#if greater_one location.length 1}}
-                {{#each location}}
-                    {{this}}
-                {{/each}}
+            {{#if poster}}
+            <img class="movie-img" src="{{poster}}"/>
+            {{else}}
+            <img class="movie-img" src="/placeholder-poster.jpg"/>
             {{/if}}
         </div>
         <div class="movie-info">

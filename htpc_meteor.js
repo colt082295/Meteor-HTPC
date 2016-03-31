@@ -29,24 +29,9 @@ function removeBrackets(input) {
 
 
 
-var root = "";
-var title = "";
-var name = [];
-var old_name = "";
-var resulter = "";
-var element = "";
 var timeout = 0;
 var url = "http://api.themoviedb.org/3/configuration?api_key=23290308516dcbfcb67fb0f330028492";
 var base_url = "http://image.tmdb.org/t/p/w396";
-var number = 0;
-var finished = 0;
-var movieLength = "";
-var zero = 0;
-var run = 0;
-var id = "";
-var metadata1 = "";
-var removeId = [];
-var search_running = "";
 var timeoutId = 0;
 var sectionId;
 
@@ -216,16 +201,8 @@ if (Meteor.isClient) {
                           this.on("loadedmetadata", function(){
                             
                             this.duration(result.duration);
-                            if (time) {
-                                this.currentTime(time);
-                                console.log("I loaded the video, and the current time is being set to " + time);
-                                this.play();
-                            } else {
-                                this.play();
-                            }
-                            
+                            this.play();
                             this.loadingSpinner.hide();
-                            //setTimeout(function(){ time = undefined }, 1000);
                             
                     
                           });
@@ -233,11 +210,10 @@ if (Meteor.isClient) {
                           
                           this.on("seeking", function(){
                             
-                            if (!time) { // If time is undefined
-                            console.log('seeking webm to ' + this.currentTime() );
+                            console.log('seeking to ' + this.currentTime() );
                             time = this.currentTime(); // Set time to the time you want to seek to
                             
-                            Meteor.call('streamSeek', location, time, function(error, result) {
+                            Meteor.call('streamSeekWebm', location, time, function(error, result) {
                                       if (error) {
                                           
                                           console.log(error);
@@ -253,11 +229,7 @@ if (Meteor.isClient) {
                                          
                             });
                             
-                          } else {
-                              
-                            time = undefined; 
-                              
-                          }
+                          
                 
                           });
                           
@@ -325,31 +297,25 @@ if (Meteor.isClient) {
                           this.on("loadedmetadata", function(){
                             
                             this.duration(result.duration);
-                            if (time) {
-                                this.currentTime(time);
-                                console.log("I loaded the video, and the current time is being set to " + time);
-                            }
                             this.play();
                             this.loadingSpinner.hide();
-                            //setTimeout(function(){ time = undefined }, 1000);
                             
                     
                           });
           
                           this.on("seeking", function(){
                             
-                            if (!time) { // If time is undefined
-                            console.log('seeking 1' + this.currentTime() );
+                            console.log('seeking to ' + this.currentTime() );
                             time = this.currentTime(); // Set time to the time you want to seek to
                             
-                            Meteor.call('streamSeek', location, time, function(error, result) {
+                            Meteor.call('streamSeekMp4', location, time, function(error, result) {
                                       if (error) {
                                           
                                           console.log(error);
                                           
                                       } else {
                                           
-                                          player.src({"type":"video/webm", "src":"http://167.114.103.80:"+result.port});
+                                          player.src({"type":"video/mp4", "src":"http://167.114.103.80:"+result.port});
                                           //player.currentTime(time);
                                           player.play();
                                           
@@ -357,34 +323,6 @@ if (Meteor.isClient) {
                                          
                             });
                             
-                          } else {
-                              
-                              
-                              
-                              Meteor.call('streamSeek', location, time, function(error, result) {
-                                      if (error) {
-                                          
-                                          console.log(error);
-                                          
-                                      } else {
-                                          
-                                          player.src({"type":"video/webm", "src":"http://167.114.103.80:"+result.port});
-                                          //player.currentTime(time);
-                                          //player.play();
-                                          
-                                      }
-                                         
-                            });
-                              
-                              
-                            time = undefined; 
-                              
-                              
-                              
-                              
-                              
-                              
-                          }
                 
                           });
                               
@@ -1284,6 +1222,27 @@ Template.videoVersionModal.helpers({
     Template.viewMoviePage.events({
         
         
+        'click .movie-img': function(event, template) {
+            
+            /*
+            if (this.location.length > 1) { // If multiple versions of the video
+                
+                $('#videoVersionModal').foundation('open');
+                Session.set("videoVersions", this.location);
+                
+            } else { // Only one version of the video
+            */
+            
+            Session.set("location", this.location[0]);
+            Router.go('player');
+            
+            //}
+            
+            
+            
+        },
+        
+        
         'click #remove': function(event, template) {
             
             
@@ -1377,7 +1336,7 @@ Template.videoVersionModal.helpers({
     });
     
     Template.movies.events({
-
+    /*
         'click .info': function(event, template) {
 
             notifications.on('message', function(message) {
@@ -1401,6 +1360,7 @@ Template.videoVersionModal.helpers({
 
 
         },
+        */
 
         'click .scan': function(event, template) {
             event.preventDefault();

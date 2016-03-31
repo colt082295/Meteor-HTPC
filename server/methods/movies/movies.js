@@ -1,4 +1,7 @@
 var Future = Meteor.npmRequire('fibers/future');
+var base_url = "http://image.tmdb.org/t/p/w396";
+var run = 0;
+var finished = 0;
 
 Meteor.methods({
 
@@ -309,7 +312,7 @@ Meteor.methods({
                     notifications.emit('message', 'THE LIMIT IS UP');
                     finished = finished + 1;
 
-                    name = file.name; // Getting the name of the movie
+                    var name = file.name; // Getting the name of the movie
 
                     Meteor.call('searchMovie', name, function(error, movie) { // Do a search on TMDB for movies matching the name
 
@@ -362,7 +365,7 @@ Meteor.methods({
                                         overview: overview,
                                         release: release,
                                         runtime: runtime,
-                                        old_name: old_name,
+                                        //old_name: old_name,
                                         poster: poster_base + poster,
                                         movie_id: movie_id,
                                     }
@@ -419,7 +422,7 @@ Meteor.methods({
 
                     finished = finished + 1;
 
-                    name = file.name; // Getting the name of the movie
+                    var name = file.name; // Getting the name of the movie
 
                     Meteor.call('searchMovie', name, function(error, movie) { // Do a search on TMDB for movies matching the name
 
@@ -472,7 +475,7 @@ Meteor.methods({
                                         overview: overview,
                                         release: release,
                                         runtime: runtime,
-                                        old_name: old_name,
+                                        //old_name: old_name,
                                         poster: poster_base + poster,
                                         movie_id: movie_id,
                                     }
@@ -756,9 +759,6 @@ Meteor.methods({
 
 
             });
-
-
-            search_running = "";
 
 
             future.return("Finished!");
