@@ -1,4 +1,4 @@
-var Future = Meteor.npmRequire('fibers/future');
+import Future from 'fibers/future';
 
 Meteor.methods({
 

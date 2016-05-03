@@ -1,0 +1,202 @@
+<template name="home">
+
+  <div class="off-canvas-wrapper wrapper full-height">
+    <div class="off-canvas-wrapper-inner wrapper full-height" data-off-canvas-wrapper>
+      <div class="off-canvas position-left" id="offCanvas" data-off-canvas>{{> sidebarMobile}}</div>
+      <div class="off-canvas-content wrapper full-height" data-off-canvas-content>
+
+        <div class="wrapper full-height">
+
+          {{> nav}}
+
+          <div class="container row full-height">
+
+            {{> sidebar}}
+
+            <div class="info-main columns home-wrapper">
+
+              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
+
+
+
+              <div id="continue-swiper"  class="swiper-container row no-margin">
+                <div class="top small-12 row">
+                  <h1 class="columns title">Continue Watching</h1>
+                  <div class="car-nav columns">
+                    <a class="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                    <a class="next"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+
+                  <div class="swiper-scrollbar small-12"></div>
+                </div>
+
+                <div class="swiper-wrapper">
+                  
+                  
+                  
+                </div>
+
+              </div>
+
+
+
+              
+              <div id="movie-swiper" class="swiper-container row no-margin">
+                <div class="top small-12 row">
+                  <h1 class="columns title">New Movies</h1>
+                  <div class="car-nav columns">
+                    <a class="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                    <a class="next"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+
+                  <div class="swiper-scrollbar small-12"></div>
+                </div>
+
+                <div class="swiper-wrapper">
+                  {{#if movieCount}}
+                  {{#each movies}}
+
+                  <div class="swiper-slide home-poster">
+
+                    <a href="{{pathFor 'viewMoviePage'}}" class="">
+                      <div class="poster_container">
+                        
+                        {{#if poster}}
+                    <img class="movie-img" src="{{poster}}" /> {{else}}
+                    <img class="movie-img" src="/placeholder-poster.jpg" /> {{/if}}
+                    {{#if greater_one this.location.length 1}}
+                        <span class="info badge left">{{this.location.length}}</span> {{/if}}
+                        <div class="poster_overlay top">
+
+                          {{#if watched}} {{else}}
+
+                          <div class="not-watched"></div>
+
+                          {{/if}}
+
+                        </div>
+                        <div class="poster_overlay bottom">
+
+                          <a class="play-movie"><i class="fa fa-play" aria-hidden="true"></i></a>
+                          <a id="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+
+                        </div>
+
+                        {{#if percent}}
+
+                        <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
+
+                          <div class="progress-bar" style="width:{{percent}}%"></div>
+
+                        </div>
+
+                        {{/if}}
+
+                      </div>
+                      <div class="carousel-title">{{this.name}}</div>
+                    </a>
+
+                  </div>
+
+
+                  {{/each}}
+                  {{else}}
+
+                <h2>You don't seem to have any movies added yet.</h2> 
+              
+              {{/if}} 
+                  
+                </div>
+
+              </div>
+
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              <div id="show-swiper" class="swiper-container row no-margin">
+                <div class="top small-12 row">
+                  <h1 class="columns title">New Shows</h1>
+                  <div class="car-nav columns">
+                    <a class="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                    <a class="next"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+
+                  <div class="swiper-scrollbar small-12"></div>
+                </div>
+
+                <div class="swiper-wrapper">
+                  {{#if showCount}}
+                  {{#each shows}}
+
+                  <div class="swiper-slide home-poster">
+
+                    <a href="{{pathFor 'viewSeasonPage' section = show.section _id = show._id season_number = episode.season_number}}" class="">
+                      <div class="poster_container">
+                        <img src="{{this.show.poster}}" />
+                        <div class="poster_overlay top">
+
+                          {{#if episode.watched}} {{else}}
+
+                          <div class="not-watched"></div>
+
+                          {{/if}}
+
+                        </div>
+                        <div class="poster_overlay bottom">
+
+                          <a class="play-show"><i class="fa fa-play" aria-hidden="true"></i></a>
+                          <!--<a id="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>-->
+
+                        </div>
+                        {{#if percentShow}}
+
+                        <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percentShow}}% of this.">
+
+                          <div class="progress-bar" style="width:{{percentShow}}%"></div>
+
+                        </div>
+
+                        {{/if}}
+                      </div>
+                      <a href="{{pathFor 'viewShowPage' _id = show._id section = show.section}}" class="carousel-title">{{show.name}}</a>
+                      <div class="carousel-title-more"><a href="" class="underline_hover">S:{{episode.season_number}}</a> - <a href="" class="underline_hover">Ep:{{episode.episode}}</a></div>
+
+
+                    </a>
+
+                  </div>
+
+
+
+
+                  {{/each}}
+                  {{else}}
+
+                <h2>You don't seem to have any shows added yet.</h2> 
+              
+              {{/if}}
+                </div>
+
+              </div>
+
+              
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</template>

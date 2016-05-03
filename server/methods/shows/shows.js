@@ -1,11 +1,252 @@
-var Future = Meteor.npmRequire('fibers/future');
+import Future from 'fibers/future';
+
+import MovieDB1 from 'moviedb';
+var MovieDB = new MovieDB1('23290308516dcbfcb67fb0f330028492');
+
+import walk from 'walkdir';
+import fs from 'fs';
+import mime from 'mime';
+import path from 'path';
+
+
+import TVDB from 'node-tvdb/compat';
+var tvdb = new TVDB('79403F2E528405DB');
+
+
+//var Future = Meteor.npmRequire('fibers/future');
 
 Meteor.methods({
+    
+    updateShow: function(id, section, series_name, overview, banner, backdrop, language, show_id, poster, episodes) {
+
+        Tv.update({
+                _id: id,
+                section: section
+            },
+            {
+                $set: {
+                    name: series_name,
+                    overview: overview,
+                    banner: banner,
+                    backdrop: backdrop,
+                    language: language,
+                    show_id: show_id,
+                    series_id: show_id,
+                    poster: poster,
+                    episode_info: episodes,
+                }
+
+            },
+            function(err, res) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    return "Updated the show.";
+                }
+            });
+
+    },
+    
+    
+    
+    updateShowDescription: function(id, section, description) {
+
+        Tv.update({
+                _id: id,
+                section: section
+            },
+            {
+                $set: {
+                    overview: description,
+                }
+
+            },
+            function(err, res) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    return "Updated the description.";
+                }
+            });
+
+    },
+    
+    
+   refreshShow: function(id, section, overview) {
+            
+           return Tv.update({
+               _id: id,
+               section: section
+           },
+           {
+               $set: {
+                   overview: overview
+               }
+           }
+           )
+            
+            
+
+
+    },
+    
+    
+    countShows: function(section) {
+            
+           var count = Tv.find({
+                section: section
+            });
+            
+            //console.log(count.count());
+            return count.count();
+            
+            
+
+
+    },
+    
+    
+    updateShowProgress: function(id, section, time, season, episode) {
+        //var future = new Future();
+        /*
+        var name = req.params.name;
+var value = req.params.value;
+var query = {};
+query[name] = value;
+collection.findOne(query, function (err, item) { ... });
+*/
+
+/*
+Collection.update(
+    { _id: "wLXDvjDvbsxzfxabR", "group.id": "dfDFSfdsFDSfdsFws"}, 
+    {$set: { "group.data": newData }}
+);
+
+*/
+
+console.log("id " + id);
+console.log("section " + section);
+console.log("time " + time);
+console.log("season " + season);
+console.log("episode " + episode);
+
+
+
+/*
+var show = Tv.update(
+  {_id: id,
+   'episodes.season_number': season,
+   'episodes.episode': episode
+  }, 
+  {$set: {'episodes.$.watched': true}}
+)
+
+
+
+var show = Tv.update({
+         _id: id,
+         episodes: {
+             $elemMatch: {
+                 season_number: season,
+                 episode: episode
+             }
+         },
+         {
+             $set: {
+                 'episodes.$': {
+                     watched: true
+                 }
+             }
+         })
+
+
+
+
+
+
+
+
+
+*/
+
+/*
+var show = Tv.findOne(
+  {_id: id,
+   'episodes.season_number': season,
+   'episodes.episode': episode
+  }
+)
+
+*/
+
+
+var show = Tv.update({
+         _id: id,
+         episodes: {
+             $elemMatch: {
+                 season_number: season,
+                 episode: episode
+             }
+         }},
+         {
+             $set: {
+                 'episodes.$.progress': time,
+                 'episodes.$.watched': true,
+                 }
+             }
+         )
+
+
+        
+        console.log("show")
+        console.log(show)
+        
+        /*
+        a = [{prop1:"abc",prop2:"qwe"},{prop1:"bnmb",prop2:"yutu"},{prop1:"zxvz",prop2:"qwrq"}]
+index = a.findIndex(x => x.prop2=="yutu")
+*/
+
+
+/*
+        var index1;
+        
+        show.forEach(function(file, index, array) {
+
+            if (file.episode === episode) {
+
+                file.progress === time;
+                
+                index1 === index;
+
+            }
+
+        });
+        
+        console.log(index1)
+        */
+        
+        /*
+
+        Tv.update({_id: id , section: section},
+        {
+            $set: {
+                progress: time
+            }
+        }
+        )
+        
+        */
+
+        return true;
+
+    },
 
 
     searchShow: function(name) {
         var future = new Future();
-        var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
         MovieDB.searchTv({
             query: name
@@ -99,7 +340,7 @@ Meteor.methods({
 
     showInfo: function(id, season) {
         var future = new Future();
-        var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
         MovieDB.tvSeasonInfo({
             id: id,
@@ -134,8 +375,8 @@ Meteor.methods({
 
 
     showName4: function(folder, name, nameOg) {
-        var walk = Meteor.npmRequire('walkdir');
-        var path = Meteor.npmRequire('path');
+        //var walk = Meteor.npmRequire('walkdir');
+        //var path = Meteor.npmRequire('path');
         var future = new Future();
 
         /*
@@ -276,9 +517,11 @@ Meteor.methods({
         });
 
         var future = new Future();
+        /*
         var walk = Meteor.npmRequire('walkdir');
         var path = Meteor.npmRequire('path');
         var countrynames = Meteor.npmRequire('countrynames');
+        */
         var directories = [];
 
         var emitter = walk(location, { // Make this an option, rather than hardcoded,
@@ -301,32 +544,31 @@ Meteor.methods({
 
             directories.forEach(Meteor.bindEnvironment(function(folder, index, array) {
 
-                notifications.emit('message', folder);
-
                 // Guess the show name
-                notifications.emit('message', "Time for showName");
-                var showNameWrap = Meteor.myFunctions.showName(folder); // Replace with custom Async method rather than 3rd party.
+                notifications.emit('message', "Going to find the show name for " + folder);
+                var showNameWrap = Meteor.myFunctions.showName(folder); 
 
                 //console.log(showNameWrap)
                 //var showNameResponse = showNameWrap();
                 //
 
                 // Search for the show
-                notifications.emit('message', "Time for showSearch");
+                notifications.emit('message', "Going to do a search for the show. " + folder);
                 var showSearch = Meteor.myFunctions.showSearch(showNameWrap, showNameWrap.title, folder, sectionId);
 
                 notifications.emit('message', showSearch);
-                //
 
-
-                if (showSearch.series) { // If I get a series response
+                if (showSearch.series) { // If I get a series response in the search
 
                     var seasons = showSearch.seasons;
+                    notifications.emit('message', "showSearch test");
+                    notifications.emit('message', showSearch);
+                    var episodes = showSearch.episodes;
                     var series = showSearch.series;
 
                     // Look inside the show folder
-                    notifications.emit('message', "Time for directoryRecur");
-                    var directoryRecur = Meteor.myFunctions.directoryRecur(folder, series, seasons, sectionId);
+                    notifications.emit('message', "Going to recursively look through the directory for episodes in " + folder);
+                    var directoryRecur = Meteor.myFunctions.directoryRecur(folder, series, seasons, sectionId, episodes);
                     notifications.emit('message', directoryRecur);
                     //
                 }
@@ -346,21 +588,23 @@ Meteor.methods({
             notifications.emit('message', allShows);
 
 
-            allShows.forEach(function(file, index, array) {
+            allShows.forEach(function(show, index, array) {
 
-                var _id = file._id;
-                var id = file.show_id;
-                var name = file.name;
-                var episode_info = file.episode_info;
+                var _id = show._id;
+                var id = show.show_id;
+                var name = show.name;
+                var episode_info = show.episode_info; // This is the complete metadata for every episode available on TMDB
+                var episodes = show.episodes;
                 notifications.emit('message', "All show info for " + name + " :");
-                notifications.emit('message', file);
+                notifications.emit('message', show);
+                notifications.emit('message', "episodes");
+                notifications.emit('message', episodes);
 
 
-                file.seasons.forEach(function(file, index, array) {
+                show.seasons.forEach(function(file, index, array) {
 
                     var season = file.season_number;
                     var season_posters = [];
-                    var episodes = file.episodes;
                     var episodeInfo = [];
 
                     notifications.emit('message', "Getting season data for " + name + " season " + season);
@@ -421,13 +665,13 @@ Meteor.methods({
 
                                     episodes.forEach(function(file, index, array) {
 
-                                        if (file.episode) {
+                                        if (file.episode && file.season_number === season) {
 
                                             var episode = file.episode;
 
                                             notifications.emit('message', "Checking " + name + " season " + season + " episode " + episode);
 
-
+                                            /*
                                             var episodeIndex = episodeInfo.filter(function(obj) {
                                                 return obj.EpisodeNumber == episode;
                                             }).map(function(obj) {
@@ -436,18 +680,26 @@ Meteor.methods({
                                                     episode: episode,
                                                     location: file.location,
                                                     name: obj.EpisodeName,
-                                                    banner: "http://thetvdb.com/banners/" + obj.filename
+                                                    banner: "http://thetvdb.com/banners/" + obj.filename,
+                                                    date: new Date()
 
                                                 }
                                             });
+                                            */
+                                            
+                                            var episodeIndex = episodeInfo.filter(function(obj) {
+                                                return obj.EpisodeNumber == episode;
+                                            })[0];
 
 
                                             if (episodeIndex) {
-
+                                                
+                                                notifications.emit('message', "episodeIndex");
                                                 notifications.emit('message', episodeIndex);
+                                                file.banner = "http://thetvdb.com/banners/" + episodeIndex.filename;
 
 
-                                                episodeArray.push(episodeIndex[0]);
+                                                //episodeArray.push(episodeIndex[0]);
 
                                             }
 
@@ -464,9 +716,10 @@ Meteor.methods({
                                         section: sectionId,
                                     }, {
                                         $set: {
+                                            date_updated: new Date(),
                                             "seasons.$.poster": season_posters[0],
                                             "seasons.$.posters": season_posters,
-                                            "seasons.$.episodes": episodeArray
+                                            "episodes": episodes,
 
                                         }
                                     }, {
@@ -524,9 +777,10 @@ Meteor.methods({
     getActorsTv: function(id) {
 
         var future = new Future();
+        /*
         var TVDB = Meteor.npmRequire("node-tvdb/compat");
         var tvdb = new TVDB("79403F2E528405DB");
-
+        */
 
 
         tvdb.getActors(id, function(error, response) {
@@ -548,8 +802,10 @@ Meteor.methods({
     getBanners: function(id) {
 
         var future = new Future();
+        /*
         var TVDB = Meteor.npmRequire("node-tvdb/compat");
         var tvdb = new TVDB("79403F2E528405DB");
+        */
 
         tvdb.getBanners(id, function(error, response) {
 
@@ -573,8 +829,10 @@ Meteor.methods({
     getSeries: function(id) {
 
         var future = new Future();
+        /*
         var TVDB = Meteor.npmRequire("node-tvdb/compat");
         var tvdb = new TVDB("79403F2E528405DB");
+        */
 
         tvdb.getSeriesAllById(id, function(error, response) {
 
@@ -609,8 +867,10 @@ Meteor.methods({
 
 
         var future = new Future();
+        /*
         var TVDB = Meteor.npmRequire("node-tvdb/compat");
         var tvdb = new TVDB("79403F2E528405DB");
+        */
 
         tvdb.getSeriesByName(name, function(err, response) {
 
@@ -673,8 +933,10 @@ Meteor.methods({
 
 
         var future = new Future();
+        /*
         var TVDB = Meteor.npmRequire("node-tvdb/compat");
         var tvdb = new TVDB("79403F2E528405DB");
+        */
 
         tvdb.getSeriesByName(name, function(err, response) {
 
@@ -721,8 +983,10 @@ Meteor.methods({
 
 
         var future = new Future();
+        /*
         var TVDB = Meteor.npmRequire("node-tvdb/compat");
         var tvdb = new TVDB("79403F2E528405DB");
+        */
 
 
 
@@ -770,6 +1034,17 @@ Meteor.methods({
         return future.wait();
 
     },
+    
+    
+    
+    removeShow: function(id, section) {
+
+        return Tv.remove({
+            _id: id,
+            section: section
+        });
+
+    },
 
 
 
@@ -778,6 +1053,12 @@ Meteor.methods({
         return Tv.remove({
             section: section
         });
+
+    },
+    
+    removeAllShows: function() {
+
+        return Tv.remove({});
 
     },
 

@@ -1,55 +1,71 @@
 <template name="viewSeasonPage">
+  
 
-  {{> nav}}
-  
-    <div class="wrapper">
-  
-<div class="container full-height row">
-  
-  {{> sidebar}}
-  
-  
-<div class="main columns">
-    
-    <div class="top-wrapper">
-        <div class="movie-info">
-            <button class="remove">Remove Show</button>
-            <div class="content" id="panel1">
-                <p class="movie-description">{{overview}}</p>
-                {{#each episodes}}
+  <div class="off-canvas-wrapper wrapper full-height">
+    <div class="off-canvas-wrapper-inner wrapper full-height" data-off-canvas-wrapper>
+      <div class="off-canvas position-left" id="offCanvas" data-off-canvas>{{> sidebarMobile}}</div>
+      <div class="off-canvas-content wrapper full-height" data-off-canvas-content>
 
-                <a class="episode_wrapper inline-block">
-                    <div class="carousel-item">
-                      <div class="carousel-img-wrapper">
-                        <div class="episode-img" style="background-image: url('{{this.banner}}')">
-                        </div>
-                      </div>
-                      <div class="episode_number">{{episode}}</div>
-                      <div class="carousel-title">{{name}}</div>
+        <div class="wrapper full-height">
+
+          {{> nav}}
+
+          <div class="container full-height row">
+
+            {{> sidebar}}
+
+
+            <div class="info-main columns">
+
+              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
+
+              <div class="top-wrapper">
+                <div class="">
+                  <div class="row flexbox start" id="panel1">
+                    <p class="movie-description">{{overview}}</p>
+                    {{#each episodes}}
+
+                    <div class="columns small-4 medium-6 large-4 episode-wrapper">
+                        <a class="banner-wrapper">
+                          <img src="{{this.banner}}" />
+                          <div class="episode_number">{{episode}}</div>
+                          {{#if percent}}
+
+                          <div class="progress-wrapper bottom bottom-pos" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
+  
+                            <div class="progress-bar" style="width:{{percent}}%"></div>
+  
+                          </div>
+  
+                          {{/if}}
+                        </a>
+                          
+                        
+                        <div class="episode-title">{{name}}</div>
                     </div>
-                  </a>
-                  
-                {{/each}}
-                <div class="reveal" id="videoVersionModal" data-reveal>
-    
-                  {{> videoVersionModal}}
-                    
-                    
+
+                    {{/each}}
+                    <div class="reveal" id="videoVersionModal" data-reveal>
+
+                      {{> videoVersionModal}}
+
+
+                    </div>
+
+                  </div>
                 </div>
-            
+
+              </div>
+
+
+
+
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-
-</div>
-
-
-
-    
-</div>
-
-{{> footer}}
-</div>
-</div> 
+  </div>
 
 
 
@@ -60,23 +76,18 @@
 
 
 
-
-                  
 </template>
 
 
 <template name="videoVersionModal">
-  
-  <h2>Please choose a video version.</h2>
-                {{#each videoVersions}}
-                
-                  <a id="{{@index}}" class="button video-version">{{this}}</a>
-                
-                {{/each}}
-                  
-                    <button class="close-button" data-close aria-label="Close reveal" type="button">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-  
-  
+
+  <h2>Please choose a video version.</h2> {{#each videoVersions}}
+
+  <a id="{{@index}}" class="button video-version">{{this}}</a> {{/each}}
+
+  <button class="close-button" data-close aria-label="Close reveal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+
 </template>

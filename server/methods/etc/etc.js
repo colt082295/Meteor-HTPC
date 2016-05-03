@@ -1,10 +1,53 @@
-var Future = Meteor.npmRequire('fibers/future');
+import Future from 'fibers/future';
+import MovieDB1 from 'moviedb';
+var MovieDB = new MovieDB1('23290308516dcbfcb67fb0f330028492');
+
+
+import walk from 'walkdir';
+import walk2 from 'walk';
+import fs from 'fs';
+import mime from 'mime';
+import path from 'path';
+//var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
 Meteor.methods({
+    
+    
+    movieSubscription: function(limit, section) {
+        var future = new Future();
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+
+        MovieDB.searchPerson({
+            query: name
+        }, function(error, result) {
+
+            if (error) {
+
+                console.log(error);
+                future.return(error);
+
+            }
+            else {
+
+                //console.log(result.results[0]);
+                future.return(result);
+
+
+            }
+
+        });
+
+        return future.wait();
+
+
+
+
+
+    },
 
     searchPerson: function(name) {
         var future = new Future();
-        var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
         MovieDB.searchPerson({
             query: name
@@ -44,13 +87,16 @@ Meteor.methods({
         });
 
 
-        var future = new Future();
+        var future = new Future(),
+        walker;
+        /*
         var walk = Meteor.npmRequire('walk'),
             fs = Meteor.npmRequire('fs'),
             mime = Meteor.npmRequire('mime'),
             walker,
             path = Meteor.npmRequire('path'),
             directories = [];
+            */
 
         var options = {
 
@@ -61,7 +107,7 @@ Meteor.methods({
 
         };
 
-        walker = walk.walk(folder, options);
+        walker = walk2.walk(folder, options);
 
         walker.on('directories', Meteor.bindEnvironment(function(root, dirStatsArray, next) {
 
@@ -93,6 +139,27 @@ Meteor.methods({
             future.return(directories);
 
         }));
+
+
+        return future.wait();
+
+
+    },
+    
+    
+    
+    
+        downloadVideo: function(video) {
+
+        this.unblock();
+
+        var future = new Future();
+            //fs = Meteor.npmRequire('fs');
+            
+            
+            var data = fs.readFile(video);
+            
+            future.return(data);
 
 
         return future.wait();

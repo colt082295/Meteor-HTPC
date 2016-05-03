@@ -1,4 +1,5 @@
-var Future = Meteor.npmRequire('fibers/future');
+import Future from 'fibers/future';
+//var Future = Meteor.npmRequire('fibers/future');
 
 Meteor.methods({
 
@@ -45,7 +46,7 @@ Meteor.methods({
 
         if (section.format === "movies") {
 
-            Moviess.remove({
+            Movies.remove({
                 section: id
             });
 

@@ -1,84 +1,374 @@
 <template name="viewMoviePage">
 
-  {{> nav}}
-  
-      <div class="wrapper">
-  
-<div class="container full-height row">
-  
-  {{> sidebar}}
-  
-<div class="main columns">
-    <!--<a href="" class="button search">Update Info</a>-->
-    <a href="" id="remove" class="button">Remove</a>
-    <div class="top-wrapper">
-        <div class="image-wrapper">
-            {{#if poster}}
-            <img class="movie-img" src="{{poster}}"/>
-            {{else}}
-            <img class="movie-img" src="/placeholder-poster.jpg"/>
-            {{/if}}
-        </div>
-        <div class="movie-info">
-            <button class="movie-info"></button>
-            <div class="top-container">
-                <h1 class="movie-title">{{name}}</h1>
-                <div class="tabs-container">
-                    <ul class="tabs">
-                    <li class="tab col s3"><a class="active" href="#panel1">Basic</a></li>
-                    <!--
-                    <li class="tab col s3"><a href="#panel2">Cast</a></li>
-                    <li class="tab col s3"><a href="#panel3">More</a></li>
-                    -->
-                    </ul>
+
+  <div class="off-canvas-wrapper wrapper full-height">
+    <div class="off-canvas-wrapper-inner wrapper full-height" data-off-canvas-wrapper>
+      <div class="off-canvas position-left" id="offCanvas" data-off-canvas>{{> sidebarMobile}}</div>
+      <div class="off-canvas-content wrapper full-height" data-off-canvas-content>
+
+        <div class="wrapper full-height">
+
+          {{> nav}}
+
+          <div class="container full-height row">
+
+            {{> sidebar}}
+
+            <div class="info-main columns">
+              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
+              <!--<a href="" class="button search">Update Info</a>-->
+              <div class="background-img-wrapper">
+                <div class="background-img" style="background-image: url({{backdrop}})"></div>
+              </div>
+
+              <div class="row no-margin">
+                <div class="button-group no-margin row">
+                  <a class="button play-video column"><i class="fa fa-play"></i><span class="show-for-large">Play</span></a>
+                  <a id="edit" class="button column"><i class="fa fa-pencil"></i><span class="show-for-large">Edit</span></a>
+                  <a id="refresh" class="button column"><i class="fa fa-refresh"></i><span class="show-for-large">Refresh</span></a>
+                  <!--<a id="download" class="button column" href=""><i class="fa fa-arrow-circle-o-down"></i><span class="show-for-large">Download</span></a>-->
+                  <button class="button column" type="button" data-toggle="example-dropdown"><i class="fa fa-ellipsis-h"></i></button>
+                  <div class="dropdown-pane" id="example-dropdown" data-dropdown data-auto-focus="true">
+                    <a id="remove" class="button alert"><i class="fa fa-trash-o"></i><span class="">Remove</span></a>
+                  </div>
                 </div>
-            </div>
-            <div class="content" id="panel1">
-                <p class="movie-description">{{overview}}</p>
-            </div>
-            
-            <div class="content" id="panel2">
-                
-                <div class="cast-wrapper">
-                    <!--
-                    <a href="#">
-                        <div class="cast">
-                            <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
-                            <p>Matt Damon</p>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="cast">
-                            <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
-                            <p>Matt Damon</p>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="cast">
-                            <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
-                            <p>Matt Damon</p>
-                        </div>
-                    </a>
-                    -->
-                </div>
-                
-            </div>
-            
-            
-            <div class="content" id="panel3">
-                
-                
-            </div>
-            
-        </div>
-    </div>
+              </div>
 
-    
-</div>
 
-{{> footer}}
 
-</div>
-</div>
+              <div class="info-wrapper">
+                
+                {{#if progress}}
+                
+                  <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
                   
+                    <div class="progress-bar" style="width:{{percent}}%"></div>
+                    
+                  </div>
+                
+                {{/if}}
+                
+
+                <div class="info-wrapper-background">
+                  <div class="background-img"></div>
+                </div>
+
+                <div class="info-container hide-for-small-only">
+
+                  <div class="image-wrapper play play-video">
+                    <img class="play-img" src="/play.svg" /> {{#if poster}}
+                    <img class="movie-img" src="{{poster}}" /> {{else}}
+                    <img class="movie-img" src="/placeholder-poster.jpg" /> {{/if}}
+                  </div>
+                  <div class="movie-info">
+                    <div class="top-container">
+
+
+                      <div class="row">
+                        <div class="large-7 small-12 columns">
+
+                          <h2 class="movie-title">{{name}}</h2>
+
+                        </div>
+                        <div class="large-5 medium-5 columns show-for-large">
+
+
+                          <ul class="tabs" data-tabs id="example-tabs">
+
+                            <li class="tabs-title is-active content-info"><a aria-selected="true" href="#basic-panel">Basic</a></li>
+
+                            <li class="tabs-title content-info"><a href="#cast-panel">Cast</a></li>
+
+                          </ul>
+                        </div>
+
+
+
+                        <div class="small-12 columns show-for-medium-only">
+
+
+                          <ul class="tabs expand" data-tabs id="example-tabs">
+
+                            <li class="columns tabs-title is-active one-third"><a aria-selected="true" href="#basic-panel">Basic</a></li>
+
+                            <li class="columns tabs-title one-third"><a href="#cast-panel">Cast</a></li>
+
+                          </ul>
+                        </div>
+
+                        <div class="small-12 columns show-for-small-only">
+
+
+                          <ul class="tabs expand" data-tabs id="example-tabs">
+
+                            <li class="columns tabs-title is-active one-third"><a aria-selected="true" href="#basic-panel-small">Basic</a></li>
+
+                            <li class="columns tabs-title one-third"><a href="#cast-panel-small">Cast</a></li>
+
+                          </ul>
+                        </div>
+
+
+
+                      </div>
+
+
+
+
+
+
+
+
+
+                    </div>
+
+
+                    <div class="tabs-content content hide-for-small-only" data-tabs-content="example-tabs">
+
+
+                      <div class="tabs-panel is-active" id="basic-panel">
+                        <p class="movie-description">{{overview}}</p>
+                      </div>
+
+                      <div class="tabs-panel" id="cast-panel">
+
+                        <div class="cast-wrapper no-margin row">
+                          {{#each actors}} {{#if this.profile_path}}
+
+                          <div class="columns medium-3 cast fill-cast">
+                            <img src="https://image.tmdb.org/t/p/w396{{this.profile_path}}" />
+                            <p class="name">{{this.name}}</p>
+                          </div>
+                          
+                          {{/if}} {{else}}
+                          <h4>Sorry, no cast available. Maybe <a id="searchMovieCast">search for cast.</a></h4> {{/each}}
+                          
+                        </div>
+                        {{#with actors}}
+                        
+                          <a class="button small-12 show_all_cast">Show All</a>
+                        
+                        {{/with}}
+                        
+
+                      </div>
+
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+
+
+                <div class="info-container small show-for-small-only">
+
+                  <div class="top-container">
+
+
+                    <div class="row no-margin">
+
+
+                      <div class="image-wrapper play play-video small-3">
+                        <img class="play-img" src="/play.svg" /> {{#if poster}}
+                        <img class="movie-img" src="{{poster}}" /> {{else}}
+                        <img class="movie-img" src="/placeholder-poster.jpg" /> {{/if}}
+                      </div>
+
+
+
+                      <div class="small-9 columns">
+
+                        <h1 class="movie-title">{{name}}</h1>
+
+                      </div>
+
+                    </div>
+                    <div class="row tab-wrapper">
+                      <div class="small-12 columns">
+
+
+                        <ul class="tabs expand row no-margin" data-tabs id="example-tabs">
+
+                          <li class="columns tabs-title is-active one-third"><a aria-selected="true" href="#basic-panel-small">Basic</a></li>
+
+                          <li class="columns tabs-title one-third"><a href="#cast-panel-small">Cast</a></li>
+
+                        </ul>
+                      </div>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+                  </div>
+
+
+                  <div class="tabs-content content" data-tabs-content="example-tabs">
+
+
+                    <div class="tabs-panel is-active" id="basic-panel-small">
+                      <p class="movie-description">{{overview}}</p>
+                    </div>
+
+                    <div class="tabs-panel" id="cast-panel-small">
+
+                      <div class="cast-wrapper row center-flex">
+                        {{#each actors}} {{#if this.profile_path}}
+
+                        <div class="columns cast small-4 medium-3">
+                          <img src="https://image.tmdb.org/t/p/w396{{this.profile_path}}" />
+                          <p>{{this.name}}</p>
+                        </div>
+
+                        {{/if}} {{else}}
+                        <h4>Sorry, no cast available. Maybe <a id="searchMovieCast">search for cast.</a></h4> {{/each}}
+                        
+                      </div>
+                      
+                      {{#with actors}}
+                        
+                          <a class="button small-12 show_all_cast">Show All</a>
+                        
+                        {{/with}}
+
+                    </div>
+
+
+                  </div>
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              </div>
+
+
+
+
+
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+  <div class="reveal no-padding" id="edit-movie" data-reveal>
+
+    {{> editMovieModal}}
+
+  </div>
+
+</template>
+
+
+
+
+
+
+
+
+<template name="editMovieModal">
+
+  <div class="content no-padding">
+
+    <form id="editing-content">
+
+      <div class="row collapse">
+        <div class="medium-3 columns full-height-flex">
+          <ul class="tabs vertical full-width edit-content" id="example-vert-tabs" data-tabs>
+            <li class="tabs-title is-active"><a href="#panel-name" aria-selected="true">Title</a></li>
+            <li class="tabs-title"><a href="#panel-description">Description</a></li>
+            <li class="tabs-title"><a href="#panel-posters">Poster</a></li>
+            <li class="tabs-title"><a href="#panel-backgrounds">Background</a></li>
+            <li class="tabs-title"><a href="#panel-files">Files</a></li>
+          </ul>
+        </div>
+        <div class="medium-9 columns modal-right-padding">
+          <div class="tabs-content vertical" data-tabs-content="example-vert-tabs">
+            <div class="tabs-panel is-active" id="panel-name">
+              <input type="text" id="edit-movie-name" placeholder="Name of movie" value="{{name}}"> {{#each editMovieName}}
+
+              <a class="name-search">{{this.title}}</a> {{/each}}
+            </div>
+            <div class="tabs-panel" id="panel-description">
+              <textarea class="full-width" rows="5">{{overview}}</textarea>
+              <input id="save-description" type="button" class="button float-right" value="Save">
+            </div>
+            <div class="tabs-panel" id="panel-posters">
+              {{#each posters}}
+
+              <a class="movie-poster"><img src="http://image.tmdb.org/t/p/w396{{this.file_path}}" /></a>
+
+              {{/each}}
+            </div>
+            <div class="tabs-panel" id="panel-backgrounds">
+              {{#each backdrops}}
+
+              <a class="movie-backdrop"><img src="https://image.tmdb.org/t/p/original{{this.file_path}}" /></a>
+
+              {{/each}}
+            </div>
+            <div class="tabs-panel" id="panel-files">
+              {{#each ../location}}
+                <div class="well">{{this}}</div>
+              {{/each}}
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+
+
+    </form>
+
+  </div>
+
+
+  <button class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
 </template>

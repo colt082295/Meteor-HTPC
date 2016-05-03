@@ -1,0 +1,91 @@
+<template name="sidebarMobile">
+    
+    
+    <div class="sidebar small-12">
+        
+        
+        <div class="top row no-margin">
+            
+            <div class="small-10">
+            {{> searchCustomMobile}}
+            </div>
+            
+            <div class="small-2 add-wrapper">
+                <a class="add"><i class="fa fa-plus"></i></a>
+            </div>
+            
+        </div>
+        
+        <div class="content">
+            
+            <div class="spinner">
+              <div class="double-bounce1"></div>
+              <div class="double-bounce2"></div>
+            </div>
+            
+            {{#each sections}}
+            
+            <a href="{{pathFor 'section' _id = _id}}" class="section-label">{{name}} <a class="edit float-right"><i class="fa fa-pencil"></i></a></a>
+                
+                
+            
+            {{/each}}
+            
+            
+        </div>
+        
+        
+        
+    </div>
+
+    <div class="reveal" id="add-content" data-reveal>
+        
+        {{> addContentSidebar}}    
+        
+    </div>
+    
+
+    <div class="reveal" id="edit-content" data-reveal>
+        
+        {{> editContentSidebar}}     
+
+    </div>
+    </template>
+    
+    
+    
+    
+    
+<template name="searchCustomMobile">
+    <div class="search-wrapper">
+    <input type="text" id="search-bar-mobile" class="search_box" placeholder="Search something...">
+    </div>
+
+    <div id="mobile-search-suggestions" class="search_suggestions">
+        <div class="title">Movies</div>
+        <ul class="results">
+            {{#each movies}}
+            
+                <li><a href="{{pathFor 'viewMoviePage' _id = this.__originalId section = this.section}}" class="result row no-margin">
+                    <div class="small-2"><img src="{{this.poster}}"/></div>
+                    <div class="small-10 relative ellipsis-wrap"><span class="name">{{this.name}}</span></div>
+                    </a></li>
+            {{else}}
+            
+                
+            
+            {{/each}}
+            
+            <div class="title">Tv Shows</div>
+            
+            {{#each shows}}
+            
+                <li><a href="{{pathFor 'viewShowPage' _id = this.__originalId}}" class="result row no-margin">
+                    <div class="small-2"><img src="{{this.poster}}"/></div>
+                    <div class="small-10 relative ellipsis-wrap"><span class="name">{{this.name}}</span></div>
+                    </a></li>
+            
+            {{/each}}
+        </ul>
+    </div>
+</template>  

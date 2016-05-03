@@ -6,24 +6,19 @@
 
 insecure
 fourseven:scss
-meteorhacks:npm
 iron:router
 accounts-password
 accounts-ui
 
 
-richsilv:owl-carousel
 sergeyt:typeahead
 cfs:standard-packages
 cfs:filesystem
-sujith3g:jstree
 reactive-var
 streams
 yuukan:streamy
 
 
-npm-container
-standard-minifiers
 meteor-base
 mobile-experience
 mongo
@@ -38,7 +33,6 @@ ejson
 spacebars
 check
 ecmascript
-zurb:foundation-sites
 meteorhacks:aggregate
 meteorhacks:kadira
 meteorhacks:kadira-profiler
@@ -50,5 +44,11 @@ cfs:ejson-file
 meteorhacks:async
 meteorhacks:fast-render
 natestrauser:font-awesome
-remodal:remodal
 meteorhacks:subs-manager
+bambattajb:sticky
+matteodem:easy-search
+standard-minifier-js
+nolimits4web:swiper
+juliancwirko:postcss
+natestrauser:select2
+percolate:paginated-subscription

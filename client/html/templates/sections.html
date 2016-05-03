@@ -1,13 +1,17 @@
 <template name="section">
 
-  <div class="wrapper">
-  
-<div class="flex-wrap">
+  <div class="off-canvas-wrapper wrapper full-height">
+    <div class="off-canvas-wrapper-inner wrapper full-height" data-off-canvas-wrapper>
+      <div class="off-canvas position-left" id="offCanvas" data-off-canvas>{{> sidebarMobile}}</div>
+      <div class="off-canvas-content wrapper full-height" data-off-canvas-content>
 
-  {{> nav}}
-  
-  <div class="row fill-vert">
-  {{> sidebar}}
+        <div class="wrapper full-height">
+
+          {{> nav}}
+
+          <div class="container full-height row">
+
+            {{> sidebar}}
   
   
   
@@ -31,6 +35,8 @@
   </div>
   
     </div>
+</div>
+</div>
 </div>
 
 {{> footer}}

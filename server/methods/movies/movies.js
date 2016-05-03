@@ -1,15 +1,65 @@
-var Future = Meteor.npmRequire('fibers/future');
+import Future from 'fibers/future';
+import MovieDB1 from 'moviedb';
+var MovieDB = new MovieDB1('23290308516dcbfcb67fb0f330028492');
+
+import walk from 'walkdir';
+import walk2 from 'walk';
+import fs from 'fs';
+import mime from 'mime';
+import path from 'path';
+
+
+//var Future = Meteor.npmRequire('fibers/future');
 var base_url = "http://image.tmdb.org/t/p/w396";
 var run = 0;
 var finished = 0;
 
 Meteor.methods({
+    
+    
+    updateMovieDescription: function(id, section, description) {
+
+        Movies.update({
+                _id: id,
+                section: section
+            },
+            {
+                $set: {
+                    overview: description,
+                }
+
+            },
+            function(err, res) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    return "Updated the description.";
+                }
+            });
+
+    },
+    
+    countMovies: function(section) {
+            
+           var count = Movies.find({
+                section: section
+            });
+            
+            //console.log(count.count());
+            return count.count();
+            
+            
 
 
-    removeMovie: function(id) {
+    },
 
-        Moviess.remove({
-                _id: id
+
+    removeMovie: function(id, section) {
+
+        Movies.remove({
+                _id: id,
+                section: section
             },
             function(err, res) {
                 if (err) {
@@ -26,7 +76,7 @@ Meteor.methods({
 
     searchMovie: function(name) {
         var future = new Future();
-        var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
         MovieDB.searchMovie({
             query: name
@@ -79,14 +129,14 @@ Meteor.methods({
     findMovies: function() {
 
 
-        return Moviess.find().fetch();
+        return Movies.find().fetch();
 
     },
 
 
     movieInfo: function(id) {
         var future = new Future();
-        var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
 
         MovieDB.movieInfo({
@@ -101,10 +151,29 @@ Meteor.methods({
         });
         return future.wait();
     },
+    
+    
+    movieImages: function(id) {
+        var future = new Future();
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+
+
+        MovieDB.movieImages({
+            id: id
+        }, function(error, result) {
+            if (error) {
+                future.return(error);
+            }
+            else {
+                future.return(result);
+            }
+        });
+        return future.wait();
+    },
 
     movieCredits: function(id) {
         var future = new Future();
-        var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
 
 
         MovieDB.movieCredits({
@@ -119,32 +188,107 @@ Meteor.methods({
         });
         return future.wait();
     },
+    
+    
+    movieCreditsUpdate: function(movie_id, id, section) {
+        var future = new Future();
+        //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');
+
+
+        MovieDB.movieCredits({
+            id: movie_id
+        }, Meteor.bindEnvironment(function(error, result) {
+            if (error) {
+                throw(error);
+            }
+            else {
+                
+                Movies.update({
+                    _id: id,
+                    section: section,
+                },
+                {
+                    $set: {
+                        cast: result.cast,
+                    }
+
+                }, Meteor.bindEnvironment(function(err, res) {
+                    if (err) {
+                        console.log("ERROR ADDING movieCredits TO: " + id);
+                        throw(err);
+                    }
+                    else {
+                        future.return("SUCCESSFULLY ADDED movieCredits TO: " + id);
+                        console.log("SUCCESSFULLY ADDED movieCredits TO: " + id);
+                    }
+                }));
+                
+                
+            }
+        }));
+        return future.wait();
+    },
 
 
 
 
     add_movies: function(name, old_name, overview, release, runtime, poster, poster_base) {
-        Moviess.insert({
+        Movies.insert({
             name: name,
             overview: overview,
             release: release,
             runtime: runtime,
             old_name: old_name,
             poster: poster_base + poster,
+            date: new Date(),
+            watched: false
         });
 
-        return Moviess.find().fetch();
+        return Movies.find().fetch();
+
+    },
+    
+    
+    updateMovieProgress: function(id, section, time) {
+        //var future = new Future();
+
+        Movies.update({_id: id , section: section},
+        {
+            $set: {
+                progress: time,
+                watched: true,
+            }
+        }
+        )
+
+        return true;
+
+    },
+    
+    setWatchedMovie: function(id, section) {
+        //var future = new Future();
+
+        Movies.update({_id: id , section: section},
+        {
+            $set: {
+                watched: true
+            }
+        }
+        )
+
+        return true;
 
     },
 
 
 
-    updateMovie: function(id, name, overview, release, runtime, poster_base, poster, movie_id) {
+    updateMovie: function(id, section, name, overview, release, runtime, poster_base, poster, movie_id) {
 
         var future = new Future();
 
-        Moviess.update({
-            _id: id
+        Movies.update({
+            _id: id,
+            section: section
         }, {
             $set: {
                 name: name,
@@ -181,14 +325,17 @@ Meteor.methods({
         });
 
         var allVideos = [];
-        var future = new Future();
+        var future = new Future(),
+        walker;
+        /*
         var walk = Meteor.npmRequire('walk'),
             fs = Meteor.npmRequire('fs'),
             mime = Meteor.npmRequire('mime'),
             walker,
             path = Meteor.npmRequire('path');
+            */
 
-        walker = walk.walk(folder);
+        walker = walk2.walk(folder);
 
         walker.on("file", Meteor.bindEnvironment(function(root, fileStats, next) {
 
@@ -203,14 +350,15 @@ Meteor.methods({
 
             fs.readFile(fileStats.name, Meteor.bindEnvironment(function() {
 
-                var ext = path.extname(fileStats.name);
-                var name1 = fileStats.name;
-                var location = root + '/' + name1;
-                var nameEncoded = encodeURIComponent(name1);
+                var ext = path.extname(fileStats.name); // File extension
+                var name1 = fileStats.name; // Filename
+                var location = root + '/' + name1; // The full file location
+                var nameEncoded = encodeURIComponent(name1); // URL friendly
+                
+                
+                var video = Meteor.myFunctions.isVideoNotSample(name1, location); // Make sure the video isn't a sample
 
-                var videoFormats = [".avi", ".mkv", ".mp4", ".vob", ".ts", ".m2ts", ".mpg", ".wmv"];
-
-                if (videoFormats.indexOf(ext) > -1) {
+                if (video) { // If video is not a sample
 
                     notifications.emit('message', "Found a video. " + name1);
                     notifications.emit('message', root);
@@ -233,7 +381,7 @@ Meteor.methods({
                     //if (type1 === "video") {
                     //if ( videoFormats.indexOf( ext ) > -1 ) {
 
-                    Meteor.call('movieName', nameEncoded, root, function(error, result) {
+                    Meteor.call('movieName', nameEncoded, root, function(error, result) { // Gues the name of the movie
 
                         if (error) {
                             console.log(error);
@@ -247,10 +395,12 @@ Meteor.methods({
 
 
 
-                            Moviess.insert({
+                            Movies.insert({
                                 name: result,
                                 location: [location],
                                 section: id,
+                                date: new Date(),
+                                watched: false
                             });
 
                             //console.log(result);
@@ -293,7 +443,7 @@ Meteor.methods({
 
 
 
-            var fetch = Moviess.find({
+            var fetch = Movies.find({ // Find all movies for the section
                 section: id
             }).fetch();
 
@@ -336,6 +486,16 @@ Meteor.methods({
                                 
                             });
                             */
+                            
+                            notifications.emit('message', "File test");
+                            notifications.emit('message', file.location[0]);
+                            
+                            var videoMetadata = Meteor.myFunctions.videoMetadata(file.location[0]);
+                            
+                            notifications.emit('message', "videoMetadata");
+                            notifications.emit('message', videoMetadata);
+                            
+                            var duration = videoMetadata.format.duration;
 
                             notifications.emit('message', 'Found ' + name);
 
@@ -344,18 +504,19 @@ Meteor.methods({
 
                                 var it = movie.results[0]; // Traverse only in the first array returned. I'd like to eventually setup my own equation to see whether the search result is actually the correct movie, but I'm relying on the TMDB search currently.
 
-
+                                notifications.emit('message', it);
 
                                 // console.log(search._id);
                                 var overview = it.overview;
                                 var release = it.release_date;
-                                var runtime = it.runtime;
+                                var runtime = duration;
                                 var poster_base = base_url;
                                 var poster = it.poster_path;
+                                var backdrop = "https://image.tmdb.org/t/p/original" + it.backdrop_path
                                 var movie_id = it.id;
                                 var title = it.original_title;
 
-                                Moviess.update({
+                                Movies.update({
                                     _id: file._id,
                                     section: id,
                                 }, {
@@ -367,6 +528,7 @@ Meteor.methods({
                                         runtime: runtime,
                                         //old_name: old_name,
                                         poster: poster_base + poster,
+                                        backdrop: backdrop,
                                         movie_id: movie_id,
                                     }
 
@@ -386,12 +548,12 @@ Meteor.methods({
                                 notifications.emit('message', 'There were no results searching for ' + name);
 
 
-                                Moviess.update({
+                                Movies.update({
                                     _id: file._id,
                                     section: id,
                                 }, {
                                     $set: {
-                                        hide: 'yes'
+                                        no_results: true
                                     }
 
                                 }, function(err, res) {
@@ -446,6 +608,16 @@ Meteor.methods({
                                 
                             });
                             */
+                            
+                            notifications.emit('message', "File test");
+                            notifications.emit('message', file.location[0]);
+                            
+                            var videoMetadata = Meteor.myFunctions.videoMetadata(file.location[0]);
+                            
+                            notifications.emit('message', "videoMetadata");
+                            notifications.emit('message', videoMetadata);
+                            
+                            var duration = videoMetadata.format.duration;
 
                             notifications.emit('message', 'Found ' + name);
 
@@ -453,19 +625,26 @@ Meteor.methods({
 
 
                                 var it = movie.results[0]; // Traverse only in the first array returned. I'd like to eventually setup my own equation to see whether the search result is actually the correct movie, but I'm relying on the TMDB search currently.
-
+                                
+                                notifications.emit('message', it);
+                                
+                                /*
+                                notifications.emit('message', 'it results');
+                                notifications.emit('message', it);
+                                */
 
 
                                 // console.log(search._id);
                                 var overview = it.overview;
                                 var release = it.release_date;
-                                var runtime = it.runtime;
+                                var runtime = duration;
                                 var poster_base = base_url;
                                 var poster = it.poster_path;
+                                var backdrop = "https://image.tmdb.org/t/p/original" + it.backdrop_path
                                 var movie_id = it.id;
                                 var title = it.original_title;
 
-                                Moviess.update({
+                                Movies.update({
                                     _id: file._id,
                                     section: id,
                                 }, {
@@ -477,6 +656,7 @@ Meteor.methods({
                                         runtime: runtime,
                                         //old_name: old_name,
                                         poster: poster_base + poster,
+                                        backdrop: backdrop,
                                         movie_id: movie_id,
                                     }
                                 }, function(err, res) {
@@ -495,12 +675,12 @@ Meteor.methods({
                                 notifications.emit('message', 'There were no results searching for ' + name);
 
 
-                                Moviess.update({
+                                Movies.update({
                                     _id: file._id,
                                     section: id,
                                 }, {
                                     $set: {
-                                        hide: 'yes'
+                                        no_results: true
                                     }
 
                                 }, function(err, res) {
@@ -518,27 +698,12 @@ Meteor.methods({
 
                     });
 
-                    /*
-                
-                            See if there is another way to do a search for movies where no information is found. 
-                
-                
-                            */
-
 
                 }
 
             });
 
-            //var result2 = Moviess.find().fetch();
-
-            /*
-            var pipeline = [
-              {$group: {_id: null, resTime: {$sum: "$resTime"}}}
-            ];
-            */
-
-            var pipeline = [{
+            var pipeline = [{ // Get duplicate movies
                         $group: {
                             // Group by fields to match on (a,b)
                             _id: "$name",
@@ -604,7 +769,10 @@ Meteor.methods({
                 }
             }];
             */
-            var result2 = Moviess.aggregate(pipeline);
+            
+            
+            /*
+            var result2 = Movies.aggregate(pipeline);
 
             notifications.emit('message', "pipeline");
             notifications.emit('message', result2);
@@ -631,7 +799,7 @@ Meteor.methods({
                     idArray.push(file._id);
                     /*
                             
-                            Moviess.remove({
+                            Movies.remove({
                                 _id: file._id,
                                 section: id,
                             },
@@ -644,7 +812,7 @@ Meteor.methods({
                                     console.log("SUCCESSFULLY REMOVED: " + file.name);
                                 }
                             });
-                            */
+                            
 
 
                 });
@@ -653,7 +821,7 @@ Meteor.methods({
                 notifications.emit('message', idArray);
 
                 /*
-                        Moviess.remove({'_id':{'$in':idArray}},
+                        Movies.remove({'_id':{'$in':idArray}},
                             function(err, res) {
                                 if (err) {
                                     console.log("ERROR REMOVING docs ");
@@ -668,7 +836,7 @@ Meteor.methods({
 
 
                 /*
-                Moviess.update({
+                Movies.update({
                     _id: updateId,
                     section: id,
                 },
@@ -689,7 +857,7 @@ Meteor.methods({
                     }
                 });
                         
-                */
+                
 
                 notifications.emit('message', "All locations");
                 notifications.emit('message', location_array);
@@ -702,7 +870,7 @@ Meteor.methods({
                 var location_array = [];
 
                 notifications.emit('message', file.name);
-                var fetch = Moviess.find({
+                var fetch = Movies.find({
                     name: file.name,
                     section: id,
                 }).fetch();
@@ -720,7 +888,7 @@ Meteor.methods({
 
                 var id1 = id_array.shift();
 
-                Moviess.update({
+                Movies.update({
                     _id: id1,
                     section: id,
                 }, {
@@ -741,7 +909,7 @@ Meteor.methods({
 
                 id_array.forEach(function(file, index, array) {
 
-                    Moviess.remove({
+                    Movies.remove({
                         _id: file,
                         section: id,
                     }, function(err, res) {
@@ -755,10 +923,125 @@ Meteor.methods({
                     });
                 });
                         
-                */
+                
 
 
             });
+            
+            */
+            
+            var fetch2 = Movies.find({ // Find all movies for the section
+                section: id
+            }).fetch();
+            
+            fetch2.forEach(function(file, index, array) {
+                
+                
+                run = run + 2; // This adds one to the current run count. This is to count the number of requests to TMDB to account for the timeout
+
+                if (run >= 20) { // When the run count hits 20 or more
+
+                    run = 0;
+                    notifications.emit('message', 'YOU HIT THE LIMIT FOR TMDB');
+                    Meteor._sleepForMs(30000); // Find the currect time to put it to sleep for
+                    notifications.emit('message', 'THE LIMIT IS UP');
+                    finished = finished + 1;
+                    
+                    
+                    Meteor.myFunctions.movieImages(file.movie_id, file.name, file._id, file.section); // Get the movie posters and backdrops
+                
+                    Meteor.call('movieCredits', file.movie_id, function(error, movie) { // Get the cast
+    
+                            if (error) {
+                                notifications.emit('message', 'Error adding credits to: ' + file.name);
+                                notifications.emit('message', error);
+    
+                            }
+                            else {
+                    
+                    
+                                notifications.emit('message', 'Credits for ' + file.name);
+                                notifications.emit('message', movie);
+                                
+                                
+                                Movies.update({
+                                    _id: file._id,
+                                    section: id,
+                                },
+                                {
+                                    $set: {
+                                        cast: movie.cast,
+                                    }
+                
+                                }, function(err, res) {
+                                    if (err) {
+                                        notifications.emit('message', "There was an error getting the credits for: " + file.name);
+                                        notifications.emit('message', err);
+                                    }
+                                    else {
+                
+                                        notifications.emit('message', "Added the credits for: " + file.name);
+                                    }
+                                });
+                                
+                            }
+                            
+                    });
+                    
+                    
+                } else {
+                    
+                    notifications.emit('message', 'movieImages test: ' + file.name);
+                    notifications.emit('message', file);
+                    Meteor.myFunctions.movieImages(file.movie_id, file.name, file._id, file.section); // Get the movie posters and backdrops
+                
+                    Meteor.call('movieCredits', file.movie_id, function(error, movie) { // Get the cast
+    
+                            if (error) {
+                                notifications.emit('message', 'Error adding credits to: ' + file.name);
+                                notifications.emit('message', error);
+    
+                            }
+                            else {
+                    
+                    
+                                notifications.emit('message', 'Credits for ' + file.name);
+                                notifications.emit('message', movie);
+                                
+                                
+                                Movies.update({
+                                    _id: file._id,
+                                    section: id,
+                                },
+                                {
+                                    $set: {
+                                        cast: movie.cast,
+                                    }
+                
+                                }, function(err, res) {
+                                    if (err) {
+                                        notifications.emit('message', "There was an error getting the credits for: " + file.name);
+                                        notifications.emit('message', err);
+                                    }
+                                    else {
+                
+                                        notifications.emit('message', "Added the credits for: " + file.name);
+                                    }
+                                });
+                                
+                            }
+                            
+                    });
+                    
+                    
+                    
+                }
+                
+                
+            });
+            
+            
+            
 
 
             future.return("Finished!");
@@ -842,7 +1125,7 @@ Meteor.methods({
                                     
                                     name = result;
                                         
-                                    var addMovie = Moviess.insert({
+                                    var addMovie = Movies.insert({
                                         name: result,
                                         location: [location],
                                         section: id,
@@ -923,7 +1206,7 @@ Meteor.methods({
                                         var movie_id = it.id;
                                         var title = it.original_title;
 
-                                        Moviess.update({
+                                        Movies.update({
                                             _id: file,
                                         }, {
                                             
@@ -953,7 +1236,7 @@ Meteor.methods({
                                         notifications.emit('message', 'There were no results searching for ' + name);
 
 
-                                        Moviess.update({
+                                        Movies.update({
                                             _id: file
                                         }, {
                                             $set: {
@@ -1041,10 +1324,124 @@ Meteor.methods({
         return future.wait();
 
     },
+    
+    
+    updateMoviePoster: function(id, src, section) {
+        
+        var future = new Future();
+        
+        Movies.update({
+            _id: id,
+            section: section
+        }, {
+            $set: {
+                poster: src
+            }
+
+        }, function(err, res) {
+            if (err) {
+                future.return(err);
+            }
+            else {
+
+                future.return("SUCCESSFULLY UPDATED: " + id);
+            }
+        });
+        
+        return future.wait();
+
+    },
+    
+    
+        updateMovieBackdrop: function(id, src, section) {
+        
+        var future = new Future();
+        
+        Movies.update({
+            _id: id,
+            section: section
+        }, {
+            $set: {
+                backdrop: src
+            }
+
+        }, function(err, res) {
+            if (err) {
+                future.return(err);
+            }
+            else {
+
+                future.return("SUCCESSFULLY UPDATED BACKDROP: " + id);
+            }
+        });
+        
+        return future.wait();
+
+    },
+    
+    
+    
+    searchMovieCast: function(id, section, movie_id) {
+        
+        var future = new Future();
+    
+    Meteor.call('movieCredits', movie_id, function(error, movie) { // Do a search on TMDB for movies matching the name
+
+                        if (error) {
+                            notifications.emit('message', 'Error with getting the credits.');
+                            notifications.emit('message', error);
+                            throw(error);
+                            future.return(error);
+
+                        }
+                        else {
+                            
+                            
+                            Movies.update({
+                                _id: id,
+                                section: section,
+                            },
+                            {
+                                $set: {
+                                    cast: movie.cast,
+                                }
+            
+                            }, function(err, res) {
+                                if (err) {
+                                    notifications.emit('message', "ERROR ADDING movieCredits TO: " + id);
+                                    notifications.emit('message', err);
+                                    throw(err);
+                                    future.return(err);
+                                }
+                                else {
+            
+                                    console.log("SUCCESSFULLY ADDED movieCredits TO: " + id);
+                                    future.return({res, movie});
+                                }
+                            });
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                
+                
+                        }
+                        
+                        
+                        
+                });
+    
+    return future.wait();
+    
+    },
 
     removeMovies: function(section) {
 
-        return Moviess.remove({
+        return Movies.remove({
             section: section
         });
 

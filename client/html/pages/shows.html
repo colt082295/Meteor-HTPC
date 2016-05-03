@@ -1,73 +1,86 @@
 <template name="shows">
 
-  <div class="main columns">
-      
-      <div class="">
-         <a href="" class="button info scan">Scan Show</a>
-         <a href="" class="button info remove">Remove Shows</a>
-         <!--<a href="" class="button info">Re-Scan Info</a>-->
+  <div class="section-main columns">
+        
+        <div class="sub-menu-wrapper">
           
-         <div class="row flexbox">   
-         
-          {{#each content}}
-          
-             <div class="flex-item-wrapper">
-      
-               <div class="flex-item columns">
-                    
-                    <a href="{{pathFor 'viewShowPage'}}" class="">
-                      <div class="">
-                        <div class="">
-                          <div class="carousel-img" style="background-image: url('{{this.poster}}')">
-                          </div>
-                        </div>
-                        <div class="carousel-title">{{this.name}}</div>
-                      </div>
-                    </a>
-                  
+                <div class="align-left float-left">  
+                
+                {{#if loadedContent}}
+                <h4 class="no-margin">{{loadedContent}} of {{allContent}}</h4>
+                {{else}}
+                {{/if}}
+                
                 </div>
-              
-              </div>
+                
+                <ul class="menu dropdown align-right" data-dropdown-menu data-options="disableHover:true;closingTime:5000;clickOpen:true;">
+                  <li><a href="" class="button info scan"><i class="fa fa-refresh"></i><span class="show-for-large">Scan</span></a></li>
+                  <li>
+                    <a href="#"><i class="fa fa-cog"></i></a>
+                    <ul class="menu submenu is-dropdown-submenu vertical" data-submenu>
+                        <li><a href="" class="button remove alert"><i class="fa fa-trash-o"></i><span class="show-for-large">Remove all</span></a></li>
+                    </ul>
+                  </li>
+                  
+                  
+                  <!--<li><a href="" class="button info">Re-Scan Info</a></li>-->
+                </ul>
+                
+            </div>
+         
+         
+         <div class="row flexbox start relative">  
+         
+         <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
+         
+         {{#if loading}}
+         
+         <!--
+          <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+          </div>
           
-          {{/each}}
-        
-        </div>
-        
-      </div>
-      
-      <div class="sort_movies">
-          <a href="#" class="letter">A</a>
-          <a href="#" class="letter">B</a>
-          <a href="#" class="letter">C</a>
-          <a href="#" class="letter">D</a>
-          <a href="#" class="letter">E</a>
-          <a href="#" class="letter">F</a>
-          <a href="#" class="letter">G</a>
-          <a href="#" class="letter">H</a>
-          <a href="#" class="letter">I</a>
-          <a href="#" class="letter">J</a>
-          <a href="#" class="letter">K</a>
-          <a href="#" class="letter">L</a>
-          <a href="#" class="letter">M</a>
-          <a href="#" class="letter">N</a>
-          <a href="#" class="letter">O</a>
-          <a href="#" class="letter">P</a>
-          <a href="#" class="letter">Q</a>
-          <a href="#" class="letter">R</a>
-          <a href="#" class="letter">S</a>
-          <a href="#" class="letter">T</a>
-          <a href="#" class="letter">U</a>
-          <a href="#" class="letter">V</a>
-          <a href="#" class="letter">W</a>
-          <a href="#" class="letter">X</a>
-          <a href="#" class="letter">Y</a>
-          <a href="#" class="letter">Z</a>
-      </div>
-  
-  
-  
-  
-  
+          
+          
+          <h1>LOADING</h1>
+          -->
+          
+          <div class="content-loading">
+               <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+              </div>
+            </div>
+         
+         {{else}}
+             
+            
+                {{#each content}}
+                
+                   <div class="columns small-4 medium-3 large-2 movie-item"> 
+                            
+                            <a href="{{pathFor 'viewShowPage' section = ../_id}}" class="">
+                                <div class="">
+                                      <img src="{{this.poster}}"/>
+                                  </div>
+                                  <div class="carousel-title">{{this.name}}</div>
+                            </a>
+                    
+                    </div>
+                    
+                {{/each}}
+                
+                
+                {{#if hasMore}}
+                  <p><a class="js-load-more">More</a></p>
+                {{/if}}
+                
+          {{/if}}
+                
+            
+            </div>
+         
   
   </div>
                   

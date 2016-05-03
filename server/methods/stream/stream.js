@@ -1,4 +1,20 @@
-var Future = Meteor.npmRequire('fibers/future');
+import Future from 'fibers/future';
+
+import MovieDB1 from 'moviedb';
+var MovieDB = new MovieDB1('23290308516dcbfcb67fb0f330028492');
+
+import walk from 'walkdir';
+import fs from 'fs';
+import mime from 'mime';
+import path from 'path';
+
+
+import TVDB from 'node-tvdb/compat';
+var tvdb = new TVDB('79403F2E528405DB');
+
+import http from 'http';
+import ffmpeg from 'fluent-ffmpeg';
+import portfinder from 'portfinder';
 
 Meteor.methods({
 
@@ -11,11 +27,12 @@ Meteor.methods({
         });
 
 
-
+        /*
         var http = Meteor.npmRequire('http');
         var fs = Meteor.npmRequire('fs');
         var ffmpeg = Meteor.npmRequire('fluent-ffmpeg');
         var portfinder = Meteor.npmRequire('portfinder');
+        */
         var future = new Future();
 
 
@@ -91,24 +108,28 @@ Meteor.methods({
 
 
 
-    streamWebm: function(path) {
+    streamWebm: function(path, quality) {
 
         this.unblock();
 
         notifications.permissions.read(function(userId, eventName) {
             return true;
         });
+        
+        notifications.emit('message', "quality");
+                        notifications.emit('message', quality);
 
 
-
+        /*
         var http = Meteor.npmRequire('http');
         var fs = Meteor.npmRequire('fs');
         var ffmpeg = Meteor.npmRequire('fluent-ffmpeg');
         var portfinder = Meteor.npmRequire('portfinder');
+        */
         var future = new Future();
 
 
-        ffmpeg.ffprobe(path, function(err, metadata) {
+        ffmpeg.ffprobe(path, Meteor.bindEnvironment(function(err, metadata) {
 
 
             if (err) {
@@ -116,20 +137,34 @@ Meteor.methods({
             }
             else {
 
-                portfinder.getPort(function(err, port) {
+                portfinder.getPort(Meteor.bindEnvironment(function(err, port) {
 
 
-                    http.createServer(function(req, res) {
+                    http.createServer(Meteor.bindEnvironment(function(req, res) {
 
                         console.log("encoding movie", path);
                         notifications.emit('message', metadata);
+                        
+                        /*
+                        
+                        var quality1 = Meteor.myFunctions.qualityCheck(quality);
+                        
+                        notifications.emit('message', "quality 3");
+                        notifications.emit('message', quality1);
+                        
+                        */
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         ffmpeg({
                           source: path,
                           timeout: 0
                         })
-
-
-
+                        
                         .withVideoCodec('libvpx')
                             .addOptions(['-qmin 10', '-qmax 42', '-quality good', '-crf 20', '-cpu-used -6', '-threads 0', '-f webm', '-deadline realtime'])
                             .withVideoBitrate(2200)
@@ -137,7 +172,8 @@ Meteor.methods({
                             .audioBitrate('128k')
                             .audioChannels(2)
                             .fps(24)
-                            .withSize('1280x720')
+                            
+                            .withSize(quality)
                             .format('webm')
 
                         .on('error', function(err, stdout, stderr) {
@@ -156,7 +192,7 @@ Meteor.methods({
                             });
 
 
-                    }).listen(port);
+                    })).listen(port);
                     console.log("video stream running on port: " + port);
                     future.return({
                         port: port,
@@ -165,12 +201,12 @@ Meteor.methods({
                     //future.return({port:port, duration: metadata.format.duration});
 
 
-                });
+                }));
 
 
 
             }
-        });
+        }));
 
 
         return future.wait();
@@ -190,11 +226,12 @@ Meteor.methods({
         });
 
 
-
+        /*
         var http = Meteor.npmRequire('http');
         var fs = Meteor.npmRequire('fs');
         var ffmpeg = Meteor.npmRequire('fluent-ffmpeg');
         var portfinder = Meteor.npmRequire('portfinder');
+        */
         var future = new Future();
 
         ffmpeg.ffprobe(path, function(err, metadata) {
@@ -276,11 +313,12 @@ Meteor.methods({
         });
 
 
-
+        /*
         var http = Meteor.npmRequire('http');
         var fs = Meteor.npmRequire('fs');
         var ffmpeg = Meteor.npmRequire('fluent-ffmpeg');
         var portfinder = Meteor.npmRequire('portfinder');
+        */
         var future = new Future();
 
         ffmpeg.ffprobe(path, function(err, metadata) {
