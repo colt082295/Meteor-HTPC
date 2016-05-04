@@ -1,6 +1,7 @@
 .bower-cache/*
 .bower-registry/*
 .bower-tmp/*
+node_modules/
 public/bower_components/*
 public/stream/*
 public/guessit-rest.log

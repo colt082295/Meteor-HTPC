@@ -35,6 +35,18 @@
             
              <div class="row flexbox start">   
              
+             <!--
+             <div id="container-test">
+    <div class="item">
+        <div>
+            #name#
+        </div>
+    </div>
+    
+    
+</div>
+-->
+             
              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
              
              
@@ -47,7 +59,6 @@
                                       {{#if poster}}
                     <img class="" src="{{poster}}" /> {{else}}
                     <img class="" src="/placeholder-poster.jpg" /> {{/if}}
-                                    <!--<div class="carousel-img" style="background-image: url('{{this.poster}}')">-->
                                         {{#if greater_one this.location.length 1}}
                                             <span class="info badge left">{{this.location.length}}</span>
                                         {{/if}}
@@ -74,6 +85,7 @@
                     </div>
                     
                 {{/each}}
+                
                 
               
             
@@ -116,7 +128,6 @@
     
     
     
-    
     {{#if loading}}
                 <p>Loading...</p>
               {{else}}
@@ -124,6 +135,7 @@
                   <p><a class="js-load-more button">More</a></p>
                 {{/if}}
               {{/if}}
+    
               
     </div>
                   

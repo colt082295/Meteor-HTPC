@@ -9,6 +9,7 @@ notifications = new Meteor.Stream('server-notifications');
 
 
 import path from 'path';
+import ViewList from 'view-list';
 //import chokidar from 'chokidar';
 
 
@@ -1460,8 +1461,63 @@ if (Meteor.isClient) {
     
     
     Template.movies.onRendered(function(event, template) {
+        
+        var div = $( ".start" );
+        
+        /*
+        // Create an instance of our view list in document.body
+var viewlist = new ViewList({
+  className: 'view-list',
+  eachrow: function (row) {
+    return this.html('li', [
+      this.html('strong', row.name + ': '),
+      row.message
+    ])
+  }
+});
+console.log("viewlist");
+console.log(viewlist);
+
+// Create some data to add to the list
+var data = ['one', 'two', 'three']
+
+// Render the data
+console.log(viewlist.render(data));
+//viewlist.render(data)
+
+// Listen for scroll events coming up
+viewlist.addEventListener('scroll', function (element) {
+  console.log('List was scrolled to ' + element.scrollTop)
+})
+
+// Every second, append a new row
+var i = 0
+setInterval(function() {
+  data.push('row ' + i++)
+  viewlist.render(data)
+}, 1000)
     
-    
+    */
+    Meteor.autorun(function() {
+        if (movieSubscription.ready()) {
+            Session.set("movie-test", Movies.find().fetch())
+    var data = Movies.find().fetch();
+$('#container-test').vsRepeat({
+    data         : Session.get("movie-test"),        // required
+    offsetBefore : 50,          // optional
+    offsetAfter  : 50,          // optional
+    excess       : 0,           // optional
+    //sizeProperty : 'size',      // optional
+    direction    : 'vertical',// optional (default: vertical)
+    onRender     : function(element, index, startIndex, endIndex){
+        if((index + startIndex) % 2)
+            element.css('background', 'gray');
+    }
+});
+}
+})
+
+
         console.log("TEST");
         console.log(Template);
         console.log(this);
@@ -1498,11 +1554,11 @@ if (Meteor.isClient) {
             
         }
         
-        visible();
+        //visible();
         
         $(window).scroll(function() { // Run everytime user scrolls
           
-          visible();
+          //visible();
           
         });
         
@@ -1510,11 +1566,12 @@ if (Meteor.isClient) {
         
         
         
-        /*
-        Might use something like this to calculate the height without having to load all the movies at once.
+        
+        //Might use something like this to calculate the height without having to load all the movies at once.
         
         Meteor.autorun(function() {
         if (movieSubscription.ready()) {
+            setTimeout(function(){ 
         var widthPercent = $(".movie-item").outerWidth() / $('.movie-item').parent().width() * 100;
         var perRow = Math.floor(100 / widthPercent);
         console.log(".movie-item");
@@ -1525,12 +1582,19 @@ if (Meteor.isClient) {
         console.log(Template);
         var amount1 = Session.get("contentCount");
         console.log(amount1);
-        console.log("The amount of rows is " + Math.ceil(amount1 / perRow));
+        console.log("The amount of rows is " + Math.ceil(amount1 / perRow) + " at " + $(".movie-item").height() + " px height per row.");
+        console.log(Math.ceil(amount1 / perRow) * $(".movie-item").height());
+        $('body').height(Math.ceil(amount1 / perRow) * $(".movie-item").outerHeight());
+        
+        
+            }, 3000);
+        
+        
         }
         
         
         });
-        */
+        
         
         
         

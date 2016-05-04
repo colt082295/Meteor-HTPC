@@ -23,6 +23,8 @@
     "stream-transcoder": "0.0.5",
     "video.js": "^5.9.2",
     "videojs-resolution-switcher": "0.3.1",
+    "view-list": "^2.1.0",
+    "virtual-scroll": "^1.0.2",
     "walk": "2.3.9",
     "walkdir": "0.0.11"
   },
