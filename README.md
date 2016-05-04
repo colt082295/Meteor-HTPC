@@ -3,3 +3,10 @@ This is a web app, built in Meteor, to keep track of your media - or at least th
 Some things work, some things don't. I'm always working on this project and updating it as I learn more. If you find any bugs or anything you see that can be done better, feel free to submit. The most troublesome and buggy part of the whole project is likely the video seeking.
 
 This also uses GuessIt. So you'll need to install and run it: https://github.com/guessit-io/guessit-rest The link for api requests is hardcoded for localhost currently, so you'll need to change it if you do an api request to a remote server.
+
+## Todo
+
+- Get video seeking working (right now it seeks, but the player doesn't reflect the new time after the source change.)
+- Replace infinite scrolling with virtual scrolling. This will make it more performant in cases where sections have a ton of content.
+- Save images locally. All images are currently loaded externally which creates notciable lag in image load time.
+- ...lots more.
