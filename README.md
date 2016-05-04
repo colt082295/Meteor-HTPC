@@ -1,12 +1,21 @@
-This is a web app, built in Meteor, to keep track of your media - or at least that's the end goal. Right now it's on its very initial stages towards that. I'll likely be updating this frequently.
+This is a web app, built in Meteor, to keep track of your media - or at least that's the end goal. Right now it's on its very initial stages towards that.
 
 Some things work, some things don't. I'm always working on this project and updating it as I learn more. If you find any bugs or anything you see that can be done better, feel free to submit. The most troublesome and buggy part of the whole project is likely the video seeking.
-
-This also uses GuessIt. So you'll need to install and run it: https://github.com/guessit-io/guessit-rest The link for api requests is hardcoded for localhost currently, so you'll need to change it if you do an api request to a remote server.
 
 ## Todo
 
 - Get video seeking working (right now it seeks, but the player doesn't reflect the new time after the source change.)
 - Replace infinite scrolling with virtual scrolling. This will make it more performant in cases where sections have a ton of content.
-- Save images locally. All images are currently loaded externally which creates notciable lag in image load time.
+- Save images locally. All images are currently loaded externally which creates noticeable lag in image load time (plus occasional timeout bans).
 - ...lots more.
+
+
+## To Run
+
+1. Install [Meteor](https://github.com/meteor/meteor).
+2. Install + run [GuessIt](https://github.com/guessit-io/guessit-rest). You could instead point directly to the hosted [api](http://api.guessit.io/) if you were so inclined - you'd just have to change the hardcoded localhost to the api url.
+2. Run `meteor npm install` to install the npm dependencies. The Atmosphere deps should install on first run.
+3. Run `meteor` or `meteor --your-port-here`.
+
+At some point I'll likely start putting out actual releases that won't require Meteor to run, but that's a while away. You can always do it yourself, however, by using [Demeteorizer](https://github.com/onmodulus/demeteorizer).
+
