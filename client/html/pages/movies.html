@@ -1,102 +1,86 @@
 <template name="movies">
 
     <div class="section-main column">
-        
-        <div class="">
-            
-            <div class="sub-menu-wrapper">
-                <div class="align-left float-left">  
-                
-                {{#if loadedContent}}
-                <h4 class="no-margin">{{loadedContent}} of {{allContent}}</h4>
-                {{else}}
-                {{/if}}
-                
-                </div>
-                
-                <ul class="menu dropdown align-right float-right" data-dropdown-menu data-options="disableHover:true;closingTime:5000;clickOpen:true;">
-                  <li><a href="" class="button info scan"><i class="fa fa-refresh"></i><span class="show-for-large">Scan</span></a></li>
-                  <li>
-                    <a href="#"><i class="fa fa-cog"></i></a>
-                    <ul class="menu submenu is-dropdown-submenu vertical" data-submenu>
-                        <li><a href="" class="button info remove alert"><i class="fa fa-trash-o"></i><span class="show-for-large">Remove all</span></a></li>
-                    </ul>
-                  </li>
-                  
-                  
-                  <!--<li><a href="" class="button info">Re-Scan Info</a></li>-->
-                </ul>
-                
-            </div>
-            
-             
-             
-             
-            
-             <div class="row flexbox start">   
-             
-             
-             <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
-             
-             
-                {{#each content}}
-                
-                   <div class="columns small-4 medium-3 large-2 movie-item"> 
-                            
-                            <a href="{{pathFor 'viewMoviePage' section = ../_id}}" class="">
-                                <div class="poster_wrapper">
-                                      {{#if poster}}
-                    <img class="" src="{{poster}}" /> {{else}}
-                    <img class="" src="/placeholder-poster.jpg" /> {{/if}}
-                                        {{#if greater_one this.location.length 1}}
-                                            <span class="info badge left">{{this.location.length}}</span>
-                                        {{/if}}
-                                        
-                                        {{#if percent}}
 
-                                            <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
-                    
-                                              <div class="progress-bar" style="width:{{percent}}%"></div>
-                    
-                                            </div>
-                    
-                                        {{/if}}
-                                                
-                                        
-                                        
-                                  </div>
-                                  <div class="carousel-title">{{this.name}}</div>
-                                  
-                            </a>
-                            
-                            
-                    
-                    </div>
-                    
-                {{/each}}
-                
-                
-              
-            
+        <div class="">
+
+            <div class="sub-menu-wrapper clearfix">
+                <div class="align-left float-left">
+
+                    {{#if loadedContent}}
+                    <h4 class="no-margin media-count">{{loadedContent}} of {{allContent}}</h4> {{else}} {{/if}}
+
+                </div>
+
+                <ul class="menu dropdown align-right float-right" data-dropdown-menu data-options="disableHover:true;closingTime:5000;clickOpen:true;">
+                    <li><a href="" class="button info scan"><i class="fa fa-refresh"></i><span class="show-for-large">Scan</span></a></li>
+                    <li>
+                        <a href="#"><i class="fa fa-cog"></i></a>
+                        <ul class="menu submenu is-dropdown-submenu vertical" data-submenu>
+                            <li><a href="" class="button info remove alert"><i class="fa fa-trash-o"></i><span class="show-for-large">Remove all</span></a></li>
+                        </ul>
+                    </li>
+
+
+                    <!--<li><a href="" class="button info">Re-Scan Info</a></li>-->
+                </ul>
+
             </div>
-        
-     
-        
-    
-        
+
+            <div class="row flexbox start">
+
+                {{#if loading}}
+
+                <div class="content-loading">
+                    <div class="spinner">
+                        <div class="double-bounce1"></div>
+                        <div class="double-bounce2"></div>
+                    </div>
+                </div>
+
+                {{else}} {{#each content}}
+
+                <div class="columns small-4 medium-3 large-2 movie-item">
+
+                    <a href="{{pathFor 'viewMoviePage' section = ../_id}}" class="">
+                        <div class="poster_wrapper">
+                            {{#if poster}}
+                            <img class="" src="{{poster}}" /> {{else}}
+                            <img class="" src="/placeholder-poster.jpg" /> {{/if}} {{#if greater_one this.location.length 1}}
+                            <span class="info badge left">{{this.location.length}}</span> {{/if}} {{#if percent}}
+
+                            <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
+
+                                <div class="progress-bar" style="width:{{percent}}%"></div>
+
+                            </div>
+
+                            {{/if}}
+
+
+
+                        </div>
+                        <div class="carousel-title">{{this.name}}</div>
+
+                    </a>
+
+
+
+                </div>
+
+                {{/each}} {{#if hasMore}}
+                <p><a class="js-load-more button small-12">More</a></p>
+                {{/if}} {{/if}}
+
+            </div>
+
+
+
+
+
         </div>
-    
-    
-    
-    {{#if loading}}
-                <p>Loading...</p>
-              {{else}}
-                {{#if hasMore}}
-                  <p><a class="js-load-more button">More</a></p>
-                {{/if}}
-              {{/if}}
-    
-              
+
+
     </div>
-                  
+
 </template>

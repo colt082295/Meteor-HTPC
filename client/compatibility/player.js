@@ -107,38 +107,16 @@ Template.player.onRendered(function() {
                 else {
 
                     console.log(result);
-                    //videojs("video").ready(function(){
                     var player = myVideo1.ready(function() {
-                        //var player = videojs('video', {  }, function() {
+                        
                         console.log('Good to go!');
                         
-
-                        /*
-                          
-                        I have to figure out a way to pass the correct port for the video to the video player on the page.
-                          
-                        */
-                        //this.bigPlayButton.hide();
-                        //this.loadingSpinner.show();
-
-
-                        // find out way to get loading spinner to show up so user knows something is happening.
-
-
-                        //this.duration(result.duration);
-
-                        // {"type":"application/x-mpegURL", "src":"http://167.114.103.80:2347/stream/stream.m3u8"},
                         this.src({
                             "type": "video/webm",
                             "src": "http://167.114.103.80:" + result.port
                         });
-                        //this.duration(result.duration);
+                        
                         this.load();
-                        //this.play();
-
-                        // The duration gets screwed up for some reason, but if i pause the video once the page loads, the duration is right. Why?
-
-
 
                         this.on("playing", function() {
                             
@@ -156,7 +134,6 @@ Template.player.onRendered(function() {
 
                             this.duration(result.duration);
                             this.play();
-                            //this.loadingSpinner.hide();
                             $(".video_wrapper .spinner").hide();
 
 
@@ -195,7 +172,6 @@ Template.player.onRendered(function() {
                             
                                 $( ".video-top" ).css({'visibility': 'visible', 'opacity': 1});
                             
-                            
                         });
                         
                         
@@ -231,8 +207,6 @@ Template.player.onRendered(function() {
                                         "src": "http://167.114.103.80:" + result.port
                                     });
                                     player.load();
-                                    //player.currentTime(time);
-                                    //player.play();
 
                                 }
 
@@ -241,127 +215,48 @@ Template.player.onRendered(function() {
 
 
                         });
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-           /*             
-                        
-                        
-                        
-                        this.on("progress",function(){ 
-    if( player.duration() ) {    
-        console.log(player.duration());
-        var percent = (player.buffered().end(0)/player.duration()) * 100; 
-        console.log(player.buffered());
-        
-        console.log("Percent buffered: " + percent);
-        console.log( percent );    
-        if( percent >= .05 ) {  
-            console.log("loaded!");    
-        }  
-        
-        //player.currentTime++;    
-    }    
-});
-                        
-                        
-                    */    
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                   
-                        
-                        var lastTime = 0,
-    lastBuffer = 0,
-    buffered = false,
-    bufferPause = false;
+                 
 
-this.on("progress",function(){
-      // As video downloads, check if the video is actually playing.
-      // (this.paused() will return true even if it's buffering, so we have to check the time advancement)
-      var currentTime = this.currentTime();
-      console.log("The buffered percent is: " + this.bufferedPercent());
-
-      if ( lastTime !== currentTime ) {
-        // Update the lastTime if the time has changed.
-        lastTime = currentTime;
-        $(".video_wrapper .spinner").hide();
-      } else if ( this.paused() === false ) {
-        // Video is buffering/waiting.
-        buffered = false;
-
-        // If we haven't already paused the video, pause it so the video isn't attempting to replay all the time
-        $(".video_wrapper .spinner").show();
-        console.log("Pausing the video to wait for more of the video to buffer.");
-        //this.pause();
-        bufferPause = true; // To indicate pause was initiated by this buffer check
-
-        
-        
-        // I want to do a check here to see if the video buffered twice or more times within 5 seconds. If so, display an alert telling the user that their bandwidth isn't good
-        // enough for the current quality. Maybe I can run some some of bandwidth test that can calculate what bandwidth would be best?
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      }
-      
-});
+                        this.on("progress",function(){
+                              // As video downloads, check if the video is actually playing.
+                              // (this.paused() will return true even if it's buffering, so we have to check the time advancement)
+                              var currentTime = this.currentTime();
+                              console.log("The buffered percent is: " + this.bufferedPercent());
                         
-                       
+                              if ( lastTime !== currentTime ) {
+                                // Update the lastTime if the time has changed.
+                                lastTime = currentTime;
+                                $(".video_wrapper .spinner").hide();
+                              } else if ( this.paused() === false ) {
+                                // Video is buffering/waiting.
+                                buffered = false;
                         
+                                // If we haven't already paused the video, pause it so the video isn't attempting to replay all the time
+                                $(".video_wrapper .spinner").show();
+                                console.log("Pausing the video to wait for more of the video to buffer.");
+                                //this.pause();
+                                bufferPause = true; // To indicate pause was initiated by this buffer check
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                   
-
-
-
-
+                                
+                                
+                                // I want to do a check here to see if the video buffered twice or more times within 5 seconds. If so, display an alert telling the user that their bandwidth isn't good
+                                // enough for the current quality. Maybe I can run some some of bandwidth test that can calculate what bandwidth would be best?
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                              }
+                              
+                        });
 
                     });
 
@@ -371,27 +266,6 @@ this.on("progress",function(){
 
             });
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         else if (myVideo.canPlayType('video/mp4')) {
             console.log("You can play mp4");
@@ -470,7 +344,6 @@ this.on("progress",function(){
                                         "type": "video/mp4",
                                         "src": "http://167.114.103.80:" + result.port
                                     });
-                                    //player.currentTime(time);
                                     player.play();
 
                                 }
@@ -496,16 +369,6 @@ this.on("progress",function(){
 
 
         }
-        
-        /*
-        if($( ".video-js" ).hasClass( "vjs-user-inactive" )) {
-            
-            $( ".video-top" ).hide();
-            
-        }
-        */
-        
-        //Blaze.renderWithData(Template.videoTop, {my: "data"}, $(".video-js")[0])
 
 
     });

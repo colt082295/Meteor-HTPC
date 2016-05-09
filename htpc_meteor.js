@@ -1524,6 +1524,7 @@ if (Meteor.isClient) {
     Template.movies.onDestroyed(function() {
 
         console.log("Section destroyed.");
+        Session.set("contentCount", null);
         movieSubscription.stop();
 
 
@@ -2728,6 +2729,7 @@ if (Meteor.isClient) {
     Template.shows.onDestroyed(function() {
 
         console.log("Section destroyed.");
+        Session.set("contentCount", null);
         tvSubscription.stop();
 
 
@@ -2820,7 +2822,7 @@ if (Meteor.isServer) {
         
             return Movies.find({
       section: section,
-      no_results: { $ne: true }
+      //no_results: { $ne: true } for only showing media that was found online
         }, {
             fields: {
                 name: 1,

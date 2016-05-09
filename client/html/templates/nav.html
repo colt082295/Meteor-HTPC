@@ -1,88 +1,39 @@
 <template name="nav">
   <div class="nav-wrapper">
-  <nav class="title-bar" data-responsive-toggle="top-bar-menu" data-hide-for="medium">
-    <div class="title-bar-left">
-      <a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="Logo"></a>
-    </div>
-  
-    <div class="title-bar-right">
-      <button class="menu-icon" type="button" data-toggle></button>
-    </div>
-  </nav>
-  
-  <nav class="top-bar" id="top-bar-menu">
-      <div class="top-bar-left show-for-medium">
-        <ul class="menu menu-items">
-          <li><a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="logo"></a></li>
-        </ul>
+    <nav class="">
+
+      <div class="title-bar hide-for-large">
+
+        <div class="title-bar-left">
+          <a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="Logo"></a>
+        </div>
+
+        <div class="title-bar-right">
+          <button class="menu-icon" type="button" data-toggle="offCanvas"></button>
+        </div>
+
       </div>
-      <div class="top-bar-right">
-        <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
-          <!--
-          <li>
-            {{#if currentUser}}
-            <a class="user" href="">{{currentUser.username}}</a>
-            <ul class="menu vertical ">
-              <li><a id="logout" href="#">Logout</a></li>
-            </ul>
-            {{else}}
-            <a class="" href="{{pathFor 'login'}}">Login</a>
-            {{/if}}
-          </li>
-          -->
-        </ul>
-        <!--
-        <ul class="vertical medium-horizontal menu menu-items" data-responsive-menu="drilldown medium-dropdown">
-          <li>
-            <a href="{{pathFor 'movies'}}">Movies</a>
-            <ul class="menu vertical ">
-              <li>
-                <a href="#">Item 1A</a>
-                <ul class="menu vertical ">
-                  <li><a href="#">Item 1Ai</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Item 1B</a></li>
-              <li><a href="#">Item 1C</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="{{pathFor 'shows'}}">Shows</a>
-            <ul class="menu vertical ">
-              <li><a href="#">Item 2A</a></li>
-              <li><a href="#">Item 2B</a></li>
-            </ul>
-          </li>
-          
-          <li class="hide-for-small-only">
-            <input class="form-control typeahead" name="team" type="text"
-             placeholder=""
-             autocomplete="off" spellcheck="off"
-             data-sets="search"/>
-         </li> 
-        </ul>
-        -->
+
+
+      <div class="top-bar show-for-large">
+
+
+        <div class="top-bar-left">
+          <ul class="menu menu-items">
+            <li>
+              <a href="{{pathFor 'home'}}"><img src="http://placehold.it/150x48&text=logo" alt="logo"></a>
+            </li>
+          </ul>
+        </div>
+        <div class="top-bar-right">
+
+        </div>
+
+
       </div>
-  </nav>
-  
+
+    </nav>
+
   </div>
 
 </template>
-
-<!--
-<template name="team">
-  
-  <div class="search-content">
-    <a href="#">
-      <div class="img-wrapper">
-        <img src="https://image.tmdb.org/t/p/original/AjbENYG3b8lhYSkdrWwlhVLRPKR.jpg"/>
-      </div>
-      <div class="info">
-        <h4 class="search-title">{{title}}</h4>
-        <p class="search-description">{{description}}</p>
-      </div>
-    </a>
-  </div>
-  
-</template>
--->

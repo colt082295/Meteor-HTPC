@@ -15,7 +15,6 @@
             {{> sidebar}}
 
             <div class="info-main columns">
-              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
               <!--<a href="" class="button search">Update Info</a>-->
               <div class="background-img-wrapper">
                 <div class="background-img" style="background-image: url({{backdrop}})"></div>
@@ -37,17 +36,17 @@
 
 
               <div class="info-wrapper">
-                
+
                 {{#if progress}}
-                
-                  <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
-                  
-                    <div class="progress-bar" style="width:{{percent}}%"></div>
-                    
-                  </div>
-                
+
+                <div class="progress-wrapper bottom" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
+
+                  <div class="progress-bar" style="width:{{percent}}%"></div>
+
+                </div>
+
                 {{/if}}
-                
+
 
                 <div class="info-wrapper-background">
                   <div class="background-img"></div>
@@ -89,9 +88,9 @@
 
                           <ul class="tabs expand" data-tabs id="example-tabs">
 
-                            <li class="columns tabs-title is-active one-third"><a aria-selected="true" href="#basic-panel">Basic</a></li>
+                            <li class="columns tabs-title content-info is-active one-third"><a aria-selected="true" href="#basic-panel">Basic</a></li>
 
-                            <li class="columns tabs-title one-third"><a href="#cast-panel">Cast</a></li>
+                            <li class="columns tabs-title content-info one-third"><a href="#cast-panel">Cast</a></li>
 
                           </ul>
                         </div>
@@ -101,9 +100,9 @@
 
                           <ul class="tabs expand" data-tabs id="example-tabs">
 
-                            <li class="columns tabs-title is-active one-third"><a aria-selected="true" href="#basic-panel-small">Basic</a></li>
+                            <li class="columns tabs-title content-info is-active one-third"><a aria-selected="true" href="#basic-panel-small">Basic</a></li>
 
-                            <li class="columns tabs-title one-third"><a href="#cast-panel-small">Cast</a></li>
+                            <li class="columns tabs-title content-info one-third"><a href="#cast-panel-small">Cast</a></li>
 
                           </ul>
                         </div>
@@ -139,17 +138,15 @@
                             <img src="https://image.tmdb.org/t/p/w396{{this.profile_path}}" />
                             <p class="name">{{this.name}}</p>
                           </div>
-                          
+
                           {{/if}} {{else}}
                           <h4>Sorry, no cast available. Maybe <a id="searchMovieCast">search for cast.</a></h4> {{/each}}
-                          
+
                         </div>
                         {{#with actors}}
-                        
-                          <a class="button small-12 show_all_cast">Show All</a>
-                        
-                        {{/with}}
-                        
+
+                        <a class="button small-12 show_all_cast">Show All</a> {{/with}}
+
 
                       </div>
 
@@ -233,14 +230,12 @@
 
                         {{/if}} {{else}}
                         <h4>Sorry, no cast available. Maybe <a id="searchMovieCast">search for cast.</a></h4> {{/each}}
-                        
+
                       </div>
-                      
+
                       {{#with actors}}
-                        
-                          <a class="button small-12 show_all_cast">Show All</a>
-                        
-                        {{/with}}
+
+                      <a class="button small-12 show_all_cast">Show All</a> {{/with}}
 
                     </div>
 
@@ -351,7 +346,7 @@
             </div>
             <div class="tabs-panel" id="panel-files">
               {{#each ../location}}
-                <div class="well">{{this}}</div>
+              <div class="well">{{this}}</div>
               {{/each}}
             </div>
           </div>

@@ -154,6 +154,40 @@ Meteor.methods({
                         
                         */
                         
+                        /*
+                        
+                        var range = req.headers.range;
+                        
+                        
+                        
+                        var positions = range.replace(/bytes=/, "").split("-");
+      var start = parseInt(positions[0], 10);
+      var total = metadata.format.size;
+      var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+      var chunksize = (end - start) + 1;
+
+      res.writeHead(206, {
+        "Content-Range": "bytes " + start + "-" + end + "/" + total,
+        "Accept-Ranges": "bytes",
+        "Content-Length": chunksize,
+        "Content-Type": "video/webm"
+      });
+      */
+      
+      var total = metadata.format.size;
+      var range = req.headers.range;
+    var parts = range.replace(/bytes=/, "").split("-");
+    var partialstart = parts[0];
+    var partialend = parts[1];
+
+    var start = parseInt(partialstart, 10);
+    var end = partialend ? parseInt(partialend, 10) : total-1;
+    var chunksize = (end-start)+1;
+    //console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
+
+    //var file = fs.createReadStream(path, {start: start, end: end});
+    res.writeHead(206, { 'Content-Range': 'bytes ' + start + '-' + end + '/' + total, 'Accept-Ranges': 'bytes', 'Content-Length': chunksize, 'Content-Type': 'video/webm' });
+                        //notifications.emit('message', res);
                         
                         
                         
@@ -175,6 +209,7 @@ Meteor.methods({
                             
                             .withSize(quality)
                             .format('webm')
+                            
 
                         .on('error', function(err, stdout, stderr) {
                                 console.log('an error happened: ' + err.message);

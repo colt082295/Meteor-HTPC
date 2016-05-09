@@ -1,87 +1,63 @@
 <template name="shows">
 
-  <div class="section-main columns">
-        
-        <div class="sub-menu-wrapper">
-          
-                <div class="align-left float-left">  
-                
+    <div class="section-main columns">
+
+        <div class="sub-menu-wrapper clearfix">
+
+            <div class="align-left float-left">
+
                 {{#if loadedContent}}
-                <h4 class="no-margin">{{loadedContent}} of {{allContent}}</h4>
-                {{else}}
-                {{/if}}
-                
-                </div>
-                
-                <ul class="menu dropdown align-right" data-dropdown-menu data-options="disableHover:true;closingTime:5000;clickOpen:true;">
-                  <li><a href="" class="button info scan"><i class="fa fa-refresh"></i><span class="show-for-large">Scan</span></a></li>
-                  <li>
+                <h4 class="no-margin media-count">{{loadedContent}} of {{allContent}}</h4> {{else}} {{/if}}
+
+            </div>
+
+            <ul class="menu dropdown align-right float-right" data-dropdown-menu data-options="disableHover:true;closingTime:5000;clickOpen:true;">
+                <li><a href="" class="button info scan"><i class="fa fa-refresh"></i><span class="show-for-large">Scan</span></a></li>
+                <li>
                     <a href="#"><i class="fa fa-cog"></i></a>
                     <ul class="menu submenu is-dropdown-submenu vertical" data-submenu>
                         <li><a href="" class="button remove alert"><i class="fa fa-trash-o"></i><span class="show-for-large">Remove all</span></a></li>
                     </ul>
-                  </li>
-                  
-                  
-                  <!--<li><a href="" class="button info">Re-Scan Info</a></li>-->
-                </ul>
-                
+                </li>
+
+
+                <!--<li><a href="" class="button info">Re-Scan Info</a></li>-->
+            </ul>
+
+        </div>
+
+        <div class="row flexbox start relative">
+
+            {{#if loading}}
+
+            <div class="content-loading">
+                <div class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
             </div>
-         
-         
-         <div class="row flexbox start relative">  
-         
-         <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
-         
-         {{#if loading}}
-         
-         <!--
-          <div class="spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-          </div>
-          
-          
-          
-          <h1>LOADING</h1>
-          -->
-          
-          <div class="content-loading">
-               <div class="spinner">
-                <div class="double-bounce1"></div>
-                <div class="double-bounce2"></div>
-              </div>
-            </div>
-         
-         {{else}}
-             
-            
-                {{#each content}}
-                
-                   <div class="columns small-4 medium-3 large-2 movie-item"> 
-                            
-                            <a href="{{pathFor 'viewShowPage' section = ../_id}}" class="">
-                                <div class="">
-                                      <img src="{{this.poster}}"/>
-                                  </div>
-                                  <div class="carousel-title">{{this.name}}</div>
-                            </a>
-                    
+
+            {{else}} {{#each content}}
+
+            <div class="columns small-4 medium-3 large-2 movie-item">
+
+                <a href="{{pathFor 'viewShowPage' section = ../_id}}" class="">
+                    <div class="">
+                        <img src="{{this.poster}}" />
                     </div>
-                    
-                {{/each}}
-                
-                
-                {{#if hasMore}}
-                  <p><a class="js-load-more">More</a></p>
-                {{/if}}
-                
-          {{/if}}
-                
-            
+                    <div class="carousel-title">{{this.name}}</div>
+                </a>
+
             </div>
-         
-  
-  </div>
-                  
+
+            {{/each}} {{#if hasMore}}
+            <p><a class="js-load-more button small-12">More</a></p>
+            {{/if}} {{/if}}
+
+
+        </div>
+
+
+    </div>
+
 </template>

@@ -1,204 +1,196 @@
 <template name="sidebar">
-    
-    
-    <div class="sidebar medium-3 large-2 columns hide-for-small-only">
-        
+
+
+    <div class="sidebar medium-3 large-2 columns show-for-large">
+
         <div id="sticker" class="">
-        <div class="top row no-margin">
-            
-            <div class="small-10">
-            {{> searchCustom}}
+            <div class="top row no-margin">
+
+                <div class="small-10">
+                    {{> searchCustom}}
+                </div>
+
+                <div class="small-2 add-wrapper">
+                    <a class="add"><i class="fa fa-plus"></i></a>
+                </div>
+
             </div>
-            
-            <div class="small-2 add-wrapper">
-                <a class="add"><i class="fa fa-plus"></i></a>
+
+            <div class="content">
+
+                <div class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
+
+                {{#each sections}}
+
+                <a href="{{pathFor 'section' _id = _id}}" class="section-label">{{name}} <a class="edit float-right"><i class="fa fa-pencil"></i></a></a>
+
+
+
+                {{/each}}
+
+
             </div>
-            
+
+
         </div>
-        
-        <div class="content">
-            
-            <div class="spinner">
-              <div class="double-bounce1"></div>
-              <div class="double-bounce2"></div>
-            </div>
-            
-            {{#each sections}}
-            
-            <a href="{{pathFor 'section' _id = _id}}" class="section-label">{{name}} <a class="edit float-right"><i class="fa fa-pencil"></i></a></a>
-                
-                
-            
-            {{/each}}
-            
-            
-        </div>
-        
-        
-      </div>  
     </div>
 
     <div class="reveal" id="add-content" data-reveal>
-        
-        {{> addContentSidebar}}    
-        
+
+        {{> addContentSidebar}}
+
     </div>
-    
+
 
     <div class="reveal" id="edit-content" data-reveal>
-        
-        {{> editContentSidebar}}     
+
+        {{> editContentSidebar}}
 
     </div>
 
-    </template>
-    
-    
-    
-    <template name="addContentSidebar">
-        
-        
-              <div class="content">
-          
-          <form id="adding-content">
-              
-               <input type="text" id="new-content-name" placeholder="Name of section">
-               
-               <input type="text" id="new-content-location" name="new_content_location" placeholder="Enter the directory" value="/">
-               
-               <div class="directory_wrapper">
-                   
-                   <a id="up-directory" class="">Up one directory</a>
-                   
-                   {{#each directories}}
-                   
-                       <a class="directory">{{name}}</a>
-                       
-                   {{/each}}
-               
-               </div>
-               
-               <hr>
-               
-               <label>Choose a format
-                  <select id="new-content-format">
+</template>
+
+
+
+<template name="addContentSidebar">
+
+
+    <div class="content">
+
+        <form id="adding-content">
+
+            <input type="text" id="new-content-name" placeholder="Name of section">
+
+            <input type="text" id="new-content-location" name="new_content_location" placeholder="Enter the directory" value="/">
+
+            <div class="directory_wrapper">
+
+                <a id="up-directory" class="">Up one directory</a> {{#each directories}}
+
+                <a class="directory">{{name}}</a> {{/each}}
+
+            </div>
+
+            <hr>
+
+            <label>Choose a format
+                <select id="new-content-format">
                     <option value="movies">Movies</option>
                     <option value="shows">TV Shows</option>
                     <option value="other">Other</option>
-                  </select>
-                </label>
-                
-                <a id="submit" class="button float-right">Add Section</a>
-              
-          </form>
-          
-          
-          
-      </div>
-      
-      
-      <button class="close-button" data-close aria-label="Close modal" type="button">
+                </select>
+            </label>
+
+            <a id="submit" class="button float-right">Add Section</a>
+
+        </form>
+
+
+
+    </div>
+
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
         <span aria-hidden="true">&times;</span>
-      </button>
-        
-        
-        
-    </template>
-    
-    
-    
-    
-    <template name="editContentSidebar">
-        
-       <div class="content">
-          
-          <form id="editing-content">
-              
-               <input type="text" id="edit-content-name" placeholder="Name of section">
-               <input type="text" id="edit-content-location" placeholder="Enter the directory">
-               <div class="directory_wrapper">
-                   
-                   <a id="up-directory" class="">Up one directory</a>
-                   
-                   {{#each directories}}
-                   
-                       <a class="directory">{{name}}</a>
-                       
-                   {{/each}}
-               
-               </div>
-               
-               <label>Choose a format
-                  <select id="edit-content-format">
+    </button>
+
+
+
+</template>
+
+
+
+
+<template name="editContentSidebar">
+
+    <div class="content">
+
+        <form id="editing-content">
+
+            <input type="text" id="edit-content-name" placeholder="Name of section">
+            <input type="text" id="edit-content-location" placeholder="Enter the directory">
+            <div class="directory_wrapper">
+
+                <a id="up-directory" class="">Up one directory</a> {{#each directories}}
+
+                <a class="directory">{{name}}</a> {{/each}}
+
+            </div>
+
+            <label>Choose a format
+                <select id="edit-content-format">
                     <option value="movies">Movies</option>
                     <option value="shows">TV Shows</option>
                     <option value="other">Other</option>
-                  </select>
-                </label>
-                
-                <input type="submit" class="button float-right" value="Save Section">
-                
-                <!--<a class="button" id="remove-sections">Remove all sections</a>-->
-                <a class="button alert" id="remove-section">Remove section</a>
-              
-          </form>
-          
-      </div>
-      
-      
-      <button class="close-button" data-close aria-label="Close modal" type="button">
+                </select>
+            </label>
+
+            <input type="submit" class="button float-right" value="Save Section">
+
+            <!--<a class="button" id="remove-sections">Remove all sections</a>-->
+            <a class="button alert" id="remove-section">Remove section</a>
+
+        </form>
+
+    </div>
+
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
         <span aria-hidden="true">&times;</span>
-      </button> 
-        
-    </template>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    </button>
+
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <template name="searchCustom">
     <div class="search-wrapper">
-    <input type="text" id="search-bar" class="search_box" placeholder="Search something...">
+        <input type="text" id="search-bar" class="search_box" placeholder="Search something...">
     </div>
 
     <div id="search-suggestions" class="search_suggestions">
         <div class="title">Movies</div>
         <ul class="results">
-            
+
             {{#each movies}}
-            
-                <li><a href="{{pathFor 'viewMoviePage' _id = this.__originalId section = this.section}}" class="result row no-margin">
-                    <div class="small-2"><img src="{{this.poster}}"/></div>
+
+            <li>
+                <a href="{{pathFor 'viewMoviePage' _id = this.__originalId section = this.section}}" class="result row no-margin">
+                    <div class="small-2"><img src="{{this.poster}}" /></div>
                     <div class="small-10 relative ellipsis-wrap"><span class="name">{{this.name}}</span></div>
-                    </a></li>
-            {{else}}
-            
-                
-            
-            {{/each}}
-            
+                </a>
+            </li>
+            {{else}} {{/each}}
+
             <div class="title">Tv Shows</div>
-            
+
             {{#each shows}}
-            
-                <li><a href="{{pathFor 'viewShowPage' _id = this.__originalId}}" class="result row no-margin">
-                    <div class="small-2"><img src="{{this.poster}}"/></div>
+
+            <li>
+                <a href="{{pathFor 'viewShowPage' _id = this.__originalId}}" class="result row no-margin">
+                    <div class="small-2"><img src="{{this.poster}}" /></div>
                     <div class="small-10 relative ellipsis-wrap"><span class="name">{{this.name}}</span></div>
-                    </a></li>
-            
+                </a>
+            </li>
+
             {{/each}}
-            
-            
+
+
         </ul>
     </div>
-</template>   
+</template>

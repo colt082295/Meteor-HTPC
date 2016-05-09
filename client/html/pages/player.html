@@ -1,47 +1,47 @@
 <template name="player">
-    
-    
-    <div class="video_wrapper">
-    
-      <video id="video" class="video-js vjs-default-skin" controls>
-        
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a web browser that
-          <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-        </p>
-        
-        
-        
-      </video>
-      
-      
-      
-      <div class="spinner">
-        <div class="double-bounce1"></div>
-        <div class="double-bounce2"></div>
-      </div>
 
+
+  <div class="video_wrapper">
+
+    <video id="video" class="video-js vjs-default-skin" controls>
+
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a web browser that
+        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+      </p>
+
+
+
+    </video>
+
+
+
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
     </div>
-    
-    
-    
-    
+
+  </div>
+
+
+
+
 </template>
 
 
 
 <template name="videoControl">
-  
-  
-    <div class="float-right content_container">
-      <select id="quality-change">
-        <option value="1920x1080">1080p</option>
-        <option value="1280x720" selected="selected">720p</option>
-        <option value="640x480">480p</option>
-        <option value="480x360">360p</option>
-      </select>
-      <a id="close" class="close_player"><i class="fa fa-times" aria-hidden="true"></i></a>
-    </div>
-  
-  
+
+
+  <div class="float-right content_container">
+    <select id="quality-change">
+      <option value="1920x1080">1080p</option>
+      <option value="1280x720" selected="selected">720p</option>
+      <option value="640x480">480p</option>
+      <option value="480x360">360p</option>
+    </select>
+    <a id="close" class="close_player"><i class="fa fa-times" aria-hidden="true"></i></a>
+  </div>
+
+
 </template>

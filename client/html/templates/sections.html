@@ -11,34 +11,25 @@
 
           <div class="container full-height row">
 
-            {{> sidebar}}
-  
-  
-  
-  {{#if equals format "movies"}}
-    
-        {{> movies}}
-        
-    {{else}}
-    
-        {{#if equals format "shows"}}
-    
-            {{> shows}}
-        
-        {{else}}
-        
-            {{> shows}}
-    
-        {{/if}}
-        
-    {{/if}}
-  </div>
-  
-    </div>
-</div>
-</div>
-</div>
+            {{> sidebar}} 
+            
+            {{#if equals format "movies"}} 
+            
+              {{> movies}} 
+              {{else}} {{#if equals format "shows"}} 
+                {{> shows}} 
+              {{else}} 
+                {{> shows}} 
+              {{/if}} 
+            {{/if}}
+            
+          </div>
 
-{{> footer}}
-                  
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{> footer}}
+
 </template>

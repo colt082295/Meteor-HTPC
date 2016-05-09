@@ -1,5 +1,5 @@
 <template name="viewSeasonPage">
-  
+
 
   <div class="off-canvas-wrapper wrapper full-height">
     <div class="off-canvas-wrapper-inner wrapper full-height" data-off-canvas-wrapper>
@@ -17,8 +17,6 @@
 
             <div class="info-main columns">
 
-              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
-
               <div class="top-wrapper">
                 <div class="">
                   <div class="row flexbox start" id="panel1">
@@ -26,22 +24,22 @@
                     {{#each episodes}}
 
                     <div class="columns small-6 medium-6 large-4 episode-wrapper">
-                        <a class="banner-wrapper">
-                          <img src="{{this.banner}}" />
-                          <div class="episode_number">{{episode}}</div>
-                          {{#if percent}}
+                      <a class="banner-wrapper">
+                        <img src="{{this.banner}}" />
+                        <div class="episode_number">{{episode}}</div>
+                        {{#if percent}}
 
-                          <div class="progress-wrapper bottom bottom-pos" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
-  
-                            <div class="progress-bar" style="width:{{percent}}%"></div>
-  
-                          </div>
-  
-                          {{/if}}
-                        </a>
-                          
-                        
-                        <div class="episode-title">{{name}}</div>
+                        <div class="progress-wrapper bottom bottom-pos" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="2" title="Looks like you've finished {{percent}}% of this.">
+
+                          <div class="progress-bar" style="width:{{percent}}%"></div>
+
+                        </div>
+
+                        {{/if}}
+                      </a>
+
+
+                      <div class="episode-title">{{name}}</div>
                     </div>
 
                     {{/each}}

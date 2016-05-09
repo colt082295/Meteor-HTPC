@@ -15,8 +15,6 @@
 
             <div class="info-main columns home-wrapper">
 
-              <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
-
               <!--
 
               <div id="continue-swiper"  class="swiper-container row no-margin">
@@ -42,7 +40,7 @@
 
 
 
-              
+
               <div id="movie-swiper" class="swiper-container row no-margin">
                 <div class="top small-12 row">
                   <h1 class="columns title">New Movies</h1>
@@ -55,18 +53,16 @@
                 </div>
 
                 <div class="swiper-wrapper">
-                  {{#if movieCount}}
-                  {{#each movies}}
+                  {{#if movieCount}} {{#each movies}}
 
                   <div class="swiper-slide home-poster">
 
                     <a href="{{pathFor 'viewMoviePage'}}" class="">
                       <div class="poster_container">
-                        
+
                         {{#if poster}}
-                    <img class="movie-img" src="{{poster}}" /> {{else}}
-                    <img class="movie-img" src="/placeholder-poster.jpg" /> {{/if}}
-                    {{#if greater_one this.location.length 1}}
+                        <img class="movie-img" src="{{poster}}" /> {{else}}
+                        <img class="movie-img" src="/placeholder-poster.jpg" /> {{/if}} {{#if greater_one this.location.length 1}}
                         <span class="info badge left">{{this.location.length}}</span> {{/if}}
                         <div class="poster_overlay top">
 
@@ -101,28 +97,25 @@
                   </div>
 
 
-                  {{/each}}
-                  {{else}}
+                  {{/each}} {{else}}
 
-                <h2>You don't seem to have any movies added yet.</h2> 
-              
-              {{/if}} 
-                  
+                  <h2>You don't seem to have any movies added yet.</h2> {{/if}}
+
                 </div>
 
               </div>
 
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
+
+
+
+
+
+
+
+
+
+
+
               <div id="show-swiper" class="swiper-container row no-margin">
                 <div class="top small-12 row">
                   <h1 class="columns title">New Shows</h1>
@@ -135,8 +128,7 @@
                 </div>
 
                 <div class="swiper-wrapper">
-                  {{#if showCount}}
-                  {{#each shows}}
+                  {{#if showCount}} {{#each shows}}
 
                   <div class="swiper-slide home-poster">
 
@@ -179,20 +171,17 @@
 
 
 
-                  {{/each}}
-                  {{else}}
+                  {{/each}} {{else}}
 
-                <h2>You don't seem to have any shows added yet.</h2> 
-              
-              {{/if}}
+                  <h2>You don't seem to have any shows added yet.</h2> {{/if}}
                 </div>
 
               </div>
 
-              
-              
-              
-              
+
+
+
+
             </div>
           </div>
         </div>

@@ -14,121 +14,92 @@
             {{> sidebar}}
 
             <div class="info-main info-wrapper columns">
-              
+
               <div class="background-img-wrapper">
                 <div class="background-img" style="background-image: url({{backdrop}})"></div>
               </div>
-              
+
               <!--info-container-->
-              
+
               <div class="row no-margin">
-                  <div class="button-group no-margin row">
-                    <!--<a class="button play-video column"><i class="fa fa-play"></i><span class="show-for-large">Play</span></a>-->
-                    <!-- Have a modal popup asking if you want to start from beginning of series or where you left off-->
-                    <a id="edit" class="button column"><i class="fa fa-pencil"></i><span class="show-for-large">Edit</span></a>
-                    <a id="refresh" class="button column"><i class="fa fa-refresh"></i><span class="show-for-large">Refresh</span></a>
-                    <button class="button column" type="button" data-toggle="example-dropdown"><i class="fa fa-ellipsis-h"></i></button>
-                    <div class="dropdown-pane" id="example-dropdown" data-dropdown data-auto-focus="true">
-                      <a id="remove-show" class="button alert"><i class="fa fa-trash-o"></i><span class="">Remove Show</span></a>
-                    </div>
+                <div class="button-group no-margin row">
+                  <!--<a class="button play-video column"><i class="fa fa-play"></i><span class="show-for-large">Play</span></a>-->
+                  <!-- Have a modal popup asking if you want to start from beginning of series or where you left off-->
+                  <a id="edit" class="button column"><i class="fa fa-pencil"></i><span class="show-for-large">Edit</span></a>
+                  <a id="refresh" class="button column"><i class="fa fa-refresh"></i><span class="show-for-large">Refresh</span></a>
+                  <button class="button column" type="button" data-toggle="example-dropdown"><i class="fa fa-ellipsis-h"></i></button>
+                  <div class="dropdown-pane" id="example-dropdown" data-dropdown data-auto-focus="true">
+                    <a id="remove-show" class="button alert"><i class="fa fa-trash-o"></i><span class="">Remove Show</span></a>
                   </div>
                 </div>
-                
-                <div class="info-wrapper-background">
-                </div>
-                
+              </div>
+
+              <div class="info-wrapper-background">
+              </div>
+
               <div class="info-container">
 
-              <div class="show-wrapper">
+                <div class="show-wrapper">
 
-
-                
-
-
-
-
-                <button type="button" class="button no-margin small-12 show-for-small-only" data-toggle="offCanvas">Show Libraries</button>
-                <div class="image-wrapper">
-                  {{#if poster}}
+                  <div class="image-wrapper">
+                    {{#if poster}}
                     <img class="movie-img" src="{{poster}}" /> {{else}}
-                    <img class="movie-img" src="/placeholder-poster.jpg" /> 
-                  {{/if}}
-                </div>
-                <div class="movie-info">
-                  <div class="top-container">
-                    <h1 class="movie-title">{{name}}</h1>
-                    
-                    <!--
-                    <ul class="tabs" data-tabs id="example-tabs">
-
-                      <li class="tabs-title is-active content-info"><a aria-selected="true" href="#basic-panel">Basic</a></li>
-                      <li class="tabs-title content-info"><a href="#cast-panel">Cast</a></li>
-                      <li class="tabs-title content-info"><a href="#more-panel">More</a></li>
-
-                    </ul>
-                    -->
-                    
+                    <img class="movie-img" src="/placeholder-poster.jpg" /> {{/if}}
                   </div>
-
-                  <div class="tabs-content content hide-for-small-only" data-tabs-content="example-tabs">
-
-                    <div class="tabs-panel is-active content" id="basic-panel">
-                      <p class="movie-description">{{overview}}</p>
-
+                  <div class="movie-info">
+                    <div class="top-container">
+                      <h1 class="movie-title">{{name}}</h1>
 
                     </div>
 
-                    <div class="tabs-panel content" id="cast-panel">
+                    <div class="content hide-for-small-only">
 
-                      <div class="cast-wrapper">
-                        {{#each actors}}
+                      <div class="content" id="basic-panel">
 
-                        <a href="{{pathFor 'viewActorPage' name = name}}">
-                          <div class="cast">
-                            <img src="{{this.picture}}" />
-                            <p>{{this.name}}</p>
-                          </div>
-                        </a>
-
-                        {{/each}}
+                        <p class="movie-description">{{overview}}</p>
 
                       </div>
 
                     </div>
-
-
-                    <div class="tabs-panel content" id="more-panel">
-
-
-                    </div>
-
                   </div>
                 </div>
-              </div>
 
 
-              <div class="seasons" id="">
+
+                <div class="content small show-for-small-only">
+
+                  <div class="content">
+
+                    <p class="movie-description">{{overview}}</p>
+
+                  </div>
 
 
-                <div class="seasons_wrapper row no-margin">
-                  {{#each season}}
-
-                  <a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number section = ../section}}" class="season-item columns small-4 medium-4 large-2">
-                    <!--<a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number section = ../section}}" class="movies_wrapper inline-block">-->
-                    <div class="season">
-                      <div class="">
-                        <img src="{{this.poster}}" />
-                      </div>
-                      <div class="season-title">Season {{this.season_number}}</div>
-                    </div>
-                  </a>
-
-                  {{/each}}
                 </div>
 
 
-              </div>
-              
+                <div class="seasons" id="">
+
+
+                  <div class="seasons_wrapper row no-margin">
+                    {{#each season}}
+
+                    <a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number section = ../section}}" class="season-item columns small-4 medium-3 large-2">
+                      <!--<a href="{{pathFor 'viewSeasonPage' _id = ../_id season_number = season_number section = ../section}}" class="movies_wrapper inline-block">-->
+                      <div class="season">
+                        <div class="">
+                          <img src="{{this.poster}}" />
+                        </div>
+                        <div class="season-title">Season {{this.season_number}}</div>
+                      </div>
+                    </a>
+
+                    {{/each}}
+                  </div>
+
+
+                </div>
+
               </div>
 
 
@@ -147,9 +118,9 @@
       </div>
     </div>
   </div>
-  
-  
-  
+
+
+
   <div class="reveal no-padding" id="edit-show" data-reveal>
 
     {{> editShowModal}}
