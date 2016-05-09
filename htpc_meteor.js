@@ -2819,7 +2819,8 @@ if (Meteor.isServer) {
     Meteor.publish("movies", function(limit, section) {
         
             return Movies.find({
-      section: section
+      section: section,
+      no_results: { $ne: true }
         }, {
             fields: {
                 name: 1,

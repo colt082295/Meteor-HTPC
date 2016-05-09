@@ -11,6 +11,36 @@
 // @include foundation-grid;
 @include foundation-flex-grid;
 
+
+// Truncate text at specific line
+@mixin multiLineEllipsis($lineHeight: 1.2em, $lineCount: 1, $bgColor: white){
+  overflow: hidden;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount; 
+  //text-align: justify;
+  //margin-right: -1em;
+  padding-right: 1em;
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: $bgColor;
+  }
+}
+
+
+
+
 /*
 @-webkit-keyframes fade-in{
 from{
@@ -1292,6 +1322,7 @@ $transition-time:0.3s;
 .movie-item {
     text-align: center;
     position: relative;
+    margin-bottom: 1em;
     
     .poster_wrapper {
        position: relative;
@@ -1818,6 +1849,7 @@ video {
     font-size: .9rem;
     color: #262626;
     margin-top: 0.5em;
+    @include multiLineEllipsis($lineHeight: 1.2em, $lineCount: 2, $bgColor: white); 
 }
 
 
