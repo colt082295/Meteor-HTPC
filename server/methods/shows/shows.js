@@ -517,11 +517,6 @@ index = a.findIndex(x => x.prop2=="yutu")
         });
 
         var future = new Future();
-        /*
-        var walk = Meteor.npmRequire('walkdir');
-        var path = Meteor.npmRequire('path');
-        var countrynames = Meteor.npmRequire('countrynames');
-        */
         var directories = [];
 
         var emitter = walk(location, { // Make this an option, rather than hardcoded,
