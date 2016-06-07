@@ -18,7 +18,7 @@
 
             <div class="content">
 
-                <div class="spinner">
+                <div id="sidebar-load" class="spinner">
                     <div class="double-bounce1"></div>
                     <div class="double-bounce2"></div>
                 </div>
@@ -164,33 +164,55 @@
     </div>
 
     <div id="search-suggestions" class="search_suggestions">
-        <div class="title">Movies</div>
+        {{#if searching}}
+
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+
+        {{else}}
+        
         <ul class="results">
+
+            <div class="title">Movies</div>
 
             {{#each movies}}
 
             <li>
-                <a href="{{pathFor 'viewMoviePage' _id = this.__originalId section = this.section}}" class="result row no-margin">
-                    <div class="small-2"><img src="{{this.poster}}" /></div>
+                <a href="{{pathFor 'viewMoviePage' _id = this._id section = this.section}}" class="result row no-margin">
+                    <div class="small-2 poster-wrapper"><img class="poster" src="{{this.poster}}" /></div>
                     <div class="small-10 relative ellipsis-wrap"><span class="name">{{this.name}}</span></div>
                 </a>
             </li>
             {{else}} {{/each}}
 
+            
+            
+            {{#with shows}}
+            
             <div class="title">Tv Shows</div>
 
             {{#each shows}}
 
             <li>
-                <a href="{{pathFor 'viewShowPage' _id = this.__originalId}}" class="result row no-margin">
-                    <div class="small-2"><img src="{{this.poster}}" /></div>
+                <a href="{{pathFor 'viewShowPage' _id = this._id section = this.section}}" class="result row no-margin">
+                    <div class="small-2 poster-wrapper"><img class="poster" src="{{this.poster}}" /></div>
                     <div class="small-10 relative ellipsis-wrap"><span class="name">{{this.name}}</span></div>
                 </a>
             </li>
 
             {{/each}}
+            
+            {{/with}}
 
 
         </ul>
+
+
+
+
+        {{/if}}
+
     </div>
 </template>

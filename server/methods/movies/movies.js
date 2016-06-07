@@ -450,7 +450,7 @@ Meteor.methods({
             notifications.emit('message', "allVideos");
             notifications.emit('message', fetch);
 
-            fetch.forEach(function(file, index, array) { // This runs a foreach to go through every movie in the movie collection.
+            fetch.map(function(file, index, array) { // This runs a map to go through every movie in the movie collection.
 
                 run = run + 1; // This adds one to the current run count
 
@@ -780,7 +780,7 @@ Meteor.methods({
 
 
 
-            result2.forEach(function(file, index, array) {
+            result2.map(function(file, index, array) {
 
                 notifications.emit('message', "All ones");
                 notifications.emit('message', file);
@@ -791,7 +791,7 @@ Meteor.methods({
                 file.docs.shift();
 
 
-                file.docs.forEach(function(file, index, array) {
+                file.docs.map(function(file, index, array) {
 
 
 
@@ -877,7 +877,7 @@ Meteor.methods({
                         
                         
 
-                fetch.forEach(function(file, index, array) {
+                fetch.map(function(file, index, array) {
 
                     id_array.push(file._id);
                     notifications.emit('message', "Just pushed new id");
@@ -907,7 +907,7 @@ Meteor.methods({
                 });
 
 
-                id_array.forEach(function(file, index, array) {
+                id_array.map(function(file, index, array) {
 
                     Movies.remove({
                         _id: file,
@@ -934,7 +934,7 @@ Meteor.methods({
                 section: id
             }).fetch();
             
-            fetch2.forEach(function(file, index, array) {
+            fetch2.map(function(file, index, array) {
                 
                 
                 run = run + 2; // This adds one to the current run count. This is to count the number of requests to TMDB to account for the timeout
@@ -1170,7 +1170,7 @@ Meteor.methods({
 
                 walker.on("end", Meteor.bindEnvironment(function() {
 
-                    addedMovies.forEach(function(file, index, array) {
+                    addedMovies.map(function(file, index, array) {
                         
                         notifications.emit('message', 'addedMovies');
                         notifications.emit('message', addedMovies);

@@ -563,7 +563,7 @@ Meteor.myFunctions = {
             
             if (find_show.seasons.length > 0) {
 
-                    find_show.seasons.forEach(function(file, index, array) {
+                    find_show.seasons.map(function(file, index, array) {
 
 
                         showSeasons.push(file.season_number);
@@ -697,7 +697,7 @@ Meteor.myFunctions = {
         notifications.emit('message', "All seasons for " + name);
         notifications.emit('message', seasons);
 
-            directories.forEach(function(file, index, array) { // Each director that was found
+            directories.map(function(file, index, array) { // Each director that was found
 
                 notifications.emit('message', "Checking the folder " + file);
 
@@ -815,7 +815,7 @@ Meteor.myFunctions = {
         notifications.emit('message', groupedFolders);
 
 
-        groupedFolders.forEach(function(file, index, array) {
+        groupedFolders.map(function(file, index, array) {
 
             //var walk = Meteor.npmRequire('walk');
             var showName = file.name;
@@ -849,7 +849,7 @@ Meteor.myFunctions = {
 
 
 
-                    file.episodes.forEach(function(file, index, array) {
+                    file.episodes.map(function(file, index, array) {
 
                         var walkLooseFolder = walk2.walk(file.location);
 
@@ -950,7 +950,7 @@ Meteor.myFunctions = {
                                                                 
                                                                 
                                                                 
-                                                                show2.seasons.forEach(function(file, index, array) {
+                                                                show2.seasons.map(function(file, index, array) {
         
                                                                     checkSeasons.push(file.season_number);
                         

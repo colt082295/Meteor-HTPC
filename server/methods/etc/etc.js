@@ -13,6 +13,63 @@ import path from 'path';
 Meteor.methods({
     
     
+    
+    searchboxSearch: function(query, type) {
+        var future = new Future();
+        let result;
+        
+        if (type == "movie") {
+            
+            result = movieSearch.search({
+                        name: query
+                    }, {
+                        limit: 3
+                    }).fetch();
+            
+        } else {
+            
+            result = tvSearch.search({
+                        name: query
+                    }, {
+                        limit: 3
+                    }).fetch();
+            
+        }
+                    
+                    
+        future.return(result);
+
+        return future.wait();
+
+
+
+
+
+    },
+    
+    
+    
+    tvSearch: function(val) {
+        var future = new Future();
+
+        let tv = tvSearch.search({
+                        name: val
+                    }, {
+                        limit: 3
+                    }).fetch();
+                    
+                    
+        future.return(tv);
+
+        return future.wait();
+
+
+
+
+
+    },
+    
+    
     movieSubscription: function(limit, section) {
         var future = new Future();
         //var MovieDB = Meteor.npmRequire('moviedb')('23290308516dcbfcb67fb0f330028492');

@@ -212,7 +212,7 @@ index = a.findIndex(x => x.prop2=="yutu")
 /*
         var index1;
         
-        show.forEach(function(file, index, array) {
+        show.map(function(file, index, array) {
 
             if (file.episode === episode) {
 
@@ -542,7 +542,7 @@ index = a.findIndex(x => x.prop2=="yutu")
             notifications.emit('message', "All Directories");
             notifications.emit('message', directories);
 
-            directories.forEach(Meteor.bindEnvironment(function(folder, index, array) {
+            directories.map(Meteor.bindEnvironment(function(folder, index, array) {
 
                 // Guess the show name
                 notifications.emit('message', "Going to find the show name for " + folder);
@@ -588,7 +588,7 @@ index = a.findIndex(x => x.prop2=="yutu")
             notifications.emit('message', allShows);
 
 
-            allShows.forEach(function(show, index, array) {
+            allShows.map(function(show, index, array) {
 
                 var _id = show._id;
                 var id = show.show_id;
@@ -601,7 +601,7 @@ index = a.findIndex(x => x.prop2=="yutu")
                 notifications.emit('message', episodes);
 
 
-                show.seasons.forEach(function(file, index, array) {
+                show.seasons.map(function(file, index, array) {
 
                     var season = file.season_number;
                     var season_posters = [];
@@ -640,7 +640,7 @@ index = a.findIndex(x => x.prop2=="yutu")
 
                             if (banners) {
 
-                                banners.forEach(function(file, index, array) {
+                                banners.map(function(file, index, array) {
 
                                     if (file.Season == season) {
                                         season_posters.push("http://thetvdb.com/banners/" + file.BannerPath)
@@ -663,7 +663,7 @@ index = a.findIndex(x => x.prop2=="yutu")
 
                                 if (episodes.length > 0) {
 
-                                    episodes.forEach(function(file, index, array) {
+                                    episodes.map(function(file, index, array) {
 
                                         if (file.episode && file.season_number === season) {
 
@@ -1087,7 +1087,7 @@ index = a.findIndex(x => x.prop2=="yutu")
         var fetch = Tv.find().fetch();
 
         run = 0;
-        fetch.forEach(function(file, index, array) { // This runs a foreach to go through every movie in the movie collection.
+        fetch.map(function(file, index, array) { // This runs a map to go through every movie in the movie collection.
 
             run = run + 1;
 
@@ -1254,7 +1254,7 @@ index = a.findIndex(x => x.prop2=="yutu")
 
 
         run = 0;
-        fetch.forEach(function(file, index, array) {
+        fetch.map(function(file, index, array) {
 
 
 
@@ -1271,7 +1271,7 @@ index = a.findIndex(x => x.prop2=="yutu")
                 Meteor._sleepForMs(18000);
                 notifications.emit('message', 'THE LIMIT IS UP');
 
-                file.seasons.forEach(function(file, index, array) {
+                file.seasons.map(function(file, index, array) {
 
                     run = run + 1;
 
@@ -1346,7 +1346,7 @@ index = a.findIndex(x => x.prop2=="yutu")
             }
             else {
 
-                file.seasons.forEach(function(file, index, array) {
+                file.seasons.map(function(file, index, array) {
 
                     run = run + 1;
 

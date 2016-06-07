@@ -3,109 +3,37 @@ Tv = new Meteor.Collection('tv');
 Sections = new Meteor.Collection('sections');
 ServerSettings = new Meteor.Collection('serverSettings');
 notifications = new Meteor.Stream('server-notifications');
-
-
-
-
-
-import path from 'path';
-import ViewList from 'view-list';
 //import chokidar from 'chokidar';
 
 
-var movieSearch = new EasySearch.Index({
+movieSearch = new EasySearch.Index({
     collection: Movies,
     fields: ['name'],
-    engine: new EasySearch.MongoDB(),
+    engine: new EasySearch.MongoDB({
+        sort: () => { score: 1 }
+    }),
 });
 
 
-var tvSearch = new EasySearch.Index({
+tvSearch = new EasySearch.Index({
     collection: Tv,
     fields: ['name'],
-    engine: new EasySearch.MongoDB()
+    engine: new EasySearch.MongoDB({
+        sort: () => { score: 1 }
+    }),
 });
 
 
-var url = "http://api.themoviedb.org/3/configuration?api_key=23290308516dcbfcb67fb0f330028492";
-var base_url = "http://image.tmdb.org/t/p/w396";
-var timeoutId = 0;
-
-
-/*
-
-Util = {};
-
-// We need to store the dep, ready flag, and data for each call
-Util.d_waitOns = {};
-
-// This function returns a handle with a reactive ready function, which
-// is what waitOn expects. waitOn will complete when the reactive function
-// returns true.
-Util.waitOnServer = function(name) {
-    // This prevents the waitOnServer call from being called multiple times
-    // and the resulting infinite loop.
-    if (this.d_waitOns[name] !== undefined &&
-        this.d_waitOns[name].ready === true) {
-        return;
-    }
-    else {
-        this.d_waitOns[name] = {};
-    }
-    var self = this;
-    // We need to store the dependency and the ready flag.
-    this.d_waitOns[name].dep = new Deps.Dependency();
-    this.d_waitOns[name].ready = false;
-
-    var callback = function(err, or) {
-        // The call has complete, so set the ready flag, notify the reactive
-        // function that we are ready, and store the data.
-        self.d_waitOns[name].ready = true;
-        self.d_waitOns[name].dep.changed();
-        self.d_waitOns[name].data = (err || or);
-    };
-
-    var args = Array.prototype.slice.call(arguments)
-    args.push(callback);
-
-    Meteor.call.apply(this, args);
-
-    // The reactive handle that we are returning.
-    var handle = {
-        ready: function() {
-            self.d_waitOns[name].dep.depend();
-            return self.d_waitOns[name].ready;
-        }
-    };
-    return handle;
-}
-
-// Retrieve the data that we stored in the async callback.
-Util.getResponse = function(name) {
-    var data = this.d_waitOns[name].data;
-    // Clear out the data so a second call with the same name wont return
-    // the same data.
-    this.d_waitOns[name] = {};
-    return data;
-}
-
-*/
-
-
-
+var url = "http://api.themoviedb.org/3/configuration?api_key=23290308516dcbfcb67fb0f330028492",
+    base_url = "http://image.tmdb.org/t/p/w396",
+    timeoutId = 0;
 
 if (Meteor.isClient) {
     
-    var tvSubscription;
-    
-    var movieSubscription;
-
-
-    Search = new Mongo.Collection('search');
-    //Meteor.subscribe("movies");
+    var tvSubscription,
+        movieSubscription;
 
     Meteor.startup(function() {
-
 
         toastr.options = {
             "closeButton": true,
@@ -119,7 +47,7 @@ if (Meteor.isClient) {
             "hideDuration": "1000",
             "timeOut": "5000",
             "extendedTimeOut": "1000"
-        }
+        };
 
         toastr.clear();
         toastr.remove();
@@ -127,8 +55,6 @@ if (Meteor.isClient) {
             toastr.clear();
             toastr.remove();
             toastr.success(message);
-            var d = new Date();
-            console.log(d.getHours() + " " + d.getMinutes() + " " + d.getSeconds() + " " + d.getMilliseconds())
             console.log(message);
         });
 
@@ -574,6 +500,12 @@ if (Meteor.isClient) {
             return Session.get("tv-searchbox");
 
         },
+        
+        searching: function() {
+
+            return Session.get("searching");
+
+        },
 
 
     });
@@ -618,30 +550,28 @@ if (Meteor.isClient) {
 
         'keyup #search-bar-mobile': function(event, template) {
 
-            var val = $("#search-bar-mobile").val();
-            console.log("search-bar-mobile")
-            console.log(val)
+            var val = $("#search-bar-mobile").val(); // get the value from the search bar
 
             if (val.length > 0) {
-
-                Tracker.autorun(function() {
-
-                    let movies = movieSearch.search({
-                        name: val
-                    }, {
-                        limit: 3
-                    }).fetch();
-                    let tv = tvSearch.search(val, {
-                        limit: 3
-                    }).fetch();
-
-                    Session.set("movie-searchbox", movies);
-                    Session.set("tv-searchbox", tv);
-                    console.log(movies)
-
-                });
-
+                
+                Session.set("searching", true);
+                Session.set("movie-searchbox", null);
+                Session.set("tv-searchbox", null);
                 $('#mobile-search-suggestions').show();
+                
+                Meteor.setTimeout(function(){
+    
+                    Meteor.call('searchboxSearch', val, "movie", function (error, result) {
+                        Session.set("movie-searchbox", result);
+                    });
+                    
+                    Meteor.call('searchboxSearch', val, "tv", function (error, result) {
+                        Session.set("tv-searchbox", result);
+                    });
+                    
+                    Session.set("searching", false);
+                
+                }, 500);
 
             }
             else {
@@ -702,43 +632,48 @@ if (Meteor.isClient) {
 
         'keyup #search-bar': function(event, template) {
             
-            Meteor.setTimeout(function(){
+            var val = $("#search-bar").val();
+            
+            if (val.length > 0) {
+                
+                Session.set("searching", true);
+                Session.set("movie-searchbox", null);
+                Session.set("tv-searchbox", null);
+                $('#search-suggestions').show();
+                
+                Meteor.setTimeout(function(){
+                    
+                    Meteor.call('searchboxSearch', val, "movie", function (error, result) {
+                        Session.set("movie-searchbox", result);
+                    });
+                    
+                    Meteor.call('searchboxSearch', val, "tv", function (error, result) {
+                        Session.set("tv-searchbox", result);
+                    });
+                    
+                    Session.set("searching", false);
+
+                
+                }, 500);
+    
+            }
+            else {
+
+                $('#search-suggestions').hide();
+
+            }
+            
+            
                 
                 
                 
-                var val = $("#search-bar").val();
+                
                 
 
-                if (val.length > 0) {
-    
-                    Tracker.autorun(function() {
-    
-                        let movies = movieSearch.search({
-                            name: val
-                        }, {
-                            limit: 3
-                        }).fetch();
-                        let tv = tvSearch.search(val, {
-                            limit: 3
-                        }).fetch();
-    
-                        Session.set("movie-searchbox", movies);
-                        Session.set("tv-searchbox", tv);
-                        console.log(movies);
-    
-                    });
-    
-                    $('#search-suggestions').show();
-    
-                }
-                else {
-    
-                    $('#search-suggestions').hide();
-    
-                }
                 
                 
-            }, 500);
+                
+            
 
 
         },
@@ -1233,17 +1168,11 @@ if (Meteor.isClient) {
             var array = [];
 
 
-            shows.forEach(Meteor.bindEnvironment(function(file) {
-                
-                //console.log("BBBB");
-                    //console.log(file);
+            shows.map(Meteor.bindEnvironment(function(file) {
 
                     if (file.episodes) {
-                        //console.log("TTTT");
-                    //console.log(file);
                     
                     var test = file.episodes.sort(function(a) {
-                        //return a.date.getTime() - new Date().getTime();
                         return new Date().getTime() - a.date.getTime();
                     });
                     
@@ -1251,7 +1180,7 @@ if (Meteor.isClient) {
                     //console.log(test);
                     //console.log(test[0]);
                 
-                array.push({show: file, episode: test[0]})
+                array.push({show: file, episode: test[0]});
 
 }
             }));
@@ -1291,7 +1220,7 @@ if (Meteor.isClient) {
             var sectionArray = [];
             
             
-            sections.forEach(Meteor.bindEnvironment(function(file) {
+            sections.map(Meteor.bindEnvironment(function(file) {
                 
                 if (file.format === "movies") {
                 
@@ -1329,7 +1258,7 @@ if (Meteor.isClient) {
             var array = [];
             
             
-            sections.forEach(Meteor.bindEnvironment(function(file) {
+            sections.map(Meteor.bindEnvironment(function(file) {
                 
                 
                 var section = Meteor.subscribe('homeTest', file)
@@ -2925,7 +2854,7 @@ if (Meteor.isServer) {
             var sectionArray = [];
             var sections = Sections.find({});
 
-            sections.forEach(Meteor.bindEnvironment(function(file) {
+            sections.map(Meteor.bindEnvironment(function(file) {
 
                 if (file.format === "movies") {
 
@@ -3241,7 +3170,7 @@ if (Meteor.isServer) {
 
         /*
         
-        allSections.forEach(Meteor.bindEnvironment(function(file) {
+        allSections.map(Meteor.bindEnvironment(function(file) {
             
                 // Push the folder locations to an array, and then do the folder watch on that array.
                 
@@ -3373,7 +3302,7 @@ if (Meteor.isServer) {
                   notifications.emit('message', 'movieFind');
                   notifications.emit('message', movieFind);
                   
-                  movieFind.forEach(function(doc) {
+                  movieFind.map(function(doc) {
                         
                         if (doc.location.length === 1) { // If there's only 1 file, then remove the whole thing.
                             

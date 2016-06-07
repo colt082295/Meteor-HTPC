@@ -96,7 +96,7 @@ $breakpoint-classes: (small medium large);
 // 3. The Grid
 // -----------
 
-$grid-row-width: $global-width;
+$grid-row-width: none;
 $grid-column-count: 12;
 $grid-column-gutter: (
   small: 20px,
@@ -387,7 +387,7 @@ $menu-margin-nested: 1rem;
 $menu-item-padding: 0.7rem 1rem;
 $menu-item-color-active: $white;
 $menu-item-background-active: map-get($foundation-palette, primary);
-$menu-icon-spacing: 0.25rem;
+$menu-icon-spacing: 0;
 
 // 23. Meter
 // ---------
