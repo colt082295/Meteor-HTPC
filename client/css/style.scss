@@ -1493,7 +1493,7 @@ video {
     font-size: .9rem;
     color: #262626;
     margin-top: 0.5em;
-    @include multiLineEllipsis($lineHeight: 1.2em, $lineCount: 2, $bgColor: white);
+    @include multiLineEllipsis($lineHeight: 1.2em, $lineCount: 2, $bgColor: whitesmoke);
 }
 
 .carousel-title-more {
@@ -1545,6 +1545,7 @@ video {
         //overflow: hidden;
         img {
             display: block;
+            width: 100%;
             box-shadow: 0px 0px 0px 1px black, 0px 0px 1px 2px grey;
         }
     }

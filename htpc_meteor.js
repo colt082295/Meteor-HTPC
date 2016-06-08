@@ -26,7 +26,8 @@ tvSearch = new EasySearch.Index({
 
 var url = "http://api.themoviedb.org/3/configuration?api_key=23290308516dcbfcb67fb0f330028492",
     base_url = "http://image.tmdb.org/t/p/w396",
-    timeoutId = 0;
+    timeoutId = 0,
+    timeout;
 
 if (Meteor.isClient) {
     
@@ -633,6 +634,8 @@ if (Meteor.isClient) {
         'keyup #search-bar': function(event, template) {
             
             var val = $("#search-bar").val();
+            
+            clearTimeout(timeout);
             
             if (val.length > 0) {
                 
